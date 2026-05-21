@@ -1,87 +1,78 @@
-# Welcome to React Router!
+# iNCU Modalize Tips
 
-A modern, production-ready template for building full-stack React applications using React Router.
+在应用内以 ModalizedWebView 展示引导和排障内容，如"如何添加小组件"、"小组件不刷新排障"等。
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/remix-run/react-router-templates/tree/main/default)
+## 项目结构
 
-## Features
+```
+app/
+  pages.ts              ← 全局配置：分类、页面定义、启用开关
+  routes.ts             ← 从 generated/pages.ts 动态生成路由树
+  generated/
+    pages.ts            ← 自动生成，不要手动编辑
+  routes/
+    home.tsx            ← 首页列表
+    redirect-page.tsx   ← 禁用页面的共享 redirect 组件
+    {category}/
+      layout.tsx        ← 分类布局（含返回按钮）
+      index.tsx         ← 分类内 OS 列表
+      {page}/
+        meta.ts         ← 页面元数据（title, description）
+        page.tsx        ← 页面内容
+scripts/
+  generate-pages.ts     ← 预构建脚本
+```
 
-- 🚀 Server-side rendering
-- ⚡️ Hot Module Replacement (HMR)
-- 📦 Asset bundling and optimization
-- 🔄 Data loading and mutations
-- 🔒 TypeScript by default
-- 🎉 TailwindCSS for styling
-- 📖 [React Router docs](https://reactrouter.com/)
-
-## Getting Started
-
-### Installation
-
-Install the dependencies:
+## 快速开始
 
 ```bash
-npm install
+pnpm install
+pnpm dev       # 开发服务器（自动生成 manifest + HMR）
+pnpm build     # 生产构建（自动生成 manifest + prerender）
+pnpm start     # 预览构建结果（静态文件服务器，端口 3000）
 ```
 
-### Development
+## 页面开关
 
-Start the development server with HMR:
+所有页面的启用状态集中在 [app/pages.ts](app/pages.ts) 控制：
 
-```bash
-npm run dev
+```ts
+pages: [
+  { id: 'ios', enabled: true },
+  { id: 'originos', enabled: false },
+],
 ```
 
-Your application will be available at `http://localhost:5173`.
+`enabled: false` 的页面：
 
-## Building for Production
+- 不会出现在首页和分类列表中
+- 路由存在但自动 redirect 到上级页面
+- 不会被 prerender
 
-Create a production build:
+## 新增页面
 
-```bash
-npm run build
+1. 在对应分类下创建 `{pageId}/meta.ts`：
+
+```ts
+export const routeMeta = {
+  title: '页面标题',
+  description: '简短描述',
+} as const;
 ```
 
-## Deployment
+2. 创建 `{pageId}/page.tsx` 编写内容
+3. 在 [app/pages.ts](app/pages.ts) 的对应分类 `pages` 数组中添加 `{ id: 'pageId', enabled: true/false }`
+4. 运行 `pnpm build`
 
-### Docker Deployment
+## 新增分类
 
-To build and run using Docker:
+1. 创建 `app/routes/{category}/layout.tsx` 和 `index.tsx`
+2. 在 [app/pages.ts](app/pages.ts) 的 `categories` 数组中添加新分类定义
+3. 按上述步骤添加页面
 
-```bash
-docker build -t my-app .
+## 技术栈
 
-# Run the container
-docker run -p 3000:3000 my-app
-```
-
-The containerized application can be deployed to any platform that supports Docker, including:
-
-- AWS ECS
-- Google Cloud Run
-- Azure Container Apps
-- Digital Ocean App Platform
-- Fly.io
-- Railway
-
-### DIY Deployment
-
-If you're familiar with deploying Node applications, the built-in app server is production-ready.
-
-Make sure to deploy the output of `npm run build`
-
-```
-├── package.json
-├── package-lock.json (or pnpm-lock.yaml, or bun.lockb)
-├── build/
-│   ├── client/    # Static assets
-│   └── server/    # Server-side code
-```
-
-## Styling
-
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever CSS framework you prefer.
-
----
-
-Built with ❤️ using React Router.
+- React Router v7（framework mode, `ssr: false`, `prerender: true`）
+- Tailwind CSS v4
+- TypeScript
+- `tsx` — 运行预构建脚本
