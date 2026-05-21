@@ -6,7 +6,7 @@ export function meta({}: Route.MetaArgs) {
     .find((c) => c.id === "add-widget-guide")
     ?.pages.find((p) => p.id === "ios");
   return [
-    { title: page?.title ?? "iOS 添加小组件" },
+    { title: page?.title ?? "iOS添加小组件" },
     { name: "description", content: page?.description ?? "" },
   ];
 }
@@ -24,8 +24,8 @@ export default function IosGuide() {
             <img src={page.image} alt="" className="brand-icon-lg" />
           )}
           <div className="detail-header-text">
-            <h1>{page?.title ?? "iOS 添加小组件"}</h1>
-            <p className="meta-date">最后更新：2026 年 5 月</p>
+            <h1>{page?.title ?? "iOS添加小组件"}</h1>
+            <p className="meta-date">最后更新：2026年5月</p>
           </div>
         </div>
         <div className="mt-6 space-y-4">
@@ -43,7 +43,7 @@ export default function IosGuide() {
           <section>
             <h2>注意事项</h2>
             <ul>
-              <li>确保 iOS 版本不低于 14.0</li>
+              <li>确保iOS版本不低于14.0</li>
               <li>如果找不到小组件，请确认应用已更新到最新版本</li>
             </ul>
           </section>

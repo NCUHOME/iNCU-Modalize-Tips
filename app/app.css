@@ -50,6 +50,7 @@ body {
   transition: background-color 0.3s ease, color 0.2s ease;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-autospace: normal;
 }
 
 /* ===== Theme Toggle ===== */
@@ -262,7 +263,8 @@ body {
   height: 32px;
   border-radius: 8px;
   flex-shrink: 0;
-  object-fit: cover;
+  object-fit: contain;
+  background: var(--bg-elevated);
 }
 
 .brand-icon-lg {
@@ -270,7 +272,8 @@ body {
   height: 40px;
   border-radius: 10px;
   flex-shrink: 0;
-  object-fit: cover;
+  object-fit: contain;
+  background: var(--bg-elevated);
 }
 
 /* ===== Detail Article ===== */

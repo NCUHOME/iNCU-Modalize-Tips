@@ -1,6 +1,7 @@
-import { Outlet, useMatches, Link } from "react-router";
+import { Outlet, useMatches, useNavigate } from "react-router";
 
 export default function WidgetTroubleshootLayout() {
+  const navigate = useNavigate();
   const matches = useMatches();
   const lastMatch = matches[matches.length - 1];
   const isIndex = lastMatch.id.endsWith("/index");
@@ -8,8 +9,8 @@ export default function WidgetTroubleshootLayout() {
   return (
     <div className="min-h-screen p-5" style={{ maxWidth: 640, margin: "0 auto" }}>
       {!isIndex && (
-        <Link
-          to="/widget-troubleshoot/"
+        <button
+          onClick={() => navigate(-1)}
           className="back-link anim-slide-left mb-5"
         >
           <svg
@@ -26,7 +27,7 @@ export default function WidgetTroubleshootLayout() {
             <polyline points="12 19 5 12 12 5" />
           </svg>
           返回
-        </Link>
+        </button>
       )}
       <Outlet />
     </div>

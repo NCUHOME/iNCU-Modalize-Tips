@@ -6,7 +6,7 @@ export function meta({}: Route.MetaArgs) {
     .find((c) => c.id === "widget-troubleshoot")
     ?.pages.find((p) => p.id === "hyperos");
   return [
-    { title: page?.title ?? "HyperOS 排障" },
+    { title: page?.title ?? "HyperOS排障" },
     { name: "description", content: page?.description ?? "" },
   ];
 }
@@ -24,8 +24,8 @@ export default function HyperosTroubleshoot() {
             <img src={page.image} alt="" className="brand-icon-lg" />
           )}
           <div className="detail-header-text">
-            <h1>{page?.title ?? "HyperOS 小组件不刷新排障"}</h1>
-            <p className="meta-date">最后更新：2026 年 5 月</p>
+            <h1>{page?.title ?? "HyperOS小组件不刷新排障"}</h1>
+            <p className="meta-date">最后更新：2026年5月</p>
           </div>
         </div>
         <div className="mt-6 space-y-4">
