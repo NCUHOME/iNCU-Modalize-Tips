@@ -6,11 +6,11 @@ export default function WidgetTroubleshootLayout() {
   const isIndex = lastMatch.id.endsWith("/index");
 
   return (
-    <div className="min-h-screen p-5">
+    <div className="min-h-screen p-5" style={{ maxWidth: 640, margin: "0 auto" }}>
       {!isIndex && (
         <Link
           to="/widget-troubleshoot/"
-          className="inline-flex items-center gap-1 text-sm text-neutral-600 hover:text-neutral-900 mb-4"
+          className="back-link anim-slide-left mb-5"
         >
           <svg
             width="16"

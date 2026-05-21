@@ -1,6 +1,6 @@
-import { Link } from "react-router";
 import type { Route } from "./+types/index";
 import { routeManifest } from "~/generated/pages";
+import { GuideCard } from "~/components/GuideCard";
 
 export function meta({}: Route.MetaArgs) {
   const category = routeManifest.categories.find(
@@ -25,18 +25,25 @@ export default function WidgetTroubleshootIndex() {
 
   return (
     <div>
-      <h1 className="text-xl font-semibold mb-2">{category.title}</h1>
-      <p className="text-neutral-500 text-sm mb-5">{category.description}</p>
+      <header className="mb-6 anim-fade-up">
+        <h1 className="text-[22px] font-semibold tracking-tight text-(--text)">
+          {category.title}
+        </h1>
+        <p className="text-sm text-(--text-secondary) mt-1">
+          {category.description}
+        </p>
+      </header>
       <div className="flex flex-col gap-3">
-        {enabledPages.map((page) => (
-          <Link
+        {enabledPages.map((page, i) => (
+          <GuideCard
             key={page.id}
-            to={page.id}
-            className="block p-4 rounded-xl border border-neutral-200 hover:border-neutral-400 transition-colors"
-          >
-            <h2 className="font-medium">{page.title}</h2>
-            <p className="text-sm text-neutral-500 mt-1">{page.description}</p>
-          </Link>
+            title={page.title}
+            description={page.description}
+            href={page.id}
+            pageId={page.id}
+            image={page.image || undefined}
+            stagger={i + 1}
+          />
         ))}
       </div>
     </div>
