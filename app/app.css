@@ -328,12 +328,21 @@ body {
   padding-left: 20px;
 }
 
+.detail-article ol {
+  list-style-type: decimal;
+}
+
+.detail-article ul {
+  list-style-type: disc;
+}
+
 .detail-article li {
   margin-bottom: 6px;
 }
 
 .detail-article li::marker {
   color: var(--accent);
+  font-weight: 700;
 }
 
 .detail-article section {
