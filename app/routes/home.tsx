@@ -55,7 +55,7 @@ export default function Home() {
                     description={page.description}
                     href={page.path}
                     pageId={page.id}
-                    image={page.image}
+                    image={page.image ?? undefined}
                     stagger={pi + 1 + ci * 2}
                   />
                 ))}
