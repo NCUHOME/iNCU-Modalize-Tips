@@ -3,10 +3,11 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "react-router build",
-    "dev": "react-router dev",
-    "start": "react-router-serve ./build/server/index.js",
-    "typecheck": "react-router typegen && tsc"
+    "generate": "tsx scripts/generate-pages.ts",
+    "dev": "pnpm generate && react-router dev",
+    "build": "pnpm generate && react-router build",
+    "start": "npx serve build/client -l 3000 -s",
+    "typecheck": "pnpm generate && react-router typegen && tsc"
   },
   "dependencies": {
     "@react-router/node": "7.15.1",
@@ -23,6 +24,7 @@
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "tailwindcss": "^4.2.2",
+    "tsx": "^4.22.3",
     "typescript": "^5.9.3",
     "vite": "^8.0.3"
   }

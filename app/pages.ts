@@ -1,0 +1,46 @@
+export interface PageDefinition {
+  id: string;
+  enabled: boolean;
+}
+
+export interface CategoryConfig {
+  id: string;
+  title: string;
+  description: string;
+  order: number;
+  pages: readonly PageDefinition[];
+}
+
+export const categories = [
+  {
+    id: 'add-widget-guide',
+    title: '如何添加小组件引导',
+    description: '根据您的手机系统，了解如何将小组件添加到主屏幕',
+    order: 1,
+    pages: [
+      { id: 'ios', enabled: true },
+      { id: 'hyperos', enabled: true },
+      { id: 'originos', enabled: false },
+      { id: 'vivo', enabled: false },
+      { id: 'harmonyos', enabled: false },
+      { id: 'coloros', enabled: false },
+      { id: 'magicos', enabled: false },
+      { id: 'flyme', enabled: false },
+    ] as const,
+  },
+  {
+    id: 'widget-troubleshoot',
+    title: '小组件不刷新排障',
+    description: '解决因系统后台限制导致的小组件不刷新问题',
+    order: 2,
+    pages: [
+      { id: 'hyperos', enabled: true },
+      { id: 'originos', enabled: false },
+      { id: 'vivo', enabled: false },
+      { id: 'harmonyos', enabled: false },
+      { id: 'coloros', enabled: false },
+      { id: 'magicos', enabled: false },
+      { id: 'flyme', enabled: false },
+    ] as const,
+  },
+] as const;
