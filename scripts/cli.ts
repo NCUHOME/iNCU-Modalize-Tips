@@ -2,12 +2,15 @@
 import path from 'node:path';
 import fs from 'node:fs';
 import { execSync } from 'node:child_process';
-import { intro, outro, select, text, confirm, spinner, cancel, isCancel } from '@clack/prompts';
+import { intro, outro, select, text, spinner, cancel, isCancel } from '@clack/prompts';
 import pc from 'picocolors';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const PAGES_FILE = path.join(ROOT, 'app', 'pages.ts');
 const ROUTES_DIR = path.join(ROOT, 'app', 'routes');
+
+const EXIT = '<exit>';
+const BACK = '<back>';
 
 // ---- Types ----
 
@@ -53,12 +56,11 @@ function hasUncommittedChanges(): boolean {
     const status = execSync('git status --porcelain', { cwd: ROOT, encoding: 'utf-8' }).trim();
     return status.length > 0;
   } catch {
-    console.warn(pc.yellow('⚠️  无法检查 git 状态，跳过检查。'));
     return false;
   }
 }
 
-async function runGenerate(): Promise<void> {
+function runGenerate(): void {
   const s = spinner();
   s.start('重新生成 manifest…');
   execSync('pnpm generate', { cwd: ROOT, stdio: 'pipe' });
@@ -69,46 +71,110 @@ async function runGenerate(): Promise<void> {
 
 async function addPage() {
   const content = fs.readFileSync(PAGES_FILE, 'utf-8');
-  const categories = parsePagesFile(content);
+  const cats = parsePagesFile(content);
 
-  if (categories.length === 0) {
+  if (cats.length === 0) {
     console.log(pc.yellow('⚠️  没有可用的分类，请先新增分类。'));
     return;
   }
 
-  const category = await select({
-    message: '选择目标分类:',
-    options: categories.map((c) => ({ value: c, label: `${c.title} (${c.id})` })),
-  });
-  if (isCancel(category)) { cancel('已取消'); return; }
+  type Step = 'category' | 'pageId' | 'title' | 'desc' | 'enabled' | 'done';
+  let step: Step = 'category';
 
-  const pageId = await text({
-    message: '页面 ID:',
-    placeholder: '如 coloros',
-    validate: (v) => {
-      if (!v) return '页面 ID 不能为空';
-      if (!/^[a-z][a-z0-9-]*$/.test(v)) return '只能包含小写字母、数字和连字符，且必须以字母开头';
-      if (category.pages.some((p) => p.id === v)) return `页面 "${v}" 已存在于该分类中`;
-      return;
-    },
-  });
-  if (isCancel(pageId)) { cancel('已取消'); return; }
+  let category: CategoryEntry | undefined;
+  let pageId: string | undefined;
+  let title: string | undefined;
+  let description: string | undefined;
+  let enabled: boolean | undefined;
 
-  const title = await text({ message: '页面标题:', placeholder: '如 ColorOS 添加小组件', validate: (v) => v ? undefined : '页面标题不能为空' });
-  if (isCancel(title)) { cancel('已取消'); return; }
+  while (step !== 'done') {
+    switch (step) {
+      case 'category': {
+        const r = await select<CategoryEntry | typeof EXIT>({
+          message: '选择目标分类:',
+          options: [
+            ...cats.map((c) => ({ value: c, label: `${c.title} (${c.id})` })),
+            { value: EXIT, label: '← 返回首页' },
+          ],
+        });
+        if (isCancel(r) || r === EXIT) return;
+        category = r;
+        step = 'pageId';
+        break;
+      }
 
-  const description = await text({ message: '页面描述:', placeholder: '简要描述该页面的内容' });
-  if (isCancel(description)) { cancel('已取消'); return; }
+      case 'pageId': {
+        const r = await text({
+          message: '页面 ID（输入 .. 返回上一步）:',
+          placeholder: '如 coloros',
+          validate: (v) => {
+            if (v === '..') return undefined;
+            if (!v) return '页面 ID 不能为空';
+            if (!/^[a-z][a-z0-9-]*$/.test(v)) return '只能包含小写字母、数字和连字符，且必须以字母开头';
+            if (category!.pages.some((p) => p.id === v)) return `页面 "${v}" 已存在于该分类中`;
+          },
+        });
+        if (isCancel(r)) return;
+        if (r === '..') { step = 'category'; break; }
+        pageId = r;
+        step = 'title';
+        break;
+      }
 
-  const enabled = await confirm({ message: '是否启用?', initialValue: false });
-  if (isCancel(enabled)) { cancel('已取消'); return; }
+      case 'title': {
+        const r = await text({
+          message: '页面标题（输入 .. 返回上一步）:',
+          placeholder: '如 ColorOS 添加小组件',
+          validate: (v) => {
+            if (v === '..') return undefined;
+            if (!v) return '页面标题不能为空';
+          },
+        });
+        if (isCancel(r)) return;
+        if (r === '..') { step = 'pageId'; break; }
+        title = r;
+        step = 'desc';
+        break;
+      }
 
-  const dir = path.join(ROUTES_DIR, category.id, pageId);
+      case 'desc': {
+        const r = await text({
+          message: '页面描述（输入 .. 返回上一步）:',
+          placeholder: '简要描述该页面内容',
+          validate: () => undefined,
+        });
+        if (isCancel(r)) return;
+        if (r === '..') { step = 'title'; break; }
+        description = r;
+        step = 'enabled';
+        break;
+      }
+
+      case 'enabled': {
+        const r = await select<boolean | typeof BACK>({
+          message: '是否启用该页面?',
+          options: [
+            { value: true, label: '启用' },
+            { value: false, label: '禁用（占位页面）' },
+            { value: BACK, label: '← 返回上一步' },
+          ],
+        });
+        if (isCancel(r)) return;
+        if (r === BACK) { step = 'desc'; break; }
+        enabled = r;
+        step = 'done';
+        break;
+      }
+    }
+  }
+
+  const dir = path.join(ROUTES_DIR, category!.id, pageId!);
   if (fs.existsSync(dir)) {
-    console.log(pc.yellow(`⚠️  目录 ${category.id}/${pageId} 已存在。`));
+    console.log(pc.yellow(`⚠️  目录 ${category!.id}/${pageId} 已存在。`));
     return;
   }
 
+  // Execute creation
   const s = spinner();
   s.start('创建页面文件…');
 
@@ -127,7 +193,7 @@ import type { Route } from "./+types/page";
 
 export function meta({}: Route.MetaArgs) {
   const page = routeManifest.categories
-    .find((c) => c.id === '${category.id}')
+    .find((c) => c.id === '${category!.id}')
     ?.pages.find((p) => p.id === '${pageId}');
   return [{ title: page?.title }, { name: 'description', content: page?.description }];
 }
@@ -152,46 +218,98 @@ export default function OsPage() {
   fs.writeFileSync(path.join(dir, 'page.tsx'), pageContent, 'utf-8');
 
   const newContent = content.replace(
-    new RegExp(`(id:\\s*'${category.id}'[\\s\\S]*?pages:\\s*\\[[\\s\\S]*?)(\\n\\s+\\]\\s+as\\s+const,)`),
+    new RegExp(`(id:\\s*'${category!.id}'[\\s\\S]*?pages:\\s*\\[[\\s\\S]*?)(\\n\\s+\\]\\s+as\\s+const,)`),
     `$1\n      { id: '${pageId}', enabled: ${enabled} },$2`,
   );
   fs.writeFileSync(PAGES_FILE, newContent, 'utf-8');
 
-  s.stop(`页面 ${pc.green(`${category.id}/${pageId}`)} 已创建`);
+  s.stop(`页面 ${pc.green(`${category!.id}/${pageId}`)} 已创建`);
 
-  await runGenerate();
+  runGenerate();
 }
 
 // ---- Add Category ----
 
 async function addCategory() {
   const content = fs.readFileSync(PAGES_FILE, 'utf-8');
-  const categories = parsePagesFile(content);
+  const cats = parsePagesFile(content);
 
-  const categoryId = await text({
-    message: '分类 ID:',
-    placeholder: '如 widget-guide',
-    validate: (v) => {
-      if (!v) return '分类 ID 不能为空';
-      if (!/^[a-z][a-z0-9-]*$/.test(v)) return '只能包含小写字母、数字和连字符，且必须以字母开头';
-      if (categories.some((c) => c.id === v)) return `分类 "${v}" 已存在`;
-      return;
-    },
-  });
-  if (isCancel(categoryId)) { cancel('已取消'); return; }
+  type Step = 'categoryId' | 'title' | 'desc' | 'order' | 'done';
+  let step: Step = 'categoryId';
 
-  const title = await text({ message: '分类标题:', placeholder: '如 如何添加小组件', validate: (v) => v ? undefined : '分类标题不能为空' });
-  if (isCancel(title)) { cancel('已取消'); return; }
+  let categoryId: string | undefined;
+  let title: string | undefined;
+  let description: string | undefined;
+  let orderNum: number | undefined;
 
-  const description = await text({ message: '分类描述:', placeholder: '简要描述该分类的内容' });
-  if (isCancel(description)) { cancel('已取消'); return; }
+  while (step !== 'done') {
+    switch (step) {
+      case 'categoryId': {
+        const r = await text({
+          message: '分类 ID（输入 .. 返回首页）:',
+          placeholder: '如 widget-guide',
+          validate: (v) => {
+            if (v === '..') return undefined;
+            if (!v) return '分类 ID 不能为空';
+            if (!/^[a-z][a-z0-9-]*$/.test(v)) return '只能包含小写字母、数字和连字符，且必须以字母开头';
+            if (cats.some((c) => c.id === v)) return `分类 "${v}" 已存在`;
+          },
+        });
+        if (isCancel(r) || r === '..') return;
+        categoryId = r;
+        step = 'title';
+        break;
+      }
 
-  const nextOrder = categories.length > 0 ? Math.max(...categories.map((c) => c.order)) + 1 : 1;
-  const order = await text({ message: '排序序号:', placeholder: `${nextOrder}`, validate: (v) => v && isNaN(Number(v)) ? '请输入数字' : undefined });
-  if (isCancel(order)) { cancel('已取消'); return; }
-  const orderNum = order ? parseInt(order, 10) : nextOrder;
+      case 'title': {
+        const r = await text({
+          message: '分类标题（输入 .. 返回上一步）:',
+          placeholder: '如 如何添加小组件',
+          validate: (v) => {
+            if (v === '..') return undefined;
+            if (!v) return '分类标题不能为空';
+          },
+        });
+        if (isCancel(r)) return;
+        if (r === '..') { step = 'categoryId'; break; }
+        title = r;
+        step = 'desc';
+        break;
+      }
 
-  const catDir = path.join(ROUTES_DIR, categoryId);
+      case 'desc': {
+        const r = await text({
+          message: '分类描述（输入 .. 返回上一步）:',
+          placeholder: '简要描述该分类的内容',
+          validate: () => undefined,
+        });
+        if (isCancel(r)) return;
+        if (r === '..') { step = 'title'; break; }
+        description = r;
+        step = 'order';
+        break;
+      }
+
+      case 'order': {
+        const nextOrder = cats.length > 0 ? Math.max(...cats.map((c) => c.order)) + 1 : 1;
+        const r = await text({
+          message: '排序序号（输入 .. 返回上一步）:',
+          placeholder: `${nextOrder}`,
+          validate: (v) => {
+            if (v === '..') return undefined;
+            if (v && isNaN(Number(v))) return '请输入数字';
+          },
+        });
+        if (isCancel(r)) return;
+        if (r === '..') { step = 'desc'; break; }
+        orderNum = r ? parseInt(r, 10) : nextOrder;
+        step = 'done';
+        break;
+      }
+    }
+  }
+
+  const catDir = path.join(ROUTES_DIR, categoryId!);
   if (fs.existsSync(catDir)) {
     console.log(pc.yellow(`⚠️  目录 ${categoryId} 已存在。`));
     return;
@@ -204,7 +322,7 @@ async function addCategory() {
 
   const layoutContent = `import { Outlet, useMatches, useNavigate } from "react-router";
 
-export default function ${toPascalCase(categoryId)}Layout() {
+export default function ${toPascalCase(categoryId!)}Layout() {
   const navigate = useNavigate();
   const matches = useMatches();
   const lastMatch = matches[matches.length - 1];
@@ -244,7 +362,7 @@ export function meta({}: Route.MetaArgs) {
   ];
 }
 
-export default function ${toPascalCase(categoryId)}Index() {
+export default function ${toPascalCase(categoryId!)}Index() {
   const category = routeManifest.categories.find(
     (c) => c.id === "${categoryId}",
   );
@@ -292,130 +410,210 @@ export default function ${toPascalCase(categoryId)}Index() {
     ] as const,
   },
 `;
-  const newContent = content.replace(/(\] as const;)$/, `${categoryBlock}$1`);
+  const newContent = content.replace(/(\] as const;)/, `${categoryBlock}$1`);
   fs.writeFileSync(PAGES_FILE, newContent, 'utf-8');
 
   s.stop(`分类 ${pc.green(categoryId)} 已创建`);
 
-  await runGenerate();
+  runGenerate();
 }
 
 // ---- Delete Page ----
 
 async function deletePage() {
   const content = fs.readFileSync(PAGES_FILE, 'utf-8');
-  const categories = parsePagesFile(content);
+  const cats = parsePagesFile(content);
 
-  if (categories.length === 0) {
+  if (cats.length === 0) {
     console.log(pc.yellow('⚠️  没有可用的分类。'));
     return;
   }
 
-  const category = await select({
-    message: '选择目标分类:',
-    options: categories.map((c) => ({ value: c, label: `${c.title} (${c.id})` })),
-  });
-  if (isCancel(category)) { cancel('已取消'); return; }
+  type Step = 'category' | 'page' | 'confirm' | 'git-check' | 'done';
+  let step: Step = 'category';
 
-  if (category.pages.length === 0) {
-    console.log(pc.yellow('⚠️  该分类下没有页面。'));
-    return;
+  let category: CategoryEntry | undefined;
+  let targetPage: PageEntry | undefined;
+
+  while (step !== 'done') {
+    switch (step) {
+      case 'category': {
+        const r = await select<CategoryEntry | typeof EXIT>({
+          message: '选择目标分类:',
+          options: [
+            ...cats.map((c) => ({ value: c, label: `${c.title} (${c.id})` })),
+            { value: EXIT, label: '← 返回首页' },
+          ],
+        });
+        if (isCancel(r) || r === EXIT) return;
+        if (r.pages.length === 0) {
+          console.log(pc.yellow('⚠️  该分类下没有页面。'));
+          return;
+        }
+        category = r;
+        step = 'page';
+        break;
+      }
+
+      case 'page': {
+        const r = await select<PageEntry | typeof BACK | typeof EXIT>({
+          message: '选择要删除的页面:',
+          options: [
+            ...category!.pages.map((p) => ({
+              value: p,
+              label: `${p.id} ${pc.dim(p.enabled ? '(启用)' : '(禁用)')}`,
+            })),
+            { value: BACK, label: '← 返回上一步' },
+            { value: EXIT, label: '← 返回首页' },
+          ],
+        });
+        if (isCancel(r) || r === EXIT) return;
+        if (r === BACK) { step = 'category'; break; }
+        targetPage = r;
+        step = 'confirm';
+        break;
+      }
+
+      case 'confirm': {
+        const r = await select<boolean | typeof BACK | typeof EXIT>({
+          message: `确认删除页面 ${pc.red(`${category!.id}/${targetPage!.id}`)}?`,
+          options: [
+            { value: true, label: '确认删除' },
+            { value: BACK, label: '← 返回上一步' },
+            { value: EXIT, label: '← 返回首页' },
+          ],
+        });
+        if (isCancel(r) || r === EXIT) return;
+        if (r === BACK) { step = 'page'; break; }
+        step = 'git-check';
+        break;
+      }
+
+      case 'git-check': {
+        if (!hasUncommittedChanges()) { step = 'done'; break; }
+        const r = await select<string | typeof BACK | typeof EXIT>({
+          message: pc.yellow('有未提交的 git 变更，继续删除可能丢失数据'),
+          options: [
+            { value: 'proceed', label: '仍然删除' },
+            { value: BACK, label: '← 返回上一步' },
+            { value: EXIT, label: '← 返回首页' },
+          ],
+        });
+        if (isCancel(r) || r === EXIT) return;
+        if (r === BACK) { step = 'confirm'; break; }
+        step = 'done';
+        break;
+      }
+    }
   }
 
-  const page = await select({
-    message: '选择要删除的页面:',
-    options: category.pages.map((p) => ({
-      value: p,
-      label: `${p.id} ${pc.dim(p.enabled ? '(启用)' : '(禁用)')}`,
-    })),
-  });
-  if (isCancel(page)) { cancel('已取消'); return; }
-
-  const confirmDel = await confirm({
-    message: `确认删除页面 "${pc.red(`${category.id}/${page.id}`)}"? 此操作不可恢复`,
-    initialValue: false,
-  });
-  if (isCancel(confirmDel) || !confirmDel) { cancel('已取消'); return; }
-
-  if (hasUncommittedChanges()) {
-    const proceed = await confirm({
-      message: pc.yellow('有未提交的 git 变更，继续删除可能会丢失数据。是否继续?'),
-      initialValue: false,
-    });
-    if (isCancel(proceed) || !proceed) { cancel('已取消'); return; }
-  }
-
+  // Execute deletion
   const s = spinner();
   s.start('删除页面…');
 
-  const pageDir = path.join(ROUTES_DIR, category.id, page.id);
+  const pageDir = path.join(ROUTES_DIR, category!.id, targetPage!.id);
   if (fs.existsSync(pageDir)) {
     fs.rmSync(pageDir, { recursive: true, force: true });
   }
 
-  const pageRegex = new RegExp(`\\n\\s+\\{\\s*id:\\s*'${page.id}'[^}]*\\},?`);
+  const pageRegex = new RegExp(`\\n\\s+\\{\\s*id:\\s*'${targetPage!.id}'[^}]*\\},?`);
   const newContent = content.replace(pageRegex, '');
   fs.writeFileSync(PAGES_FILE, newContent, 'utf-8');
 
-  s.stop(`页面 ${pc.red(`${category.id}/${page.id}`)} 已删除`);
+  s.stop(`页面 ${pc.red(`${category!.id}/${targetPage!.id}`)} 已删除`);
 
-  await runGenerate();
+  runGenerate();
 }
 
 // ---- Delete Category ----
 
 async function deleteCategory() {
   const content = fs.readFileSync(PAGES_FILE, 'utf-8');
-  const categories = parsePagesFile(content);
+  const cats = parsePagesFile(content);
 
-  if (categories.length === 0) {
+  if (cats.length === 0) {
     console.log(pc.yellow('⚠️  没有可用的分类。'));
     return;
   }
 
-  const category = await select({
-    message: '选择要删除的分类:',
-    options: categories.map((c) => ({
-      value: c,
-      label: `${c.title} (${c.id}) — ${c.pages.length} 个页面`,
-    })),
-  });
-  if (isCancel(category)) { cancel('已取消'); return; }
+  type Step = 'category' | 'confirm' | 'git-check' | 'done';
+  let step: Step = 'category';
 
-  if (category.pages.length > 0) {
-    console.log(pc.yellow(`⚠️  该分类包含 ${category.pages.length} 个页面，删除分类将同时删除所有页面文件。`));
-    console.log(pc.dim(`  页面: ${category.pages.map((p) => p.id).join(', ')}`));
-  }
+  let category: CategoryEntry | undefined;
 
-  const confirmDel = await confirm({
-    message: `确认删除分类 "${pc.red(category.id)}"? 此操作不可恢复`,
-    initialValue: false,
-  });
-  if (isCancel(confirmDel) || !confirmDel) { cancel('已取消'); return; }
+  while (step !== 'done') {
+    switch (step) {
+      case 'category': {
+        const r = await select<CategoryEntry | typeof EXIT>({
+          message: '选择要删除的分类:',
+          options: [
+            ...cats.map((c) => ({
+              value: c,
+              label: `${c.title} (${c.id}) — ${c.pages.length} 个页面`,
+            })),
+            { value: EXIT, label: '← 返回首页' },
+          ],
+        });
+        if (isCancel(r) || r === EXIT) return;
+        category = r;
 
-  if (hasUncommittedChanges()) {
-    const proceed = await confirm({
-      message: pc.yellow('有未提交的 git 变更，继续删除可能会丢失数据。是否继续?'),
-      initialValue: false,
-    });
-    if (isCancel(proceed) || !proceed) { cancel('已取消'); return; }
+        if (category.pages.length > 0) {
+          console.log(pc.yellow(`⚠️  该分类包含 ${category.pages.length} 个页面，删除分类将同时删除所有页面文件。`));
+          console.log(pc.dim(`  页面: ${category.pages.map((p) => p.id).join(', ')}`));
+        }
+
+        step = 'confirm';
+        break;
+      }
+
+      case 'confirm': {
+        const r = await select<boolean | typeof BACK | typeof EXIT>({
+          message: `确认删除分类 ${pc.red(category!.id)}? 此操作不可恢复`,
+          options: [
+            { value: true, label: '确认删除' },
+            { value: BACK, label: '← 返回上一步' },
+            { value: EXIT, label: '← 返回首页' },
+          ],
+        });
+        if (isCancel(r) || r === EXIT) return;
+        if (r === BACK) { step = 'category'; break; }
+        step = 'git-check';
+        break;
+      }
+
+      case 'git-check': {
+        if (!hasUncommittedChanges()) { step = 'done'; break; }
+        const r = await select<string | typeof BACK | typeof EXIT>({
+          message: pc.yellow('有未提交的 git 变更，继续删除可能丢失数据'),
+          options: [
+            { value: 'proceed', label: '仍然删除' },
+            { value: BACK, label: '← 返回上一步' },
+            { value: EXIT, label: '← 返回首页' },
+          ],
+        });
+        if (isCancel(r) || r === EXIT) return;
+        if (r === BACK) { step = 'confirm'; break; }
+        step = 'done';
+        break;
+      }
+    }
   }
 
   const s = spinner();
   s.start('删除分类…');
 
-  const catDir = path.join(ROUTES_DIR, category.id);
+  const catDir = path.join(ROUTES_DIR, category!.id);
   if (fs.existsSync(catDir)) {
     fs.rmSync(catDir, { recursive: true, force: true });
   }
 
-  const catRegex = new RegExp(`\\{\\s*\\n\\s+id:\\s*'${category.id}'[\\s\\S]*?\\n\\s+\\},?\\n`);
+  const catRegex = new RegExp(`\\{\\s*\\n\\s+id:\\s*'${category!.id}'[\\s\\S]*?\\n\\s+\\},?\\n`);
   const newContent = content.replace(catRegex, '');
   fs.writeFileSync(PAGES_FILE, newContent, 'utf-8');
 
-  s.stop(`分类 ${pc.red(category.id)} 已删除`);
+  s.stop(`分类 ${pc.red(category!.id)} 已删除`);
 
-  await runGenerate();
+  runGenerate();
 }
 
 // ---- Main ----
@@ -450,8 +648,6 @@ async function main() {
         await deleteCategory();
         break;
     }
-
-    console.log(); // spacing between rounds
   }
 
   outro('再见!');
