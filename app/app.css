@@ -264,7 +264,8 @@ body {
   border-radius: 8px;
   flex-shrink: 0;
   object-fit: contain;
-  background: var(--bg-elevated);
+  background: #ffffff;
+  padding: 2px;
 }
 
 .brand-icon-lg {
@@ -273,7 +274,8 @@ body {
   border-radius: 10px;
   flex-shrink: 0;
   object-fit: contain;
-  background: var(--bg-elevated);
+  background: #ffffff;
+  padding: 3px;
 }
 
 /* ===== Detail Article ===== */
