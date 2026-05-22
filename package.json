@@ -4,9 +4,9 @@
   "type": "module",
   "scripts": {
     "generate": "tsx scripts/generate-pages.ts",
-    "dev": "pnpm generate && react-router dev",
+    "dev": "tsx scripts/dev.ts",
     "build": "pnpm generate && react-router build",
-    "start": "npx serve build/client -l 3000 -s",
+    "preview": "vite preview --port 3000",
     "typecheck": "pnpm generate && react-router typegen && tsc"
   },
   "dependencies": {

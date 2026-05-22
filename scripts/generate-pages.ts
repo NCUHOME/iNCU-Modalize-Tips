@@ -38,9 +38,15 @@ function formatPath(categoryId: string, pageId: string): string {
   return `/${categoryId}/${pageId}`;
 }
 
+async function importWithBust(filePath: string) {
+  const url = new URL(`file://${filePath}`);
+  url.searchParams.set('t', Date.now().toString());
+  return import(url.href);
+}
+
 async function main() {
   const pagesModulePath = path.join(APP_DIR, 'pages.ts');
-  const pagesModule = await import(pagesModulePath);
+  const pagesModule = await importWithBust(pagesModulePath);
 
   const categories: typeof pagesModule.categories = pagesModule.categories;
 
@@ -65,7 +71,7 @@ async function main() {
         continue;
       }
 
-      const metaModule = await import(metaFilePath);
+      const metaModule = await importWithBust(metaFilePath);
       const meta = metaModule.routeMeta as RouteMeta;
 
       pages.push({
@@ -108,4 +114,28 @@ export const routeManifest = ${JSON.stringify(manifest, null, 2)} as const;
   );
 }
 
-main().catch(console.error);
+const isWatch = process.argv.includes('--watch');
+
+if (isWatch) {
+  const routesDir = path.join(APP_DIR, 'routes');
+  const pagesFile = path.join(APP_DIR, 'pages.ts');
+
+  await main();
+
+  console.log('👀 Watching for changes...');
+  fs.watch(routesDir, { recursive: true }, (event, filename) => {
+    if (filename?.endsWith('.ts') || filename?.endsWith('.tsx')) {
+      console.log(`🔄 Change detected: ${filename}`);
+      main().catch(console.error);
+    }
+  });
+  fs.watch(pagesFile, () => {
+    console.log('🔄 pages.ts changed');
+    main().catch(console.error);
+  });
+
+  // Keep alive
+  await new Promise(() => {});
+} else {
+  await main().catch(console.error);
+}

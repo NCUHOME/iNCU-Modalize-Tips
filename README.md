@@ -20,17 +20,27 @@ app/
         meta.ts         ← 页面元数据（title, description）
         page.tsx        ← 页面内容
 scripts/
-  generate-pages.ts     ← 预构建脚本
+  generate-pages.ts     ← 预构建脚本（支持 --watch 模式）
+  dev.ts                ← 开发入口（生成 + 监听 + dev server）
 ```
 
 ## 快速开始
 
 ```bash
 pnpm install
-pnpm dev       # 开发服务器（自动生成 manifest + HMR）
-pnpm build     # 生产构建（自动生成 manifest + prerender）
-pnpm start     # 预览构建结果（静态文件服务器，端口 3000）
+pnpm dev        # 开发服务器（生成 manifest + 监听文件变更 + HMR）
+pnpm build      # 生产构建（自动生成 manifest + prerender）
+pnpm preview    # 预览构建结果（端口 3000）
 ```
+
+### 开发说明
+
+`pnpm dev` 会依次执行：
+1. 首次生成 manifest
+2. 后台启动文件监听，`app/pages.ts` 或 `meta.ts` 变更时自动重新生成 manifest
+3. 前台启动 `react-router dev` 开发服务器（自带 HMR）
+
+修改任何文件都会自动触发对应更新，无需手动操作。
 
 ## 页面开关
 
@@ -62,7 +72,7 @@ export const routeMeta = {
 
 2. 创建 `{pageId}/page.tsx` 编写内容
 3. 在 [app/pages.ts](app/pages.ts) 的对应分类 `pages` 数组中添加 `{ id: 'pageId', enabled: true/false }`
-4. 运行 `pnpm build`
+4. `pnpm dev` 下自动生效，或手动 `pnpm generate`
 
 ## 新增分类
 

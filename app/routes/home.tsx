@@ -25,7 +25,7 @@ export default function Home() {
           使用指南
         </h1>
         <p className="text-sm text-(--text-secondary) mt-1">
-          {routeManifest.categories.length} 个分类，帮助你快速上手
+          {routeManifest.categories.length} 个条目，帮助你快速上手南大家园
         </p>
       </header>
 
