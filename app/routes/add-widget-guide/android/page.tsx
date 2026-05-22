@@ -5,7 +5,7 @@ export function meta({}: Route.MetaArgs) {
   const page = routeManifest.categories
     .find((c) => c.id === 'add-widget-guide')
     ?.pages.find((p) => p.id === 'android');
-  return [{ title: page?.title ?? '其他 Android' }, { name: 'description', content: page?.description ?? '' }];
+  return [{ title: page?.title }, { name: 'description', content: page?.description }];
 }
 
 export default function AndroidGuide() {

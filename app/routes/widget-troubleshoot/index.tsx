@@ -7,10 +7,10 @@ export function meta({}: Route.MetaArgs) {
     (c) => c.id === "widget-troubleshoot",
   );
   return [
-    { title: category?.title ?? "小组件不刷新排障" },
+    { title: category?.title },
     {
       name: "description",
-      content: category?.description ?? "",
+      content: category?.description,
     },
   ];
 }

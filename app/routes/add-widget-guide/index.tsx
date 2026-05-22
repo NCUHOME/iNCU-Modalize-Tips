@@ -7,10 +7,10 @@ export function meta({}: Route.MetaArgs) {
     (c) => c.id === "add-widget-guide",
   );
   return [
-    { title: category?.title ?? "如何添加小组件引导" },
+    { title: category?.title },
     {
       name: "description",
-      content: category?.description ?? "",
+      content: category?.description,
     },
   ];
 }

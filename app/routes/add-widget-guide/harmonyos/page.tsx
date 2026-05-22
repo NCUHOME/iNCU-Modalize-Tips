@@ -3,7 +3,10 @@ import { routeManifest } from "~/generated/pages";
 import type { Route } from "./+types/page";
 
 export function meta({}: Route.MetaArgs) {
-  return [{ title: "使用指南" }];
+  const page = routeManifest.categories
+    .find((c) => c.id === 'add-widget-guide')
+    ?.pages.find((p) => p.id === 'harmonyos');
+  return [{ title: page?.title }, { name: 'description', content: page?.description }];
 }
 
 export default function OsPage() {

@@ -3,7 +3,7 @@ import type { Route } from './+types/page';
 
 export function meta({}: Route.MetaArgs) {
   const page = routeManifest.categories.find((c) => c.id === 'add-widget-guide')?.pages.find((p) => p.id === 'ios');
-  return [{ title: page?.title ?? 'iOS添加小组件' }, { name: 'description', content: page?.description ?? '' }];
+  return [{ title: page?.title }, { name: 'description', content: page?.description }];
 }
 
 export default function IosGuide() {
