@@ -31,7 +31,7 @@ export default function HyperosGuide() {
           <li>
             在小组件列表中找到 <strong>南大家园</strong>
           </li>
-          <li>轻点（或拖移）添加到锁定屏幕</li>
+          <li>轻点（或拖移）添加到主屏幕</li>
         </ol>
       </section>
       <section>

@@ -19,12 +19,9 @@ export default function IosGuide() {
           <section>
             <h2>操作步骤</h2>
             <ol>
-              <li>长按主屏幕空白区域，进入编辑模式</li>
+              <li>长按主屏幕空白区域进入编辑模式，或按住主屏幕背景直到图标开始抖动</li>
               <li>
-                点击左上角的 <strong>编辑</strong> 按钮
-              </li>
-              <li>
-                轻点 <strong>添加小组件</strong>
+                轻点屏幕顶部的 <strong>编辑</strong>，然后选取 <strong>添加小组件</strong>
               </li>
               <li>
                 搜索或找到 <strong>南大家园</strong>
@@ -54,7 +51,7 @@ export default function IosGuide() {
                 找到 <strong>南大家园</strong> 并轻点（或拖移）添加到锁定屏幕
               </li>
               <li>
-                轻点右上角 <strong>关闭</strong>，然后轻点 <strong>完成</strong>
+                轻点 <strong>关闭</strong> 按钮，然后轻点 <strong>完成</strong>
               </li>
             </ol>
           </section>
@@ -70,7 +67,7 @@ export default function IosGuide() {
               <li>
                 轻点屏幕顶部的 <strong>编辑</strong>，然后选取 <strong>自定义</strong>
               </li>
-              <li>根据需要调整以下选项：</li>
+              <li>除默认外还有以下选项可供调整：</li>
             </ol>
             <ul>
               <li>
