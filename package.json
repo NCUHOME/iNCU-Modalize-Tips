@@ -7,12 +7,15 @@
     "dev": "tsx scripts/dev.ts",
     "build": "pnpm generate && react-router build",
     "preview": "vite preview --port 3000",
+    "cli": "tsx scripts/cli.ts",
     "typecheck": "pnpm generate && react-router typegen && tsc"
   },
   "dependencies": {
+    "@clack/prompts": "^1.4.0",
     "@react-router/node": "7.15.1",
     "@react-router/serve": "7.15.1",
     "isbot": "^5.1.36",
+    "picocolors": "^1.1.1",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
     "react-router": "7.15.1"

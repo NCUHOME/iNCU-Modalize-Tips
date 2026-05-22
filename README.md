@@ -21,6 +21,7 @@ app/
         page.tsx        ← 页面内容
 scripts/
   generate-pages.ts     ← 预构建脚本（支持 --watch 模式）
+  cli.ts                ← 交互式 CLI（管理页面和分类）
   dev.ts                ← 开发入口（生成 + 监听 + dev server）
 ```
 
@@ -79,6 +80,23 @@ export const routeMeta = {
 1. 创建 `app/routes/{category}/layout.tsx` 和 `index.tsx`
 2. 在 [app/pages.ts](app/pages.ts) 的 `categories` 数组中添加新分类定义
 3. 按上述步骤添加页面
+
+## 交互式 CLI
+
+提供 `pnpm cli` 交互式命令，支持新增/删除页面和分类，零外部依赖。
+
+```bash
+pnpm cli
+```
+
+支持的操作：
+
+- **新增页面** — 选择分类，输入页面 ID、标题、描述，自动创建 `meta.ts`、`page.tsx` 并更新 `pages.ts`
+- **新增分类** — 输入分类 ID、标题、描述，自动创建 `layout.tsx`、`index.tsx` 并更新 `pages.ts`
+- **删除页面** — 选择分类下的页面，确认后删除文件并更新 `pages.ts`（删除前检查 git 变更）
+- **删除分类** — 选择分类，确认后删除整个目录并更新 `pages.ts`（删除前检查 git 变更）
+
+每次变更后自动运行 `pnpm generate` 更新 manifest。
 
 ## 技术栈
 
