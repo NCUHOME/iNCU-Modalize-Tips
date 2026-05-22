@@ -1,6 +1,11 @@
 import { getPageData, getPageMeta } from '~/lib/page';
 import type { Route } from './+types/page';
 import { Detail } from '~/components/Detail';
+import { Image } from '~/components/Image';
+import { Gallery } from '~/components/Gallery';
+import liquidGlass from './image/liquid_glass.webp';
+import tintLight from './image/tint.webp';
+import tintDark from './image/tint_dark.webp';
 
 export function meta({}: Route.MetaArgs) {
   return getPageMeta('add-widget-guide', 'ios');
@@ -52,6 +57,36 @@ export default function IosGuide() {
                 轻点右上角 <strong>关闭</strong>，然后轻点 <strong>完成</strong>
               </li>
             </ol>
+          </section>
+          <section>
+            <h2>自定义小组件颜色</h2>
+            <p className="text-neutral-500 -mt-2 mb-1" style={{ fontSize: '12px' }}>
+              <strong>iOS 18</strong>及以上版本支持自定义小组件外观。
+            </p>
+            <ol>
+              <li>
+                长按主屏幕空白区域进入编辑模式，或按住主屏幕背景直到图标开始抖动
+              </li>
+              <li>
+                轻点屏幕顶部的 <strong>编辑</strong>，然后选取 <strong>自定义</strong>
+              </li>
+              <li>根据需要调整以下选项：</li>
+            </ol>
+            <ul>
+              <li>
+                <strong>透明</strong>：使小组件变为半透明（仅 <strong>iOS 26</strong> 及以上版本支持）
+                <br />
+                <Image src={liquidGlass} alt="透明效果" caption="透明效果" maxWidth={300} />
+              </li>
+              <li>
+                <strong>色调</strong>：为小组件添加颜色，使用滑块选取颜色及饱和度，然后选取"浅色"、"深色"或"自动"。
+                <br />
+                <Gallery>
+                  <Image src={tintLight} alt="浅色色调" caption="浅色模式" maxWidth={200} />
+                  <Image src={tintDark} alt="深色色调" caption="深色模式" maxWidth={200} />
+                </Gallery>
+              </li>
+            </ul>
           </section>
           <section>
             <h2>注意事项</h2>
