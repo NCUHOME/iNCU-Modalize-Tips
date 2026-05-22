@@ -1,5 +1,6 @@
 import { routeManifest } from '~/generated/pages';
 import type { Route } from './+types/page';
+import { DetailHeader } from '~/components/DetailHeader';
 
 export function meta({}: Route.MetaArgs) {
   const page = routeManifest.categories
@@ -16,13 +17,7 @@ export default function HyperosTroubleshoot() {
   return (
     <article>
       <div className="detail-article anim-fade-up">
-        <div className="detail-header">
-          {page?.image && <img src={page.image} alt="" className="brand-icon-lg" />}
-          <div className="detail-header-text">
-            <h1>{page?.title ?? 'HyperOS小组件刷新问题'}</h1>
-            <p className="meta-date">最后更新：2026年5月</p>
-          </div>
-        </div>
+        <DetailHeader title={page?.title ?? 'HyperOS小组件刷新问题'} image={page?.image} />
         <div className="mt-6 space-y-4">
           <section>
             <h2>检查步骤</h2>

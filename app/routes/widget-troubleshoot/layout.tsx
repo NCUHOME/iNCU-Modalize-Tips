@@ -9,10 +9,7 @@ export default function WidgetTroubleshootLayout() {
   return (
     <div className="min-h-screen p-5" style={{ maxWidth: 640, margin: "0 auto" }}>
       {!isIndex && (
-        <button
-          onClick={() => navigate(-1)}
-          className="back-link anim-slide-left mb-5"
-        >
+        <button onClick={() => navigate(-1)} className="back-btn anim-scale-in">
           <svg
             width="16"
             height="16"
@@ -26,10 +23,11 @@ export default function WidgetTroubleshootLayout() {
             <path d="M19 12H5" />
             <polyline points="12 19 5 12 12 5" />
           </svg>
-          返回
         </button>
       )}
-      <Outlet />
+      <div className={!isIndex ? 'has-back-btn' : ''}>
+        <Outlet />
+      </div>
     </div>
   );
 }

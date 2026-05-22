@@ -264,7 +264,7 @@ body {
   border-radius: 8px;
   flex-shrink: 0;
   object-fit: contain;
-  background: #ffffff;
+  background: transparent;
   padding: 2px;
 }
 
@@ -274,8 +274,13 @@ body {
   border-radius: 10px;
   flex-shrink: 0;
   object-fit: contain;
-  background: #ffffff;
+  background: transparent;
   padding: 3px;
+}
+
+[data-theme="dark"] .brand-icon,
+[data-theme="dark"] .brand-icon-lg {
+  background: #d7d7d7;
 }
 
 /* ===== Detail Article ===== */
@@ -353,6 +358,41 @@ body {
 
 .detail-article section:first-child {
   margin-top: 0;
+}
+
+/* ===== Floating Back Button ===== */
+.back-btn {
+  position: fixed;
+  top: 14px;
+  left: 14px;
+  z-index: 40;
+  width: 36px;
+  height: 36px;
+  border-radius: 9999px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.back-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: scale(1.05);
+}
+
+.back-btn:active {
+  transform: scale(0.92);
+}
+
+.has-back-btn {
+  padding-top: 36px;
 }
 
 /* ===== Scrollbar ===== */
