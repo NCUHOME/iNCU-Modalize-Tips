@@ -1,5 +1,5 @@
 export const routeMeta = {
-  title: 'HyperOS添加小组件',
-  description: '在Xiaomi HyperOS系统中将小组件添加到主屏幕',
+  title: '小米HyperOS',
+  description: '在小米HyperOS系统中添加小组件',
   image: '/images/hyperos-widget.svg',
 } as const;

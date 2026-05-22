@@ -1,5 +1,5 @@
 export const routeMeta = {
-  title: 'iOS添加小组件',
-  description: '在iPhone或iPad上通过编辑主屏幕添加小组件',
+  title: 'Apple iOS',
+  description: '在iPhone或iPad上添加主屏幕或锁屏小组件',
   image: '/images/ios-widget.svg',
 } as const;

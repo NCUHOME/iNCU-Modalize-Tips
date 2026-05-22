@@ -1,4 +1,4 @@
 export const routeMeta = {
-  title: 'OriginOS添加小组件',
+  title: 'Vivo OriginOS',
   description: '在Vivo OriginOS系统中添加小组件',
 } as const;
