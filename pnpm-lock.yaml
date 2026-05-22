@@ -17,6 +17,9 @@ importers:
       isbot:
         specifier: ^5.1.36
         version: 5.1.40
+      mincu-react:
+        specifier: ^2.13.2
+        version: 2.13.2(react@19.2.6)
       react:
         specifier: ^19.2.6
         version: 19.2.6
@@ -1159,6 +1162,10 @@ packages:
     resolution: {integrity: sha512-aIL5Fx7mawVa300al2BnEE4iNvo1qETxLrPI/o05L7z6go7fCw1J6EQmbK4FmJ2AS7kgVF/KEZWufBfdClMcPg==}
     engines: {node: '>= 0.6'}
 
+  events@3.3.0:
+    resolution: {integrity: sha512-mQw+2fkQbALzQ7V0MY0IqdnXNOeTtP4r0lN9z7AAawCXgqea7bDii20AYrIBrFd/Hx0M2Ocz6S111CaFkUcb0Q==}
+    engines: {node: '>=0.8.x'}
+
   exit-hook@2.2.1:
     resolution: {integrity: sha512-eNTPlAD67BmP31LDINZ3U7HSF8l57TxOY2PmBJ1shpCvpnxBF93mWCE8YHBnXs8qiUZJc9WDcWIeC3a2HIAMfw==}
     engines: {node: '>=6'}
@@ -1389,6 +1396,37 @@ packages:
     resolution: {integrity: sha512-x0Vn8spI+wuJ1O6S7gnbaQg8Pxh4NNHb7KSINmEWKiPE4RKOplvijn+NkmYmmRgP68mc70j2EbeTFRsrswaQeg==}
     engines: {node: '>=4'}
     hasBin: true
+
+  mincu-core@2.13.2:
+    resolution: {integrity: sha512-7bnhiuexrHomD6kMAKNnwwU7ARoTlUejXIQa4At3BVjHKnaVfipj+/mVbJX0wbu6LtUxv26Uq0r5UjckaZbk0A==}
+
+  mincu-data@2.13.2:
+    resolution: {integrity: sha512-Rl8Z99mtuQAFWhyVEqzc7Eibg5t3VtMvHxd5vEuS3MiDL7/Xe1GRPkRruhdWJZdXpU9NfLOuuP0uW5n04fRy4w==}
+
+  mincu-event@2.13.2:
+    resolution: {integrity: sha512-dhQFj0izFYy17IjJgEtzumGZ6FDcAsNbM4i8h2QWnrISB6iN9JCw7XRVi4pW78Y4pVmJlEreq/GaZxCTKeAF9g==}
+
+  mincu-hooks@2.13.2:
+    resolution: {integrity: sha512-IH1SCkKxrETP/KFfohtdunevAl8fIQ7xtqzLm/wiDWVuCmAO9wh4vYe13LNUiJmkVQ5ngFAmcBiQTJpBHPZGQw==}
+    peerDependencies:
+      react: '>=17'
+
+  mincu-lib@2.13.2:
+    resolution: {integrity: sha512-8rJ7f+n/wDTWd2k7htsCyTkqHrvmWWicCiw+EDVITcqmdgVHbpJ2td6tiPFbAeUFN5511FOJtc3mawAJ9OECnQ==}
+
+  mincu-network@2.13.2:
+    resolution: {integrity: sha512-jPvI5ezA7sa0DLOSkMsaQmvv3m00HN5oJx5qzss2DnOzebNSyzcrCgQidlic5MNRqpPGVjsN2P3kLdvtBRWX+A==}
+
+  mincu-react@2.13.2:
+    resolution: {integrity: sha512-vCQUsX8Wk7WFwV+tEDfrvW1vGMl3cjyAhA10TqDVIFlSIL5RBBGFYzGiAbtJjtCz1ZtAy4pRWCO38h4IyiK2/w==}
+    peerDependencies:
+      react: '>=17'
+
+  mincu-ui@2.13.2:
+    resolution: {integrity: sha512-h8nZoGNgSmRHtB62QP0s2w11bdFR1APRRqS0n7cH19QWAE1dHNtCwbi8wbimRZkOUrANoZ8OV/XZt5SHGTKUZA==}
+
+  mincu-vanilla@2.13.2:
+    resolution: {integrity: sha512-YVBGa2rajbEbfCXmNRpO8kLBuOxL5swpWJu2xh88mJODNziMw2p9I+XFt0F2u2eQtgS4eWtqOfATiaCWx+drIQ==}
 
   morgan@1.10.1:
     resolution: {integrity: sha512-223dMRJtI/l25dJKWpgij2cMtywuG/WiUKXdvwfbhGKBhy1puASqXwFzmWZ7+K73vUPoR7SS2Qz2cI/g9MKw0A==}
@@ -2670,6 +2708,8 @@ snapshots:
 
   etag@1.8.1: {}
 
+  events@3.3.0: {}
+
   exit-hook@2.2.1: {}
 
   express@4.22.2:
@@ -2879,6 +2919,52 @@ snapshots:
       mime-db: 1.52.0
 
   mime@1.6.0: {}
+
+  mincu-core@2.13.2:
+    dependencies:
+      events: 3.3.0
+      mincu-lib: 2.13.2
+
+  mincu-data@2.13.2:
+    dependencies:
+      mincu-core: 2.13.2
+      mincu-lib: 2.13.2
+
+  mincu-event@2.13.2:
+    dependencies:
+      mincu-core: 2.13.2
+
+  mincu-hooks@2.13.2(react@19.2.6):
+    dependencies:
+      lodash: 4.18.1
+      mincu-core: 2.13.2
+      mincu-data: 2.13.2
+      react: 19.2.6
+
+  mincu-lib@2.13.2: {}
+
+  mincu-network@2.13.2:
+    dependencies:
+      mincu-core: 2.13.2
+      mincu-data: 2.13.2
+
+  mincu-react@2.13.2(react@19.2.6):
+    dependencies:
+      mincu-hooks: 2.13.2(react@19.2.6)
+      mincu-vanilla: 2.13.2
+      react: 19.2.6
+
+  mincu-ui@2.13.2:
+    dependencies:
+      mincu-core: 2.13.2
+
+  mincu-vanilla@2.13.2:
+    dependencies:
+      mincu-core: 2.13.2
+      mincu-data: 2.13.2
+      mincu-event: 2.13.2
+      mincu-network: 2.13.2
+      mincu-ui: 2.13.2
 
   morgan@1.10.1:
     dependencies:
