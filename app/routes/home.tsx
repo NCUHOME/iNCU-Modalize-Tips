@@ -34,15 +34,28 @@ export default function Home() {
           const enabledPages = category.pages.filter((p) => p.enabled);
           if (enabledPages.length === 0) return null;
 
+          const count = enabledPages.length;
+
           return (
             <section key={category.id} className="anim-fade-up">
               <Link
                 to={`/${category.id}/`}
                 className="section-link mb-3"
               >
-                <h2 className="text-base font-medium text-(--text)">
-                  {category.title}
-                </h2>
+                <div className="flex items-center gap-2.5">
+                  <h2 className="text-base font-medium text-(--text)">
+                    {category.title}
+                  </h2>
+                  <span
+                    className="inline-flex items-center justify-center min-w-5 h-5 px-1.5 rounded-full text-[11px] font-medium"
+                    style={{
+                      backgroundColor: "var(--accent-subtle)",
+                      color: "var(--accent)",
+                    }}
+                  >
+                    {count}
+                  </span>
+                </div>
                 <p className="text-sm text-(--text-secondary) mt-0.5">
                   {category.description}
                 </p>
