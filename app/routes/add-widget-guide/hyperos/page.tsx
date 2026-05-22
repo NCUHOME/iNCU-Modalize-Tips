@@ -1,20 +1,16 @@
-import { routeManifest } from '~/generated/pages';
+import { getPageData, getPageMeta } from '~/lib/page';
 import type { Route } from './+types/page';
-import { DetailHeader } from '~/components/DetailHeader';
+import { Detail } from '~/components/Detail';
 
 export function meta({}: Route.MetaArgs) {
-  const page = routeManifest.categories.find((c) => c.id === 'add-widget-guide')?.pages.find((p) => p.id === 'hyperos');
-  return [{ title: page?.title }, { name: 'description', content: page?.description }];
+  return getPageMeta('add-widget-guide', 'hyperos');
 }
 
 export default function HyperosGuide() {
-  const page = routeManifest.categories.find((c) => c.id === 'add-widget-guide')?.pages.find((p) => p.id === 'hyperos');
+  const page = getPageData('add-widget-guide', 'hyperos')!;
 
   return (
-    <article>
-      <div className="detail-article anim-fade-up">
-        <DetailHeader title={page?.title ?? 'HyperOS添加小组件'} image={page?.image} />
-        <div className="mt-6 space-y-4">
+    <Detail page={page}>
           <section>
             <h2>操作步骤</h2>
             <ol>
@@ -40,8 +36,6 @@ export default function HyperosGuide() {
               <li>HyperOS/MIUI不同机型操作可能略有差异</li>
             </ul>
           </section>
-        </div>
-      </div>
-    </article>
+    </Detail>
   );
 }

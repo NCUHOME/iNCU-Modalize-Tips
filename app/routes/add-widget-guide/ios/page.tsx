@@ -1,20 +1,16 @@
-import { routeManifest } from '~/generated/pages';
+import { getPageData, getPageMeta } from '~/lib/page';
 import type { Route } from './+types/page';
-import { DetailHeader } from '~/components/DetailHeader';
+import { Detail } from '~/components/Detail';
 
 export function meta({}: Route.MetaArgs) {
-  const page = routeManifest.categories.find((c) => c.id === 'add-widget-guide')?.pages.find((p) => p.id === 'ios');
-  return [{ title: page?.title }, { name: 'description', content: page?.description }];
+  return getPageMeta('add-widget-guide', 'ios');
 }
 
 export default function IosGuide() {
-  const page = routeManifest.categories.find((c) => c.id === 'add-widget-guide')?.pages.find((p) => p.id === 'ios');
+  const page = getPageData('add-widget-guide', 'ios')!;
 
   return (
-    <article>
-      <div className="detail-article anim-fade-up">
-        <DetailHeader title={page?.title ?? 'iOS添加小组件'} image={page?.image} />
-        <div className="mt-6 space-y-4">
+    <Detail page={page}>
           <section>
             <h2>操作步骤</h2>
             <ol>
@@ -64,8 +60,6 @@ export default function IosGuide() {
               <li>如果找不到小组件，请确认应用已更新到最新版本</li>
             </ul>
           </section>
-        </div>
-      </div>
-    </article>
+    </Detail>
   );
 }

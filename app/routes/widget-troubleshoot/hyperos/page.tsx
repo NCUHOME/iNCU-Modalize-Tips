@@ -1,24 +1,16 @@
-import { routeManifest } from '~/generated/pages';
+import { getPageData, getPageMeta } from '~/lib/page';
 import type { Route } from './+types/page';
-import { DetailHeader } from '~/components/DetailHeader';
+import { Detail } from '~/components/Detail';
 
 export function meta({}: Route.MetaArgs) {
-  const page = routeManifest.categories
-    .find((c) => c.id === 'widget-troubleshoot')
-    ?.pages.find((p) => p.id === 'hyperos');
-  return [{ title: page?.title }, { name: 'description', content: page?.description }];
+  return getPageMeta('widget-troubleshoot', 'hyperos');
 }
 
 export default function HyperosTroubleshoot() {
-  const page = routeManifest.categories
-    .find((c) => c.id === 'widget-troubleshoot')
-    ?.pages.find((p) => p.id === 'hyperos');
+  const page = getPageData('widget-troubleshoot', 'hyperos')!;
 
   return (
-    <article>
-      <div className="detail-article anim-fade-up">
-        <DetailHeader title={page?.title ?? 'HyperOS小组件刷新问题'} image={page?.image} />
-        <div className="mt-6 space-y-4">
+    <Detail page={page}>
           <section>
             <h2>检查步骤</h2>
             <ol>
@@ -38,8 +30,6 @@ export default function HyperosTroubleshoot() {
               </li>
             </ol>
           </section>
-        </div>
-      </div>
-    </article>
+    </Detail>
   );
 }

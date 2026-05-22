@@ -1,24 +1,16 @@
-import { routeManifest } from '~/generated/pages';
+import { getPageData, getPageMeta } from '~/lib/page';
 import type { Route } from './+types/page';
-import { DetailHeader } from '~/components/DetailHeader';
+import { Detail } from '~/components/Detail';
 
 export function meta({}: Route.MetaArgs) {
-  const page = routeManifest.categories
-    .find((c) => c.id === 'widget-troubleshoot')
-    ?.pages.find((p) => p.id === 'android');
-  return [{ title: page?.title }, { name: 'description', content: page?.description }];
+  return getPageMeta('widget-troubleshoot', 'android');
 }
 
 export default function AndroidTroubleshoot() {
-  const page = routeManifest.categories
-    .find((c) => c.id === 'widget-troubleshoot')
-    ?.pages.find((p) => p.id === 'android');
+  const page = getPageData('widget-troubleshoot', 'android')!;
 
   return (
-    <article>
-      <div className="detail-article anim-fade-up">
-        <DetailHeader title={page?.title ?? '其他 Android'} image={page?.image} />
-        <div className="mt-6 space-y-4">
+    <Detail page={page}>
           <section>
             <h2>检查步骤</h2>
             <ol>
@@ -47,8 +39,6 @@ export default function AndroidTroubleshoot() {
               <li>如果以上方法无效，请查看对应品牌的指南</li>
             </ul>
           </section>
-        </div>
-      </div>
-    </article>
+    </Detail>
   );
 }
