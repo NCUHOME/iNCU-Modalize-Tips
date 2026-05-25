@@ -11,7 +11,7 @@ export default function AddWidgetGuideLayout() {
   );
 
   return (
-    <div className="min-h-screen" style={{ maxWidth: 640, margin: "0 auto" }}>
+    <div className="min-h-dvh" style={{ maxWidth: 640, margin: "0 auto" }}>
       <div className={`top-bar ${isIndex ? "top-bar-index" : ""}`}>
         <BackButton visible={!isIndex} />
         <div className="top-bar-header">

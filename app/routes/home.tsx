@@ -19,7 +19,7 @@ export function meta({}: Route.MetaArgs) {
 
 export default function Home() {
   return (
-    <div className="p-5" style={{ maxWidth: 640, margin: "0 auto" }}>
+    <div className="min-h-dvh p-5" style={{ maxWidth: 640, margin: "0 auto" }}>
       <header className="anim-fade-up mb-7">
         <h1 className="text-[22px] font-semibold tracking-tight text-(--text)">
           使用指南
