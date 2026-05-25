@@ -17,7 +17,7 @@ export default function IosGuide() {
   return (
     <Detail page={page}>
       <section>
-        <h2>操作步骤</h2>
+        <h2>添加主屏幕小组件</h2>
         <ol>
           <li>
             长按主屏幕空白区域进入编辑模式，或按住主屏幕背景直到图标开始抖动
