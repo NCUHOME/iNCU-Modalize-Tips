@@ -262,6 +262,7 @@ export async function addCategory() {
   const pascalId = toPascalCase(categoryId!);
   const layoutContent = applyTemplate("layout.template", {
     componentName: pascalId,
+    categoryId: categoryId!,
   });
 
   const indexContent = applyTemplate("index.template", {

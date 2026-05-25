@@ -3,13 +3,12 @@ import { select, isCancel } from "@clack/prompts";
 import pc from "picocolors";
 import type { CategoryEntry } from "../lib/types";
 import { EXIT, PAGES_FILE } from "../lib/constants";
-import { importPagesFile, readMeta } from "../lib/pages";
+import { importPagesFile, readMeta, rebuildPagesFile } from "../lib/pages";
 import { runGenerate } from "../lib/utils";
 import {
   enterTui,
   waitForKey,
   renderScrolledList,
-  escRe,
   type ScrolledListState,
 } from "../lib/terminal";
 
@@ -95,11 +94,11 @@ export async function toggleInCat() {
     } else if (key.name === "right" || key.name === "space") {
       const p = fresh.pages[cursor];
       const nState = !p.enabled;
-      const raw = fs.readFileSync(PAGES_FILE, "utf-8");
-      const re = new RegExp(
-        `(\\{\\s*id:\\s*'${escRe(p.id)}'[^}]*?enabled:\\s*)${p.enabled}(\\s*\\})`,
-      );
-      fs.writeFileSync(PAGES_FILE, raw.replace(re, `$1${nState}$2`), "utf-8");
+      const allCats = await importPagesFile();
+      const tgt = allCats.find((x) => x.id === c.id)!;
+      const pg = tgt.pages.find((x) => x.id === p.id)!;
+      pg.enabled = nState;
+      fs.writeFileSync(PAGES_FILE, rebuildPagesFile(allCats), "utf-8");
       dirty = true;
       await render();
     }
