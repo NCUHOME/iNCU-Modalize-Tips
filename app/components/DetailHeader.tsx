@@ -1,11 +1,10 @@
 interface DetailHeaderProps {
-  categoryTitle: string;
   title: string;
   description: string;
   image?: string | null;
 }
 
-export function DetailHeader({ categoryTitle, title, description, image }: DetailHeaderProps) {
+export function DetailHeader({ title, description, image }: DetailHeaderProps) {
   return (
     <div className="detail-header">
       <div
@@ -18,7 +17,6 @@ export function DetailHeader({ categoryTitle, title, description, image }: Detai
         }}
       />
       <div className="detail-header-text">
-        <p className="category-label">{categoryTitle}</p>
         <h1>{title}</h1>
         <p className="detail-description">{description}</p>
       </div>

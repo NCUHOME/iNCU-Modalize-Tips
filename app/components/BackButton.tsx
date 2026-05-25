@@ -1,7 +1,13 @@
 import { useNavigate } from "react-router";
 
-export function BackButton() {
+interface BackButtonProps {
+  visible: boolean;
+}
+
+export function BackButton({ visible }: BackButtonProps) {
   const navigate = useNavigate();
+
+  if (!visible) return null;
 
   const handleClick = () => {
     if (document.startViewTransition) {
@@ -14,7 +20,7 @@ export function BackButton() {
   return (
     <button
       onClick={handleClick}
-      className="back-btn anim-scale-in"
+      className="back-btn"
       aria-label="返回上一页"
     >
       <svg

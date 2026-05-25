@@ -21,17 +21,5 @@ export function CategoryList({ categoryId }: CategoryListProps) {
     stagger: i + 1,
   }));
 
-  return (
-    <div>
-      <header className="mb-6 anim-fade-up">
-        <h1 className="text-[22px] font-semibold tracking-tight text-(--text)">
-          {category.title}
-        </h1>
-        <p className="text-sm text-(--text-secondary) mt-1">
-          {category.description}
-        </p>
-      </header>
-      <GuideCardList pages={cards} />
-    </div>
-  );
+  return <GuideCardList pages={cards} />;
 }

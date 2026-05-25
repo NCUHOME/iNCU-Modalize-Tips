@@ -2,7 +2,6 @@ import type { ReactNode } from 'react';
 import { DetailHeader } from '~/components/DetailHeader';
 
 interface DetailProps {
-  categoryTitle: string;
   page: {
     title?: string;
     description?: string;
@@ -11,12 +10,11 @@ interface DetailProps {
   children: ReactNode;
 }
 
-export function Detail({ categoryTitle, page, children }: DetailProps) {
+export function Detail({ page, children }: DetailProps) {
   return (
     <article>
       <div className="detail-article anim-fade-up">
         <DetailHeader
-          categoryTitle={categoryTitle}
           title={page?.title ?? ''}
           description={page?.description ?? ''}
           image={page?.image}
