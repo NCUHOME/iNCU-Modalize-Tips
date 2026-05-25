@@ -1,5 +1,9 @@
 import { routeManifest } from '~/generated/pages';
 
+export function getCategoryData(categoryId: string) {
+  return routeManifest.categories.find((c) => c.id === categoryId);
+}
+
 export function getPageData(categoryId: string, pageId: string) {
   return routeManifest.categories
     .find((c) => c.id === categoryId)

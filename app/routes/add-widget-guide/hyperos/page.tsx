@@ -1,4 +1,4 @@
-import { getPageData, getPageMeta } from '~/lib/page';
+import { getCategoryData, getPageData, getPageMeta } from '~/lib/page';
 import type { Route } from './+types/page';
 import { Detail } from '~/components/Detail';
 import { Image } from '~/components/Image';
@@ -9,10 +9,11 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function HyperosGuide() {
+  const category = getCategoryData('add-widget-guide')!;
   const page = getPageData('add-widget-guide', 'hyperos')!;
 
   return (
-    <Detail page={page}>
+    <Detail categoryTitle={category.title} page={page}>
       <section>
         <h2>操作步骤</h2>
         <ol>

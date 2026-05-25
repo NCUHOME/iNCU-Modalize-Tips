@@ -1,4 +1,4 @@
-import { getPageData, getPageMeta } from '~/lib/page';
+import { getCategoryData, getPageData, getPageMeta } from '~/lib/page';
 import type { Route } from './+types/page';
 import { Detail } from '~/components/Detail';
 
@@ -7,10 +7,11 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function AndroidTroubleshoot() {
+  const category = getCategoryData('widget-troubleshoot')!;
   const page = getPageData('widget-troubleshoot', 'android')!;
 
   return (
-    <Detail page={page}>
+    <Detail categoryTitle={category.title} page={page}>
           <section>
             <h2>检查步骤</h2>
             <ol>
