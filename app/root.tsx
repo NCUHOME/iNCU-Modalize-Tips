@@ -35,6 +35,7 @@ const themeScript = `
     if (t === 'dark') {
       document.documentElement.setAttribute('data-theme', 'dark');
     }
+    document.documentElement.style.colorScheme = t;
   } catch(e) {}
 })();
 `;
