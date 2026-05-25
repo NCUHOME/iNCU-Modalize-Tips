@@ -1,18 +1,19 @@
-import fs from 'node:fs';
-import path from 'node:path';
-import type { PageEntry, CategoryEntry } from './types';
-import { PAGES_FILE, ROUTES_DIR } from './constants';
+import fs from "node:fs";
+import path from "node:path";
+import type { PageEntry, CategoryEntry } from "./types";
+import { PAGES_FILE, ROUTES_DIR } from "./constants";
 
 export function parsePagesFile(content: string): CategoryEntry[] {
   const categories: CategoryEntry[] = [];
-  const categoryRegex = /\{\s*\n\s+id:\s*'([^']+)',\s*\n\s+title:\s*'([^']*)',\s*\n\s+description:\s*'([^']*)',\s*\n\s+order:\s*(\d+),\s*\n\s+pages:\s*\[([\s\S]*?)\]\s*as\s+const,\s*\n\s*\},/g;
+  const categoryRegex =
+    /\{\s*\n\s+id:\s*'([^']+)',\s*\n\s+title:\s*'([^']*)',\s*\n\s+description:\s*'([^']*)',\s*\n\s+order:\s*(\d+),\s*\n\s+pages:\s*\[([\s\S]*?)\]\s*as\s+const,\s*\n\s*\},/g;
   let match: RegExpExecArray | null;
   while ((match = categoryRegex.exec(content)) !== null) {
     const pages: PageEntry[] = [];
     const pageRegex = /\{\s*id:\s*'([^']+)',\s*enabled:\s*(true|false)\s*\},?/g;
     let pm: RegExpExecArray | null;
     while ((pm = pageRegex.exec(match[5])) !== null) {
-      pages.push({ id: pm[1], enabled: pm[2] === 'true' });
+      pages.push({ id: pm[1], enabled: pm[2] === "true" });
     }
     categories.push({
       id: match[1],
@@ -59,39 +60,58 @@ export function rebuildPagesFile(cats: CategoryEntry[]): string {
   }
   lines.push(`] as const;`);
   lines.push(``);
-  return lines.join('\n');
+  return lines.join("\n");
 }
 
 /** Read a meta.ts file and return { title, desc, image } */
-export function readMeta(categoryId: string, pageId: string): { title: string; desc: string; image: string } {
-  const fp = path.join(ROUTES_DIR, categoryId, pageId, 'meta.ts');
-  if (!fs.existsSync(fp)) return { title: pageId, desc: '', image: '' };
-  const c = fs.readFileSync(fp, 'utf-8');
-  const tm = c.match(/title:\s*'([^']*)'/);
-  const dm = c.match(/description:\s*'([^']*)'/);
-  const im = c.match(/image:\s*'([^']*)'/);
-  return { title: tm?.[1] ?? pageId, desc: dm?.[1] ?? '', image: im?.[1] ?? '' };
+export function readMeta(
+  categoryId: string,
+  pageId: string,
+): { title: string; desc: string; image: string } {
+  const fp = path.join(ROUTES_DIR, categoryId, pageId, "meta.ts");
+  if (!fs.existsSync(fp)) return { title: pageId, desc: "", image: "" };
+  const c = fs.readFileSync(fp, "utf-8");
+  const tm = c.match(/title:\s*"([^"]*)"/);
+  const dm = c.match(/description:\s*"([^"]*)"/);
+  const im = c.match(/image:\s*"([^"]*)"/);
+  return {
+    title: tm?.[1] ?? pageId,
+    desc: dm?.[1] ?? "",
+    image: im?.[1] ?? "",
+  };
 }
 
 /** Write a meta.ts file */
-export function writeMeta(categoryId: string, pageId: string, title: string, description: string, image?: string): void {
+export function writeMeta(
+  categoryId: string,
+  pageId: string,
+  title: string,
+  description: string,
+  image?: string,
+): void {
   const dir = path.join(ROUTES_DIR, categoryId, pageId);
   fs.mkdirSync(dir, { recursive: true });
-  const imgLine = image ? `,
-  image: '${image}'` : '';
-  fs.writeFileSync(path.join(dir, 'meta.ts'), `export const routeMeta = {
-  title: '${title}',
-  description: '${description}'${imgLine},
+  const imgLine = image
+    ? `,
+  image: "${image}"`
+    : "";
+  fs.writeFileSync(
+    path.join(dir, "meta.ts"),
+    `export const routeMeta = {
+  title: "${title}",
+  description: "${description}"${imgLine},
 } as const;
-`, 'utf-8');
+`,
+    "utf-8",
+  );
 }
 
 /** Read pages.ts from disk and parse */
 export function readPages(): CategoryEntry[] {
-  return parsePagesFile(fs.readFileSync(PAGES_FILE, 'utf-8'));
+  return parsePagesFile(fs.readFileSync(PAGES_FILE, "utf-8"));
 }
 
 /** Write categories back to pages.ts */
 export function writePages(cats: CategoryEntry[]): void {
-  fs.writeFileSync(PAGES_FILE, rebuildPagesFile(cats), 'utf-8');
+  fs.writeFileSync(PAGES_FILE, rebuildPagesFile(cats), "utf-8");
 }

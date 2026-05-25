@@ -13,5 +13,5 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function {{componentName}}Index() {
-  return <CategoryList categoryId="{{categoryId}}" />
+  return <CategoryList categoryId="{{categoryId}}" />;
 }

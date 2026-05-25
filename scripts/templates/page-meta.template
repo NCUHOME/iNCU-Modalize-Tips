@@ -1,4 +1,4 @@
 export const routeMeta = {
-  title: '{{title}}',
-  description: '{{description}}',
+  title: "{{title}}",
+  description: "{{description}}",
 } as const;
