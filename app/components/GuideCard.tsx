@@ -26,6 +26,7 @@ export function GuideCard({
   return (
     <Link
       to={href}
+      viewTransition
       className={`guide-card anim-fade-up ${delayClass} ${isLoading ? "guide-card-loading" : ""}`}
       onClick={(e) => {
         if (isLoading) {

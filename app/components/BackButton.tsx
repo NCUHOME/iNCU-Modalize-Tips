@@ -3,9 +3,17 @@ import { useNavigate } from "react-router";
 export function BackButton() {
   const navigate = useNavigate();
 
+  const handleClick = () => {
+    if (document.startViewTransition) {
+      document.startViewTransition(() => navigate(-1));
+    } else {
+      navigate(-1);
+    }
+  };
+
   return (
     <button
-      onClick={() => navigate(-1)}
+      onClick={handleClick}
       className="back-btn anim-scale-in"
       aria-label="返回上一页"
     >
@@ -18,7 +26,7 @@ export function BackButton() {
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
-      >
+    >
         <path d="M19 12H5" />
         <polyline points="12 19 5 12 12 5" />
       </svg>

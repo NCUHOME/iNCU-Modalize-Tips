@@ -179,6 +179,16 @@ body::before {
   animation: slide-left 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
+/* ===== View Transitions ===== */
+::view-transition-old(root) {
+  animation: 0.25s ease-out both fade-in;
+  animation-direction: reverse;
+}
+
+::view-transition-new(root) {
+  animation: 0.25s ease-out both fade-in;
+}
+
 /* ===== Stagger Delays ===== */
 .stagger-1 { animation-delay: 0.04s; }
 .stagger-2 { animation-delay: 0.08s; }
