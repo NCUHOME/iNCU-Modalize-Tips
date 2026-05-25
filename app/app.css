@@ -249,6 +249,73 @@ body::before {
   overflow: hidden;
 }
 
+/* ===== Guide Card Loading ===== */
+@keyframes guide-card-shimmer-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes guide-card-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.guide-card-loading {
+  pointer-events: none;
+  border-color: transparent;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+.guide-card-loading::before {
+  border-color: var(--accent);
+}
+
+[data-theme="dark"] .guide-card-loading {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.guide-card-loading::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  z-index: 10;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(127, 127, 127, 0.08) 25%,
+    rgba(127, 127, 127, 0.15) 50%,
+    rgba(127, 127, 127, 0.08) 75%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  opacity: 0;
+  animation:
+    guide-card-shimmer-fade-in 1s ease forwards,
+    guide-card-shimmer 1.5s ease-in-out infinite;
+}
+
+[data-theme="dark"] .guide-card-loading::after {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.04) 25%,
+    rgba(255, 255, 255, 0.08) 50%,
+    rgba(255, 255, 255, 0.04) 75%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+}
+
 /* ===== Section Links ===== */
 .section-link {
   text-decoration: none;

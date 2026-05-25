@@ -7,6 +7,8 @@ interface GuideCardProps {
   image?: string;
   pageId: string;
   stagger?: number;
+  isLoading?: boolean;
+  onClick?: () => void;
 }
 
 export function GuideCard({
@@ -16,13 +18,22 @@ export function GuideCard({
   image,
   pageId,
   stagger = 1,
+  isLoading = false,
+  onClick,
 }: GuideCardProps) {
   const delayClass = stagger >= 1 && stagger <= 6 ? `stagger-${stagger}` : "";
 
   return (
     <Link
       to={href}
-      className={`guide-card anim-fade-up ${delayClass}`}
+      className={`guide-card anim-fade-up ${delayClass} ${isLoading ? "guide-card-loading" : ""}`}
+      onClick={(e) => {
+        if (isLoading) {
+          e.preventDefault();
+          return;
+        }
+        onClick?.();
+      }}
     >
       <div className="guide-card-body">
         {image && (
