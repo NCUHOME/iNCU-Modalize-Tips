@@ -13,7 +13,9 @@ export function setLoadingPageId(id: string | null): void {
   for (const fn of listeners) fn();
 }
 
-export function setLoadingTimer(id: ReturnType<typeof setTimeout> | null): void {
+export function setLoadingTimer(
+  id: ReturnType<typeof setTimeout> | null,
+): void {
   timerId = id;
 }
 

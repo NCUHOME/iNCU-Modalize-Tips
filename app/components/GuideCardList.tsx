@@ -22,7 +22,10 @@ interface GuideCardListProps {
   loadingDelay?: number;
 }
 
-export function GuideCardList({ pages, loadingDelay = 500 }: GuideCardListProps) {
+export function GuideCardList({
+  pages,
+  loadingDelay = 500,
+}: GuideCardListProps) {
   const navigation = useNavigation();
   const loadingPageId = useSyncExternalStore(
     subscribeLoadingPageId,

@@ -18,11 +18,7 @@ export function BackButton({ visible }: BackButtonProps) {
   };
 
   return (
-    <button
-      onClick={handleClick}
-      className="back-btn"
-      aria-label="返回上一页"
-    >
+    <button onClick={handleClick} className="back-btn" aria-label="返回上一页">
       <svg
         width="16"
         height="16"
@@ -32,7 +28,7 @@ export function BackButton({ visible }: BackButtonProps) {
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
-    >
+      >
         <path d="M19 12H5" />
         <polyline points="12 19 5 12 12 5" />
       </svg>

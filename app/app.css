@@ -3,7 +3,8 @@
 @variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
 @theme {
-  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif,
+  --font-sans:
+    "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
@@ -47,7 +48,9 @@ html {
 body {
   background-color: var(--bg);
   color: var(--text);
-  transition: background-color 0.3s ease, color 0.2s ease;
+  transition:
+    background-color 0.3s ease,
+    color 0.2s ease;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-autospace: normal;
@@ -55,13 +58,21 @@ body {
 }
 
 body::before {
-  content: '';
+  content: "";
   position: fixed;
   inset: 0;
   z-index: -1;
   background:
-    radial-gradient(ellipse 600px 400px at 10% 20%, var(--accent-subtle) 0%, transparent 70%),
-    radial-gradient(ellipse 400px 600px at 90% 80%, var(--accent-subtle) 0%, transparent 70%);
+    radial-gradient(
+      ellipse 600px 400px at 10% 20%,
+      var(--accent-subtle) 0%,
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 400px 600px at 90% 80%,
+      var(--accent-subtle) 0%,
+      transparent 70%
+    );
   pointer-events: none;
 }
 
@@ -190,12 +201,24 @@ body::before {
 }
 
 /* ===== Stagger Delays ===== */
-.stagger-1 { animation-delay: 0.04s; }
-.stagger-2 { animation-delay: 0.08s; }
-.stagger-3 { animation-delay: 0.12s; }
-.stagger-4 { animation-delay: 0.16s; }
-.stagger-5 { animation-delay: 0.2s; }
-.stagger-6 { animation-delay: 0.24s; }
+.stagger-1 {
+  animation-delay: 0.04s;
+}
+.stagger-2 {
+  animation-delay: 0.08s;
+}
+.stagger-3 {
+  animation-delay: 0.12s;
+}
+.stagger-4 {
+  animation-delay: 0.16s;
+}
+.stagger-5 {
+  animation-delay: 0.2s;
+}
+.stagger-6 {
+  animation-delay: 0.24s;
+}
 
 /* ===== Guide Card ===== */
 .guide-card {
@@ -211,7 +234,7 @@ body::before {
 }
 
 .guide-card::before {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
   border-radius: 12px;
@@ -303,7 +326,7 @@ body::before {
 }
 
 .guide-card-loading::after {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
   border-radius: 12px;
@@ -356,7 +379,6 @@ body::before {
   border-left-color: var(--accent);
   opacity: 0.8;
 }
-
 
 /* ===== Brand Icon ===== */
 .brand-icon {
@@ -505,7 +527,12 @@ body::before {
   min-height: 52px;
   padding: 16px 16px;
   padding-right: 52px;
-  background: linear-gradient(to bottom, var(--bg), var(--bg) 85%, transparent 100%);
+  background: linear-gradient(
+    to bottom,
+    var(--bg),
+    var(--bg) 85%,
+    transparent 100%
+  );
   transition: border-color 0.3s ease;
 }
 

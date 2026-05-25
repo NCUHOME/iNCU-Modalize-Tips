@@ -1,4 +1,4 @@
-import { routeManifest } from '~/generated/pages';
+import { routeManifest } from "~/generated/pages";
 
 export function getCategoryData(categoryId: string) {
   return routeManifest.categories.find((c) => c.id === categoryId);
@@ -12,5 +12,8 @@ export function getPageData(categoryId: string, pageId: string) {
 
 export function getPageMeta(categoryId: string, pageId: string) {
   const page = getPageData(categoryId, pageId);
-  return [{ title: page?.title }, { name: 'description', content: page?.description }];
+  return [
+    { title: page?.title },
+    { name: "description", content: page?.description },
+  ];
 }

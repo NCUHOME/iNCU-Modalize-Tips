@@ -1,5 +1,5 @@
-import type { ReactNode } from 'react';
-import { DetailHeader } from '~/components/DetailHeader';
+import type { ReactNode } from "react";
+import { DetailHeader } from "~/components/DetailHeader";
 
 interface DetailProps {
   page: {
@@ -15,8 +15,8 @@ export function Detail({ page, children }: DetailProps) {
     <article>
       <div className="detail-article anim-fade-up">
         <DetailHeader
-          title={page?.title ?? ''}
-          description={page?.description ?? ''}
+          title={page?.title ?? ""}
+          description={page?.description ?? ""}
           image={page?.image}
         />
         <div className="mt-6 space-y-4">{children}</div>

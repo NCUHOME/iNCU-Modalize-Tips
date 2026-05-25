@@ -20,11 +20,11 @@ export function meta({}: Route.MetaArgs) {
 export default function Home() {
   return (
     <div className="p-5" style={{ maxWidth: 640, margin: "0 auto" }}>
-      <header className="mb-7 anim-fade-up">
+      <header className="anim-fade-up mb-7">
         <h1 className="text-[22px] font-semibold tracking-tight text-(--text)">
           使用指南
         </h1>
-        <p className="text-sm text-(--text-secondary) mt-1">
+        <p className="mt-1 text-sm text-(--text-secondary)">
           {routeManifest.categories.length} 个条目，帮助你快速上手南大家园
         </p>
       </header>
@@ -38,16 +38,13 @@ export default function Home() {
 
           return (
             <section key={category.id} className="anim-fade-up">
-              <Link
-                to={`/${category.id}/`}
-                className="section-link mb-3"
-              >
+              <Link to={`/${category.id}/`} className="section-link mb-3">
                 <div className="flex items-center gap-2.5">
                   <h2 className="text-base font-medium text-(--text)">
                     {category.title}
                   </h2>
                   <span
-                    className="inline-flex items-center justify-center min-w-5 h-5 px-1.5 rounded-full text-[11px] font-medium"
+                    className="inline-flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-[11px] font-medium"
                     style={{
                       backgroundColor: "var(--accent-subtle)",
                       color: "var(--accent)",
@@ -56,7 +53,7 @@ export default function Home() {
                     {count}
                   </span>
                 </div>
-                <p className="text-sm text-(--text-secondary) mt-0.5">
+                <p className="mt-0.5 text-sm text-(--text-secondary)">
                   {category.description}
                 </p>
               </Link>

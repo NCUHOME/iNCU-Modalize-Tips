@@ -38,12 +38,7 @@ export function GuideCard({
     >
       <div className="guide-card-body">
         {image && (
-          <img
-            src={image}
-            alt=""
-            className="brand-icon"
-            loading="lazy"
-          />
+          <img src={image} alt="" className="brand-icon" loading="lazy" />
         )}
         <div className="guide-card-content">
           <div className="guide-card-title">{title}</div>

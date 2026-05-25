@@ -1,13 +1,13 @@
-import { getPageData, getPageMeta } from '~/lib/page';
-import type { Route } from './+types/page';
-import { Detail } from '~/components/Detail';
+import { getPageData, getPageMeta } from "~/lib/page";
+import type { Route } from "./+types/page";
+import { Detail } from "~/components/Detail";
 
 export function meta({}: Route.MetaArgs) {
-  return getPageMeta('add-widget-guide', 'android');
+  return getPageMeta("add-widget-guide", "android");
 }
 
 export default function AndroidGuide() {
-  const page = getPageData('add-widget-guide', 'android')!;
+  const page = getPageData("add-widget-guide", "android")!;
 
   return (
     <Detail page={page}>

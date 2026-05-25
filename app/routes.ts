@@ -4,9 +4,7 @@ import { routeManifest } from "./generated/pages";
 const routes: RouteConfig = [index("routes/home.tsx")];
 
 for (const category of routeManifest.categories) {
-  const children: RouteConfig = [
-    index(`routes/${category.id}/index.tsx`),
-  ];
+  const children: RouteConfig = [index(`routes/${category.id}/index.tsx`)];
 
   for (const page of category.pages) {
     if (page.enabled) {
@@ -23,9 +21,7 @@ for (const category of routeManifest.categories) {
     }
   }
 
-  routes.push(
-    route(category.id, `routes/${category.id}/layout.tsx`, children),
-  );
+  routes.push(route(category.id, `routes/${category.id}/layout.tsx`, children));
 }
 
 export default routes satisfies RouteConfig;
