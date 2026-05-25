@@ -1,6 +1,13 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useSyncExternalStore } from "react";
 import { useNavigation } from "react-router";
 import { GuideCard } from "~/components/GuideCard";
+import {
+  getLoadingPageId,
+  setLoadingPageId,
+  setLoadingTimer,
+  clearLoadingTimer,
+  subscribeLoadingPageId,
+} from "~/lib/loading-store";
 
 interface GuideCardListProps {
   pages: Array<{
@@ -17,17 +24,23 @@ interface GuideCardListProps {
 
 export function GuideCardList({ pages, loadingDelay = 500 }: GuideCardListProps) {
   const navigation = useNavigation();
-  const [loadingPageId, setLoadingPageId] = useState<string | null>(null);
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const loadingPageId = useSyncExternalStore(
+    subscribeLoadingPageId,
+    getLoadingPageId,
+    getLoadingPageId,
+  );
   const isNavigating = navigation.state !== "idle";
 
   const handleCardClick = useCallback(
     (pageId: string) => {
       setLoadingPageId(null);
-      if (timerRef.current) clearTimeout(timerRef.current);
-      timerRef.current = setTimeout(() => {
-        setLoadingPageId(pageId);
-      }, loadingDelay);
+      clearLoadingTimer();
+      setLoadingTimer(
+        setTimeout(() => {
+          setLoadingPageId(pageId);
+          setLoadingTimer(null);
+        }, loadingDelay),
+      );
     },
     [loadingDelay],
   );
@@ -35,16 +48,13 @@ export function GuideCardList({ pages, loadingDelay = 500 }: GuideCardListProps)
   useEffect(() => {
     if (!isNavigating) {
       setLoadingPageId(null);
-      if (timerRef.current) {
-        clearTimeout(timerRef.current);
-        timerRef.current = null;
-      }
+      clearLoadingTimer();
     }
   }, [isNavigating]);
 
   useEffect(() => {
     return () => {
-      if (timerRef.current) clearTimeout(timerRef.current);
+      clearLoadingTimer();
     };
   }, []);
 

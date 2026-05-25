@@ -16,7 +16,7 @@ export function CategoryList({ categoryId }: CategoryListProps) {
     title: page.title,
     description: page.description,
     href: page.id,
-    pageId: page.id,
+    pageId: page.path,
     image: page.image || undefined,
     stagger: i + 1,
   }));

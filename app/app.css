@@ -82,14 +82,18 @@ body::before {
   -webkit-backdrop-filter: blur(8px);
 }
 
-.theme-btn:hover {
+.theme-btn:active {
   border-color: var(--accent);
   color: var(--accent);
   transform: scale(1.05);
 }
 
-.theme-btn:active {
-  transform: scale(0.92);
+@media (hover: hover) {
+  .theme-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: scale(1.05);
+  }
 }
 
 .theme-btn svg {
@@ -206,17 +210,33 @@ body::before {
   pointer-events: none;
 }
 
-.guide-card:hover {
+@media (hover: hover) {
+  .guide-card:hover {
+    border-color: transparent;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  }
+
+  .guide-card:hover::before {
+    border-color: var(--accent);
+  }
+
+  [data-theme="dark"] .guide-card:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  }
+}
+
+.guide-card:active {
   border-color: transparent;
   transform: translateY(-2px);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
 }
 
-.guide-card:hover::before {
+.guide-card:active::before {
   border-color: var(--accent);
 }
 
-[data-theme="dark"] .guide-card:hover {
+[data-theme="dark"] .guide-card:active {
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
 }
 
@@ -270,17 +290,6 @@ body::before {
 
 .guide-card-loading {
   pointer-events: none;
-  border-color: transparent;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
-}
-
-.guide-card-loading::before {
-  border-color: var(--accent);
-}
-
-[data-theme="dark"] .guide-card-loading {
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
 }
 
 .guide-card-loading::after {
@@ -326,7 +335,14 @@ body::before {
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.section-link:hover {
+@media (hover: hover) {
+  .section-link:hover {
+    border-left-color: var(--accent);
+    opacity: 0.8;
+  }
+}
+
+.section-link:active {
   border-left-color: var(--accent);
   opacity: 0.8;
 }
@@ -440,8 +456,10 @@ body::before {
   transition: border-color 0.3s ease;
 }
 
-.detail-article section:hover {
-  border-color: var(--border-hover);
+@media (hover: hover) {
+  .detail-article section:hover {
+    border-color: var(--border-hover);
+  }
 }
 
 .detail-article section:first-child {
@@ -472,23 +490,32 @@ body::before {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
-.back-btn:hover {
+.back-btn:active {
   border-color: var(--accent);
   color: var(--accent);
   box-shadow: 0 4px 16px var(--accent-glow);
   transform: translateY(-1px);
 }
 
-.back-btn:active {
-  transform: scale(0.96);
+.back-btn:active svg {
+  transform: translateX(-3px);
 }
 
 .back-btn svg {
   transition: transform 0.2s ease;
 }
 
-.back-btn:hover svg {
-  transform: translateX(-3px);
+@media (hover: hover) {
+  .back-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    box-shadow: 0 4px 16px var(--accent-glow);
+    transform: translateY(-1px);
+  }
+
+  .back-btn:hover svg {
+    transform: translateX(-3px);
+  }
 }
 
 .back-btn span {

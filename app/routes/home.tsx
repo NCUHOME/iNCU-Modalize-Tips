@@ -66,7 +66,7 @@ export default function Home() {
                   title: page.title,
                   description: page.description,
                   href: page.path,
-                  pageId: page.id,
+                  pageId: page.path,
                   image: page.image ?? undefined,
                   stagger: pi + 1 + ci * 2,
                 }))}
