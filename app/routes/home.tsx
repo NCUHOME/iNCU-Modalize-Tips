@@ -1,7 +1,7 @@
 import { Link } from "react-router";
 import type { Route } from "./+types/home";
 import { routeManifest } from "~/generated/pages";
-import { GuideCard } from "~/components/GuideCard";
+import { GuideCardList } from "~/components/GuideCardList";
 
 export function meta({}: Route.MetaArgs) {
   const total = routeManifest.categories.reduce(
@@ -60,19 +60,17 @@ export default function Home() {
                   {category.description}
                 </p>
               </Link>
-              <div className="flex flex-col gap-3">
-                {enabledPages.map((page, pi) => (
-                  <GuideCard
-                    key={page.id}
-                    title={page.title}
-                    description={page.description}
-                    href={page.path}
-                    pageId={page.id}
-                    image={page.image ?? undefined}
-                    stagger={pi + 1 + ci * 2}
-                  />
-                ))}
-              </div>
+              <GuideCardList
+                pages={enabledPages.map((page, pi) => ({
+                  id: page.id,
+                  title: page.title,
+                  description: page.description,
+                  href: page.path,
+                  pageId: page.id,
+                  image: page.image ?? undefined,
+                  stagger: pi + 1 + ci * 2,
+                }))}
+              />
             </section>
           );
         })}
