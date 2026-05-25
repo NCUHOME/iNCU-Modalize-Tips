@@ -5,7 +5,7 @@ import pc from 'picocolors';
 import type { CategoryEntry } from '../lib/types';
 import { EXIT, BACK, ROUTES_DIR, PAGES_FILE } from '../lib/constants';
 import { parsePagesFile } from '../lib/pages';
-import { runGenerate, toPascalCase } from '../lib/utils';
+import { applyTemplate, runGenerate, toPascalCase } from '../lib/utils';
 
 export async function addPage() {
   const content = fs.readFileSync(PAGES_FILE, 'utf-8');
@@ -118,33 +118,17 @@ export async function addPage() {
 
   fs.mkdirSync(dir, { recursive: true });
 
-  const metaContent = `export const routeMeta = {
-  title: '${title}',
-  description: '${description}',
-} as const;
-`;
+  const metaContent = applyTemplate('page-meta.template', {
+    title: title!,
+    description: description!,
+  });
   fs.writeFileSync(path.join(dir, 'meta.ts'), metaContent, 'utf-8');
 
-  const pageContent = `import { getPageData, getPageMeta } from '~/lib/page';
-import type { Route } from './+types/page';
-import { Detail } from '~/components/Detail';
-
-export function meta({}: Route.MetaArgs) {
-  return getPageMeta('${category!.id}', '${pageId}');
-}
-
-export default function ${toPascalCase(pageId!)}Page() {
-  const page = getPageData('${category!.id}', '${pageId}')!;
-
-  return (
-    <Detail page={page}>
-      <div className="text-(--text-tertiary) text-sm">
-        此页面正在准备中，敬请期待。
-      </div>
-    </Detail>
-  );
-}
-`;
+  const pageContent = applyTemplate('page.template', {
+    categoryId: category!.id,
+    pageId: pageId!,
+    componentName: toPascalCase(pageId!),
+  });
   fs.writeFileSync(path.join(dir, 'page.tsx'), pageContent, 'utf-8');
 
   const newContent = content.replace(
@@ -249,43 +233,14 @@ export async function addCategory() {
   fs.mkdirSync(catDir, { recursive: true });
 
   const pascalId = toPascalCase(categoryId!);
-  const layoutContent = `import { Outlet, useMatches } from "react-router";
-import { BackButton } from "~/components/BackButton";
+  const layoutContent = applyTemplate('layout.template', {
+    componentName: pascalId,
+  });
 
-export default function ${pascalId}Layout() {
-  const matches = useMatches();
-  const lastMatch = matches[matches.length - 1];
-  const isIndex = lastMatch.id.endsWith("/index");
-
-  return (
-    <div className="min-h-screen p-5" style={{ maxWidth: 640, margin: "0 auto" }}>
-      {!isIndex && <BackButton />}
-      <div className={!isIndex ? 'has-back-btn' : ''}>
-        <Outlet />
-      </div>
-    </div>
-  );
-}
-`;
-
-  const indexContent = `import type { Route } from "./+types/index";
-import { routeManifest } from "~/generated/pages";
-import { CategoryList } from "~/components/CategoryList";
-
-export function meta({}: Route.MetaArgs) {
-  const category = routeManifest.categories.find(
-    (c) => c.id === "${categoryId}",
-  );
-  return [
-    { title: category?.title },
-    { name: "description", content: category?.description },
-  ];
-}
-
-export default function ${pascalId}Index() {
-  return <CategoryList categoryId="${categoryId}" />
-}
-`;
+  const indexContent = applyTemplate('index.template', {
+    categoryId: categoryId!,
+    componentName: pascalId,
+  });
 
   fs.writeFileSync(path.join(catDir, 'layout.tsx'), layoutContent, 'utf-8');
   fs.writeFileSync(path.join(catDir, 'index.tsx'), indexContent, 'utf-8');
