@@ -1,15 +1,25 @@
 import { Outlet, useMatches } from "react-router";
 import { BackButton } from "~/components/BackButton";
+import { routeManifest } from "~/generated/pages";
 
 export default function WidgetTroubleshootLayout() {
   const matches = useMatches();
   const lastMatch = matches[matches.length - 1];
   const isIndex = lastMatch.id.endsWith("/index");
+  const category = routeManifest.categories.find((c) => c.id === "widget-troubleshoot");
 
   return (
-    <div className="min-h-screen p-5" style={{ maxWidth: 640, margin: "0 auto" }}>
-      {!isIndex && <BackButton />}
-      <div className={!isIndex ? 'has-back-btn' : ''}>
+    <div className="min-h-screen" style={{ maxWidth: 640, margin: "0 auto" }}>
+      <div className={`top-bar ${isIndex ? 'top-bar-index' : ''}`}>
+        <BackButton visible={!isIndex} />
+        <div className="top-bar-header">
+          <h1 className={`top-bar-title ${isIndex ? 'top-bar-title-lg' : 'top-bar-title-sm'}`}>
+            {category?.title}
+          </h1>
+          {isIndex && <p className="top-bar-desc">{category?.description}</p>}
+        </div>
+      </div>
+      <div className="p-5">
         <Outlet />
       </div>
     </div>

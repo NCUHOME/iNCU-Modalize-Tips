@@ -1,4 +1,4 @@
-import { getCategoryData, getPageData, getPageMeta } from '~/lib/page';
+import { getPageData, getPageMeta } from '~/lib/page';
 import type { Route } from './+types/page';
 import { Detail } from '~/components/Detail';
 import noLimit from './image/no-limit.webp';
@@ -9,11 +9,10 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function HyperosTroubleshoot() {
-  const category = getCategoryData('widget-troubleshoot')!;
   const page = getPageData('widget-troubleshoot', 'hyperos')!;
 
   return (
-    <Detail categoryTitle={category.title} page={page}>
+    <Detail page={page}>
       <section>
         <h2>检查步骤</h2>
         <ol>
