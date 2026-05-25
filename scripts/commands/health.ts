@@ -1,15 +1,15 @@
-import fs from 'node:fs';
-import path from 'node:path';
-import { select, spinner, isCancel } from '@clack/prompts';
-import pc from 'picocolors';
-import { EXIT, ROUTES_DIR, PAGES_FILE } from '../lib/constants';
-import { parsePagesFile, readMeta } from '../lib/pages';
+import fs from "node:fs";
+import path from "node:path";
+import { select, spinner, isCancel } from "@clack/prompts";
+import pc from "picocolors";
+import { EXIT, ROUTES_DIR, PAGES_FILE } from "../lib/constants";
+import { importPagesFile, readMeta } from "../lib/pages";
 
 export async function healthCheck() {
   const s = spinner();
-  s.start('扫描项目…');
+  s.start("扫描项目…");
 
-  const cats = parsePagesFile(fs.readFileSync(PAGES_FILE, 'utf-8'));
+  const cats = await importPagesFile();
   const issues: string[] = [];
   const orphans: string[] = [];
   const definedPages = new Set<string>();
@@ -19,8 +19,8 @@ export async function healthCheck() {
       const k = `${cat.id}/${pg.id}`;
       definedPages.add(k);
       const dir = path.join(ROUTES_DIR, cat.id, pg.id);
-      const hasMeta = fs.existsSync(path.join(dir, 'meta.ts'));
-      const hasPage = fs.existsSync(path.join(dir, 'page.tsx'));
+      const hasMeta = fs.existsSync(path.join(dir, "meta.ts"));
+      const hasPage = fs.existsSync(path.join(dir, "page.tsx"));
 
       if (!hasMeta && !hasPage) {
         issues.push(`⚠️  ${pc.yellow(k)} — 目录存在但缺少 meta.ts 和 page.tsx`);
@@ -32,7 +32,9 @@ export async function healthCheck() {
       if (hasMeta) {
         const m = readMeta(cat.id, pg.id);
         if (!m.title || m.title === pg.id) {
-          issues.push(`💡 ${pc.dim(k)} — meta 标题与 ID 相同，建议补充有意义的标题`);
+          issues.push(
+            `💡 ${pc.dim(k)} — meta 标题与 ID 相同，建议补充有意义的标题`,
+          );
         }
       }
     }
@@ -53,39 +55,39 @@ export async function healthCheck() {
 
   for (const cat of cats) {
     const catPath = path.join(ROUTES_DIR, cat.id);
-    if (!fs.existsSync(path.join(catPath, 'layout.tsx'))) {
+    if (!fs.existsSync(path.join(catPath, "layout.tsx"))) {
       issues.push(`⚠️  ${pc.yellow(cat.id)} — 缺少 layout.tsx`);
     }
-    if (!fs.existsSync(path.join(catPath, 'index.tsx'))) {
+    if (!fs.existsSync(path.join(catPath, "index.tsx"))) {
       issues.push(`⚠️  ${pc.yellow(cat.id)} — 缺少 index.tsx`);
     }
   }
 
-  s.stop('扫描完成');
+  s.stop("扫描完成");
 
   if (issues.length === 0) {
-    console.log(pc.green('✅ 一切正常！没有发现问题。'));
+    console.log(pc.green("✅ 一切正常！没有发现问题。"));
     return;
   }
 
-  console.log('');
+  console.log("");
   console.log(pc.bold(`发现 ${issues.length} 个问题:`));
   for (const issue of issues) {
     console.log(`  ${issue}`);
   }
-  console.log('');
+  console.log("");
 
   if (orphans.length > 0) {
     const clean = await select<boolean | typeof EXIT>({
       message: `检测到 ${orphans.length} 个孤立目录，是否清理？`,
       options: [
         { value: true, label: `清理 ${orphans.length} 个孤立目录` },
-        { value: false, label: '暂不处理' },
+        { value: false, label: "暂不处理" },
       ],
     });
     if (clean === true) {
       const s2 = spinner();
-      s2.start('清理孤立目录…');
+      s2.start("清理孤立目录…");
       for (const o of orphans) {
         fs.rmSync(o, { recursive: true, force: true });
       }

@@ -3,27 +3,25 @@ import path from "node:path";
 import type { PageEntry, CategoryEntry } from "./types";
 import { PAGES_FILE, ROUTES_DIR } from "./constants";
 
-export function parsePagesFile(content: string): CategoryEntry[] {
-  const categories: CategoryEntry[] = [];
-  const categoryRegex =
-    /\{\s*\n\s+id:\s*'([^']+)',\s*\n\s+title:\s*'([^']*)',\s*\n\s+description:\s*'([^']*)',\s*\n\s+order:\s*(\d+),\s*\n\s+pages:\s*\[([\s\S]*?)\]\s*as\s+const,\s*\n\s*\},/g;
-  let match: RegExpExecArray | null;
-  while ((match = categoryRegex.exec(content)) !== null) {
-    const pages: PageEntry[] = [];
-    const pageRegex = /\{\s*id:\s*'([^']+)',\s*enabled:\s*(true|false)\s*\},?/g;
-    let pm: RegExpExecArray | null;
-    while ((pm = pageRegex.exec(match[5])) !== null) {
-      pages.push({ id: pm[1], enabled: pm[2] === "true" });
-    }
-    categories.push({
-      id: match[1],
-      title: match[2],
-      description: match[3],
-      order: parseInt(match[4], 10),
-      pages,
-    });
-  }
-  return categories;
+export async function importPagesFile(): Promise<CategoryEntry[]> {
+  const url = new URL(`file://${PAGES_FILE}`);
+  url.searchParams.set("t", Date.now().toString());
+  const mod = await import(url.href);
+  return mod.categories.map(
+    (c: {
+      id: string;
+      title: string;
+      description: string;
+      order: number;
+      pages: readonly { id: string; enabled: boolean }[];
+    }) => ({
+      id: c.id,
+      title: c.title,
+      description: c.description,
+      order: c.order,
+      pages: c.pages.map((p) => ({ id: p.id, enabled: p.enabled })),
+    }),
+  );
 }
 
 /** Serialize categories back to pages.ts format */
@@ -46,14 +44,14 @@ export function rebuildPagesFile(cats: CategoryEntry[]): string {
   for (let ci = 0; ci < cats.length; ci++) {
     const c = cats[ci];
     lines.push(`  {`);
-    lines.push(`    id: '${c.id}',`);
-    lines.push(`    title: '${c.title}',`);
-    lines.push(`    description: '${c.description}',`);
+    lines.push(`    id: "${c.id}",`);
+    lines.push(`    title: "${c.title}",`);
+    lines.push(`    description: "${c.description}",`);
     lines.push(`    order: ${c.order},`);
     lines.push(`    pages: [`);
     for (let pi = 0; pi < c.pages.length; pi++) {
       const p = c.pages[pi];
-      lines.push(`      { id: '${p.id}', enabled: ${p.enabled} },`);
+      lines.push(`      { id: "${p.id}", enabled: ${p.enabled} },`);
     }
     lines.push(`    ] as const,`);
     lines.push(`  },`);
@@ -107,8 +105,8 @@ export function writeMeta(
 }
 
 /** Read pages.ts from disk and parse */
-export function readPages(): CategoryEntry[] {
-  return parsePagesFile(fs.readFileSync(PAGES_FILE, "utf-8"));
+export async function readPages(): Promise<CategoryEntry[]> {
+  return importPagesFile();
 }
 
 /** Write categories back to pages.ts */
