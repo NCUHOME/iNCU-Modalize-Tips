@@ -869,9 +869,7 @@ export default function Home() {
                     className="block rounded-lg border border-neutral-100 p-3 transition-colors hover:border-neutral-300"
                   >
                     <span className="text-sm font-medium">{page.title}</span>
-                    <p className="mt-0.5 text-xs text-neutral-400">
-                      {page.description}
-                    </p>
+                    <p className="text-neutral-400">{page.description}</p>
                   </Link>
                 ))}
               </div>
@@ -1031,27 +1029,23 @@ export default function HyperosTroubleshoot() {
           <ol className="mt-2 list-decimal space-y-2 pl-5">
             <li>
               <strong>关闭省电模式</strong>
-              <p className="mt-0.5 text-xs text-neutral-400">
+              <p className="text-neutral-400">
                 设置 → 省电与电池 → 关闭省电模式
               </p>
             </li>
             <li>
               <strong>允许后台运行</strong>
-              <p className="mt-0.5 text-xs text-neutral-400">
+              <p className="text-neutral-400">
                 设置 → 应用设置 → 本应用 → 省电策略 → 选择"无限制"
               </p>
             </li>
             <li>
               <strong>锁定应用</strong>
-              <p className="mt-0.5 text-xs text-neutral-400">
-                在多任务界面将本应用下拉锁定
-              </p>
+              <p className="text-neutral-400">在多任务界面将本应用下拉锁定</p>
             </li>
             <li>
               <strong>重启小组件</strong>
-              <p className="mt-0.5 text-xs text-neutral-400">
-                移除小组件后重新添加
-              </p>
+              <p className="text-neutral-400">移除小组件后重新添加</p>
             </li>
           </ol>
         </section>

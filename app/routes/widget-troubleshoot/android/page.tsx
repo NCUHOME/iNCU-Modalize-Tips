@@ -16,27 +16,22 @@ export default function AndroidTroubleshoot() {
         <ol>
           <li>
             <strong>允许后台运行</strong>
-            <p className="mt-0.5 text-xs text-(--text-tertiary)">
-              设置 → 应用 → 南大家园 → 电池 → 选择“无限制”（或“允许后台运行”等）
+            <p>
+              设置 → 应用 → 找到 <strong>南大家园</strong> → 电池 →
+              选择“无限制”（或“允许后台运行”等）
             </p>
           </li>
           <li>
             <strong>关闭省电模式</strong>
-            <p className="mt-0.5 text-xs text-(--text-tertiary)">
-              设置 → 电池 → 关闭省电模式
-            </p>
+            <p>设置 → 电池 → 关闭省电模式</p>
           </li>
           <li>
             <strong>锁定后台任务</strong>
-            <p className="mt-0.5 text-xs text-(--text-tertiary)">
-              在多任务界面将南大家园锁定，防止被系统清理
-            </p>
+            <p>在多任务界面将南大家园锁定，防止被系统清理</p>
           </li>
           <li>
             <strong>重新添加小组件</strong>
-            <p className="mt-0.5 text-xs text-(--text-tertiary)">
-              移除小组件后重新添加
-            </p>
+            <p>移除小组件后重新添加</p>
           </li>
         </ol>
       </section>

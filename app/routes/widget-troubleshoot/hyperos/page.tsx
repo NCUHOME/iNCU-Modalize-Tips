@@ -18,22 +18,19 @@ export default function HyperosTroubleshoot() {
         <ol>
           <li>
             <strong>允许后台运行</strong>
-            <p className="mt-0.5 text-xs text-(--text-tertiary)">
-              设置 → 应用设置 → 南大家园 → 省电策略 → 选择"无限制"
+            <p>
+              设置 → 应用设置 → 找到 <strong>南大家园</strong> → 省电策略 →
+              选择"无限制"
             </p>
             <Image src={noLimit} alt="无限制" caption="无限制" maxWidth={400} />
           </li>
           <li>
             <strong>重新添加小组件</strong>
-            <p className="mt-0.5 text-xs text-(--text-tertiary)">
-              移除小组件后重新添加
-            </p>
+            <p>移除小组件后重新添加</p>
           </li>
           <li>
             <strong>关闭省电模式</strong>
-            <p className="mt-0.5 text-xs text-(--text-tertiary)">
-              设置 → 省电与电池 → 关闭省电模式
-            </p>
+            <p>设置 → 省电与电池 → 关闭省电模式</p>
           </li>
         </ol>
       </section>
