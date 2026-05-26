@@ -1,0 +1,42 @@
+[
+  {
+    "id": "ios",
+    "title": "Apple iOS",
+    "image": "/images/ios.svg"
+  },
+  {
+    "id": "android",
+    "title": "其他Android系统",
+    "image": "/images/android.webp"
+  },
+  {
+    "id": "hyperos",
+    "title": "小米HyperOS",
+    "image": "/images/xiaomi.svg"
+  },
+  {
+    "id": "harmonyos",
+    "title": "华为HarmonyOS",
+    "image": "/images/huawei.svg"
+  },
+  {
+    "id": "originos",
+    "title": "vivo OriginOS",
+    "image": "/images/vivo.svg"
+  },
+  {
+    "id": "coloros",
+    "title": "OPPO ColorOS",
+    "image": "/images/oppo.svg"
+  },
+  {
+    "id": "magicos",
+    "title": "荣耀MagicOS",
+    "image": "/images/honor.svg"
+  },
+  {
+    "id": "flyme",
+    "title": "魅族 Flyme",
+    "image": "/images/meizu.webp"
+  }
+]
