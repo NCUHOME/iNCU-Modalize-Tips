@@ -152,6 +152,15 @@ body::before {
   }
 }
 
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
 @keyframes scale-in {
   from {
     opacity: 0;
@@ -191,13 +200,18 @@ body::before {
 }
 
 /* ===== View Transitions ===== */
+::view-transition-group(root) {
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+}
+
 ::view-transition-old(root) {
-  animation: 0.25s ease-out both fade-in;
-  animation-direction: reverse;
+  animation: 0.2s ease-out both fade-out;
 }
 
 ::view-transition-new(root) {
   animation: 0.25s ease-out both fade-in;
+  animation-delay: 0.05s;
 }
 
 /* ===== Stagger Delays ===== */
