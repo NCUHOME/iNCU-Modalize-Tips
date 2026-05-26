@@ -174,9 +174,12 @@ export async function batchAdd() {
 
     // meta.ts
     const description = renderDesc(descTemplate, brand);
+    const now = new Date();
+    const updatedAt = `${now.getFullYear()}年${now.getMonth() + 1}月`;
     let metaContent = applyTemplate("page-meta.template", {
       title: brand.title,
       description,
+      updatedAt,
     });
     // 品牌页面需要注入 image 字段
     if (brand.image) {

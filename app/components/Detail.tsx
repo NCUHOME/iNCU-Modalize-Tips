@@ -6,6 +6,7 @@ interface DetailProps {
     title?: string;
     description?: string;
     image?: string | null;
+    updatedAt?: string | null;
   };
   children: ReactNode;
 }
@@ -20,7 +21,9 @@ export function Detail({ page, children }: DetailProps) {
           image={page?.image}
         />
         <div className="mt-6 space-y-4">{children}</div>
-        <p className="detail-footer-date">最后更新：2026年5月</p>
+        {page?.updatedAt && (
+          <p className="detail-footer-date">最后更新：{page.updatedAt}</p>
+        )}
       </div>
     </article>
   );

@@ -63,7 +63,7 @@ export async function editInCat() {
     return;
   }
 
-  writeMeta(cat.id, pg.id, title, desc, cur.image);
+  writeMeta(cat.id, pg.id, title, desc, cur.image, cur.updatedAt);
   console.log(pc.green(`  ✅ ${pg.id} 已更新`));
   runGenerate();
 }

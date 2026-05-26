@@ -1,16 +1,17 @@
 #!/usr/bin/env tsx
-import path from 'path';
-import fs from 'fs';
+import path from "path";
+import fs from "fs";
 
-const PROJECT_ROOT = path.resolve(import.meta.dirname, '..');
-const APP_DIR = path.join(PROJECT_ROOT, 'app');
-const OUTPUT_DIR = path.join(APP_DIR, 'generated');
-const OUTPUT_FILE = path.join(OUTPUT_DIR, 'pages.ts');
+const PROJECT_ROOT = path.resolve(import.meta.dirname, "..");
+const APP_DIR = path.join(PROJECT_ROOT, "app");
+const OUTPUT_DIR = path.join(APP_DIR, "generated");
+const OUTPUT_FILE = path.join(OUTPUT_DIR, "pages.ts");
 
 type RouteMeta = {
   title: string;
   description: string;
   image?: string;
+  updatedAt?: string;
 };
 
 type PageInfo = {
@@ -18,6 +19,7 @@ type PageInfo = {
   title: string;
   description: string;
   image: string | null;
+  updatedAt: string | null;
   enabled: boolean;
   path: string;
 };
@@ -40,12 +42,12 @@ function formatPath(categoryId: string, pageId: string): string {
 
 async function importWithBust(filePath: string) {
   const url = new URL(`file://${filePath}`);
-  url.searchParams.set('t', Date.now().toString());
+  url.searchParams.set("t", Date.now().toString());
   return import(url.href);
 }
 
 async function main() {
-  const pagesModulePath = path.join(APP_DIR, 'pages.ts');
+  const pagesModulePath = path.join(APP_DIR, "pages.ts");
   const pagesModule = await importWithBust(pagesModulePath);
 
   const categories: typeof pagesModule.categories = pagesModule.categories;
@@ -58,10 +60,10 @@ async function main() {
     for (const pageDef of category.pages) {
       const metaFilePath = path.join(
         APP_DIR,
-        'routes',
+        "routes",
         category.id,
         pageDef.id,
-        'meta.ts',
+        "meta.ts",
       );
 
       if (!fs.existsSync(metaFilePath)) {
@@ -79,6 +81,7 @@ async function main() {
         title: meta.title,
         description: meta.description,
         image: meta.image ?? null,
+        updatedAt: meta.updatedAt ?? null,
         enabled: pageDef.enabled,
         path: formatPath(category.id, pageDef.id),
       });
@@ -98,7 +101,7 @@ export const routeManifest = ${JSON.stringify(manifest, null, 2)} as const;
 `;
 
   fs.mkdirSync(OUTPUT_DIR, { recursive: true });
-  fs.writeFileSync(OUTPUT_FILE, output, 'utf-8');
+  fs.writeFileSync(OUTPUT_FILE, output, "utf-8");
 
   const totalPages = manifest.categories.reduce(
     (sum, c) => sum + c.pages.length,
@@ -114,23 +117,23 @@ export const routeManifest = ${JSON.stringify(manifest, null, 2)} as const;
   );
 }
 
-const isWatch = process.argv.includes('--watch');
+const isWatch = process.argv.includes("--watch");
 
 if (isWatch) {
-  const routesDir = path.join(APP_DIR, 'routes');
-  const pagesFile = path.join(APP_DIR, 'pages.ts');
+  const routesDir = path.join(APP_DIR, "routes");
+  const pagesFile = path.join(APP_DIR, "pages.ts");
 
   await main();
 
-  console.log('👀 Watching for changes...');
+  console.log("👀 Watching for changes...");
   fs.watch(routesDir, { recursive: true }, (event, filename) => {
-    if (filename?.endsWith('.ts') || filename?.endsWith('.tsx')) {
+    if (filename?.endsWith(".ts") || filename?.endsWith(".tsx")) {
       console.log(`🔄 Change detected: ${filename}`);
       main().catch(console.error);
     }
   });
   fs.watch(pagesFile, () => {
-    console.log('🔄 pages.ts changed');
+    console.log("🔄 pages.ts changed");
     main().catch(console.error);
   });
 

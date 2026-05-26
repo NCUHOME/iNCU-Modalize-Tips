@@ -132,9 +132,12 @@ export async function addPage() {
 
   fs.mkdirSync(dir, { recursive: true });
 
+  const now = new Date();
+  const updatedAt = `${now.getFullYear()}年${now.getMonth() + 1}月`;
   const metaContent = applyTemplate("page-meta.template", {
     title: title!,
     description: description!,
+    updatedAt,
   });
   fs.writeFileSync(path.join(dir, "meta.ts"), metaContent, "utf-8");
 

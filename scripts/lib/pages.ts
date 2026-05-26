@@ -61,21 +61,24 @@ export function rebuildPagesFile(cats: CategoryEntry[]): string {
   return lines.join("\n");
 }
 
-/** Read a meta.ts file and return { title, desc, image } */
+/** Read a meta.ts file and return { title, desc, image, updatedAt } */
 export function readMeta(
   categoryId: string,
   pageId: string,
-): { title: string; desc: string; image: string } {
+): { title: string; desc: string; image: string; updatedAt: string } {
   const fp = path.join(ROUTES_DIR, categoryId, pageId, "meta.ts");
-  if (!fs.existsSync(fp)) return { title: pageId, desc: "", image: "" };
+  if (!fs.existsSync(fp))
+    return { title: pageId, desc: "", image: "", updatedAt: "" };
   const c = fs.readFileSync(fp, "utf-8");
   const tm = c.match(/title:\s*"([^"]*)"/);
   const dm = c.match(/description:\s*"([^"]*)"/);
   const im = c.match(/image:\s*"([^"]*)"/);
+  const um = c.match(/updatedAt:\s*"([^"]*)"/);
   return {
     title: tm?.[1] ?? pageId,
     desc: dm?.[1] ?? "",
     image: im?.[1] ?? "",
+    updatedAt: um?.[1] ?? "",
   };
 }
 
@@ -86,6 +89,7 @@ export function writeMeta(
   title: string,
   description: string,
   image?: string,
+  updatedAt?: string,
 ): void {
   const dir = path.join(ROUTES_DIR, categoryId, pageId);
   fs.mkdirSync(dir, { recursive: true });
@@ -93,11 +97,15 @@ export function writeMeta(
     ? `,
   image: "${image}"`
     : "";
+  const updatedAtLine = updatedAt
+    ? `,
+  updatedAt: "${updatedAt}"`
+    : "";
   fs.writeFileSync(
     path.join(dir, "meta.ts"),
     `export const routeMeta = {
   title: "${title}",
-  description: "${description}"${imgLine},
+  description: "${description}"${imgLine}${updatedAtLine},
 } as const;
 `,
     "utf-8",
