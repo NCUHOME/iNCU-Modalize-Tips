@@ -24,7 +24,7 @@ export const categories = [
       { id: "originos", enabled: true },
       { id: "coloros", enabled: true },
       { id: "magicos", enabled: true },
-      { id: "flyme", enabled: true },
+      { id: "flyme", enabled: false },
       { id: "android", enabled: true },
     ] as const,
   },

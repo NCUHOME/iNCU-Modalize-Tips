@@ -6,6 +6,8 @@ import { Gallery } from "~/components/Gallery";
 import liquidGlass from "./image/liquid_glass.webp";
 import tintLight from "./image/tint.webp";
 import tintDark from "./image/tint_dark.webp";
+import lockModify from "./image/lock_modify.webp";
+import mainScreenMenu from "./image/main_screen_menu.webp";
 
 export function meta({}: Route.MetaArgs) {
   return getPageMeta("add-widget-guide", "ios");
@@ -25,6 +27,13 @@ export default function IosGuide() {
           <li>
             轻点屏幕顶部的 <strong>编辑</strong>，然后选取{" "}
             <strong>添加小组件</strong>
+            <br />
+            <Image
+              src={mainScreenMenu}
+              alt="主屏幕编辑菜单"
+              caption="主屏幕编辑菜单"
+              maxWidth={300}
+            />
           </li>
           <li>
             搜索或找到 <strong>南大家园</strong>
@@ -47,6 +56,13 @@ export default function IosGuide() {
           <li>
             按住锁定屏幕，直到出现 <strong>自定义</strong> 按钮，然后轻点{" "}
             <strong>自定义</strong>
+            <br />
+            <Image
+              src={lockModify}
+              alt="锁屏自定义按钮"
+              caption="锁屏自定义按钮"
+              maxWidth={300}
+            />
           </li>
           <li>
             轻点 <strong>添加小组件</strong>
@@ -105,6 +121,13 @@ export default function IosGuide() {
               />
             </Gallery>
           </li>
+          <br />
+          <p
+            className="-mt-2 mb-1 text-neutral-500"
+            style={{ fontSize: "12px" }}
+          >
+            注意：此设置将会应用于所有图标与小组件。
+          </p>
         </ul>
       </section>
       <section>
