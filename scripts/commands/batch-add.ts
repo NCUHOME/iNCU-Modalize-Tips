@@ -13,7 +13,12 @@ import pc from "picocolors";
 import type { CategoryEntry } from "../lib/types";
 import { EXIT, BACK, ROUTES_DIR } from "../lib/constants";
 import { importPagesFile, writePages } from "../lib/pages";
-import { applyTemplate, runGenerate, toPascalCase } from "../lib/utils";
+import {
+  applyTemplate,
+  runGenerate,
+  toPascalCase,
+  updatePageTsErrorIgnore,
+} from "../lib/utils";
 
 // ---- 品牌数据（从模板文件加载） ----
 
@@ -198,6 +203,10 @@ export async function batchAdd() {
       componentName: toPascalCase(brand.id),
     });
     fs.writeFileSync(path.join(dir, "page.tsx"), pageContent, "utf-8");
+
+    if (!enabled) {
+      updatePageTsErrorIgnore(cat.id, brand.id, false);
+    }
 
     created++;
   }

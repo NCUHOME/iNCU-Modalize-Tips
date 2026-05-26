@@ -4,7 +4,7 @@ import pc from "picocolors";
 import type { CategoryEntry } from "../lib/types";
 import { EXIT, PAGES_FILE } from "../lib/constants";
 import { importPagesFile, readMeta, rebuildPagesFile } from "../lib/pages";
-import { runGenerate } from "../lib/utils";
+import { runGenerate, updatePageTsErrorIgnore } from "../lib/utils";
 import {
   enterTui,
   waitForKey,
@@ -99,6 +99,7 @@ export async function toggleInCat() {
       const pg = tgt.pages.find((x) => x.id === p.id)!;
       pg.enabled = nState;
       fs.writeFileSync(PAGES_FILE, rebuildPagesFile(allCats), "utf-8");
+      updatePageTsErrorIgnore(fresh.id, p.id, nState);
       dirty = true;
       await render();
     }

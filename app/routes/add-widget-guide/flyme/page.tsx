@@ -1,5 +1,6 @@
 import { useLocation } from "react-router";
 import { getPageData, getPageMeta } from "~/lib/page";
+// @ts-expect-error 禁用页面 — 路由类型未生成
 import type { Route } from "./+types/page";
 import { Detail } from "~/components/Detail";
 

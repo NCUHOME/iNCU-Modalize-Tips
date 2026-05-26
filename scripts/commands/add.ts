@@ -5,7 +5,12 @@ import pc from "picocolors";
 import type { CategoryEntry } from "../lib/types";
 import { EXIT, BACK, ROUTES_DIR, PAGES_FILE } from "../lib/constants";
 import { importPagesFile } from "../lib/pages";
-import { applyTemplate, runGenerate, toPascalCase } from "../lib/utils";
+import {
+  applyTemplate,
+  runGenerate,
+  toPascalCase,
+  updatePageTsErrorIgnore,
+} from "../lib/utils";
 
 export async function addPage() {
   const content = fs.readFileSync(PAGES_FILE, "utf-8");
@@ -147,6 +152,10 @@ export async function addPage() {
     componentName: toPascalCase(pageId!),
   });
   fs.writeFileSync(path.join(dir, "page.tsx"), pageContent, "utf-8");
+
+  if (!enabled) {
+    updatePageTsErrorIgnore(category!.id, pageId!, false);
+  }
 
   const newContent = content.replace(
     new RegExp(
