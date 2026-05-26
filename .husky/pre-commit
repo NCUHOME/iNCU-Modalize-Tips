@@ -1,1 +1,2 @@
+npx tsx scripts/update-page-dates.ts
 pnpm pretty-quick --staged
