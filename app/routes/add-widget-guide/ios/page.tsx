@@ -119,14 +119,11 @@ export default function IosGuide() {
               />
             </Gallery>
           </li>
-          <br />
-          <p
-            className="-mt-2 mb-1 text-neutral-500"
-            style={{ fontSize: "12px" }}
-          >
-            注意：此设置将会应用于所有图标与小组件。
-          </p>
         </ul>
+        <br />
+        <p className="-mt-2 mb-1 text-neutral-500" style={{ fontSize: "12px" }}>
+          注意：此设置将会应用于所有图标与小组件。
+        </p>
       </section>
       <section>
         <h2>注意事项</h2>
