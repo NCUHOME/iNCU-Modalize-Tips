@@ -19,6 +19,7 @@ export interface AddPageArgs {
   page: string;
   title: string;
   desc: string;
+  image?: string;
   enabled?: boolean;
 }
 
@@ -43,11 +44,18 @@ export async function addPageAgent(args: AddPageArgs): Promise<string> {
 
   const now = new Date();
   const updatedAt = `${now.getFullYear()}年${now.getMonth() + 1}月`;
-  const metaContent = applyTemplate("page-meta.template", {
+  let metaContent = applyTemplate("page-meta.template", {
     title: args.title.trim(),
     description: args.desc.trim(),
     updatedAt,
   });
+  if (args.image) {
+    metaContent = metaContent.replace(
+      `description: "${args.desc.trim()}"`,
+      `description: "${args.desc.trim()}",
+  image: "${args.image}"`,
+    );
+  }
   fs.writeFileSync(path.join(dir, "meta.ts"), metaContent, "utf-8");
 
   const pageContent = applyTemplate("page.template", {

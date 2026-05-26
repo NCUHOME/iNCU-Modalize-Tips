@@ -6,8 +6,8 @@
 # 新增分类
 pnpm cli add-cat --id new-guide --title "新手指南" --desc "描述"
 
-# 新增页面（默认启用，--disabled 创建占位页）
-pnpm cli add-page --category add-widget-guide --page realme --title "Realme 添加小组件" --desc "步骤"
+# 新增页面（默认启用，--disabled 创建占位页，--image 可省略）
+pnpm cli add-page --category add-widget-guide --page realme --title "Realme 添加小组件" --desc "步骤" --image "/images/realme.webp"
 
 # 批量添加缺失品牌
 pnpm cli batch-add --category add-widget-guide --desc "在{{title}}系统中添加小组件的步骤"

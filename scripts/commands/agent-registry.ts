@@ -18,6 +18,7 @@ export const commands: Record<string, Command> = {
         page: o.page as string,
         title: o.title as string,
         desc: (o.desc as string) || "",
+        image: (o.image as string) || undefined,
         enabled: !o.disabled,
       } as AddPageArgs);
       console.log(pc.green(`✅ 已创建页面 ${key}`));
