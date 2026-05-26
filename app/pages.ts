@@ -20,8 +20,8 @@ export const categories = [
     pages: [
       { id: "ios", enabled: true },
       { id: "hyperos", enabled: true },
-      { id: "originos", enabled: false },
       { id: "harmonyos", enabled: false },
+      { id: "originos", enabled: false },
       { id: "coloros", enabled: false },
       { id: "magicos", enabled: false },
       { id: "flyme", enabled: false },

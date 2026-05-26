@@ -18,30 +18,30 @@
 
 ### 分类 1：如何添加小组件引导 (`add-widget-guide`)
 
-| 页面 ID | 系统 | 启用 |
-|---------|------|------|
-| ios | iOS | ✅ |
-| hyperos | HyperOS | ✅ |
-| originos | OriginOS | ❌ |
-| vivo | Vivo | ❌ |
-| harmonyos | HarmonyOS | ❌ |
-| coloros | ColorOS | ❌ |
-| magicos | MagicOS | ❌ |
-| flyme | Flyme | ❌ |
+| 页面 ID   | 系统      | 启用 |
+| --------- | --------- | ---- |
+| ios       | iOS       | ✅   |
+| hyperos   | HyperOS   | ✅   |
+| originos  | OriginOS  | ❌   |
+| vivo      | vivo      | ❌   |
+| harmonyos | HarmonyOS | ❌   |
+| coloros   | ColorOS   | ❌   |
+| magicos   | MagicOS   | ❌   |
+| flyme     | Flyme     | ❌   |
 
 ### 分类 2：小组件不刷新排障 (`widget-troubleshoot`)
 
 仅 Android 系（iOS 无此问题）：
 
-| 页面 ID | 系统 | 启用 |
-|---------|------|------|
-| hyperos | HyperOS | ✅ |
-| originos | OriginOS | ❌ |
-| vivo | Vivo | ❌ |
-| harmonyos | HarmonyOS | ❌ |
-| coloros | ColorOS | ❌ |
-| magicos | MagicOS | ❌ |
-| flyme | Flyme | ❌ |
+| 页面 ID   | 系统      | 启用 |
+| --------- | --------- | ---- |
+| hyperos   | HyperOS   | ✅   |
+| originos  | OriginOS  | ❌   |
+| vivo      | vivo      | ❌   |
+| harmonyos | HarmonyOS | ❌   |
+| coloros   | ColorOS   | ❌   |
+| magicos   | MagicOS   | ❌   |
+| flyme     | Flyme     | ❌   |
 
 ## 项目结构
 
@@ -84,15 +84,15 @@ scripts/
 ```ts
 export const categories = [
   {
-    id: 'add-widget-guide',
-    title: '如何添加小组件引导',
-    description: '根据您的手机系统，了解如何将小组件添加到主屏幕',
+    id: "add-widget-guide",
+    title: "如何添加小组件引导",
+    description: "根据您的手机系统，了解如何将小组件添加到主屏幕",
     order: 1,
   },
   {
-    id: 'widget-troubleshoot',
-    title: '小组件不刷新排障',
-    description: '解决因系统后台限制导致的小组件不刷新问题',
+    id: "widget-troubleshoot",
+    title: "小组件不刷新排障",
+    description: "解决因系统后台限制导致的小组件不刷新问题",
     order: 2,
   },
 ] as const;
@@ -103,18 +103,19 @@ export const categories = [
 ```ts
 // routes/add-widget-guide/ios.meta.ts
 export const routeMeta = {
-  title: 'iOS 添加小组件',
-  description: '在 iPhone 或 iPad 上通过编辑主屏幕添加小组件',
+  title: "iOS 添加小组件",
+  description: "在 iPhone 或 iPad 上通过编辑主屏幕添加小组件",
   enabled: true,
 } as const;
 ```
 
 禁用的页面：
+
 ```ts
 // routes/add-widget-guide/originos.meta.ts
 export const routeMeta = {
-  title: 'OriginOS 添加小组件',
-  description: '在 vivo OriginOS 系统中添加小组件',
+  title: "OriginOS 添加小组件",
+  description: "在 vivo OriginOS 系统中添加小组件",
   enabled: false,
 } as const;
 ```
@@ -136,16 +137,16 @@ export const routeMeta = {
 export const routeManifest = {
   categories: [
     {
-      id: 'add-widget-guide',
-      title: '如何添加小组件引导',
-      description: '根据您的手机系统...',
+      id: "add-widget-guide",
+      title: "如何添加小组件引导",
+      description: "根据您的手机系统...",
       order: 1,
       pages: [
         {
-          id: 'ios',
-          title: 'iOS 添加小组件',
-          description: '在 iPhone 或 iPad 上...',
-          path: '/add-widget-guide/ios',
+          id: "ios",
+          title: "iOS 添加小组件",
+          description: "在 iPhone 或 iPad 上...",
+          path: "/add-widget-guide/ios",
           enabled: true,
         },
         // ...
@@ -165,9 +166,7 @@ import { routeManifest } from "./generated/pages";
 const pageRoutes: RouteConfig = [index("routes/home.tsx")];
 
 for (const category of routeManifest.categories) {
-  const children = [
-    index(`routes/${category.id}/index.tsx`),
-  ];
+  const children = [index(`routes/${category.id}/index.tsx`)];
 
   for (const page of category.pages) {
     if (!page.enabled) {
@@ -187,6 +186,7 @@ export default pageRoutes;
 ```
 
 生成的 URL 结构：
+
 ```
 /                              → home.tsx
 /add-widget-guide              → layout.tsx + index.tsx
@@ -203,11 +203,11 @@ export default pageRoutes;
 
 ```tsx
 // routes/add-widget-guide/layout.tsx
-import { Outlet, useMatches, Link } from 'react-router';
+import { Outlet, useMatches, Link } from "react-router";
 
 export default function CategoryLayout() {
   const matches = useMatches();
-  const isIndex = matches[matches.length - 1].id.endsWith('/index');
+  const isIndex = matches[matches.length - 1].id.endsWith("/index");
 
   return (
     <div className="p-4">
@@ -222,23 +222,23 @@ export default function CategoryLayout() {
 }
 ```
 
-| 路径 | 匹配深度 | 是否为 index | 显示返回 |
-|------|---------|-------------|---------|
-| `/` | root + home | home 是 index | ❌ |
-| `/add-widget-guide` | root + layout + index | ✅ | ❌ |
-| `/add-widget-guide/ios` | root + layout + ios | ❌ | ✅ |
+| 路径                    | 匹配深度              | 是否为 index  | 显示返回 |
+| ----------------------- | --------------------- | ------------- | -------- |
+| `/`                     | root + home           | home 是 index | ❌       |
+| `/add-widget-guide`     | root + layout + index | ✅            | ❌       |
+| `/add-widget-guide/ios` | root + layout + ios   | ❌            | ✅       |
 
 ## 禁用页面跳转
 
 `routes/redirect-page.tsx` 通过 `clientLoader` 跳转到上级目录：
 
 ```tsx
-import { redirect } from 'react-router';
-import type { Route } from './+types/redirect-page';
+import { redirect } from "react-router";
+import type { Route } from "./+types/redirect-page";
 
 export function clientLoader({}: Route.ClientLoaderArgs) {
   const path = window.location.pathname;
-  const parentPath = path.substring(0, path.lastIndexOf('/')) || '/';
+  const parentPath = path.substring(0, path.lastIndexOf("/")) || "/";
   return redirect(parentPath);
 }
 
@@ -258,7 +258,7 @@ import { routeManifest } from "./app/generated/pages";
 export default {
   ssr: false,
   get prerender() {
-    const paths: string[] = ['/'];
+    const paths: string[] = ["/"];
     for (const cat of routeManifest.categories) {
       paths.push(`/${cat.id}/`);
       for (const page of cat.pages) {

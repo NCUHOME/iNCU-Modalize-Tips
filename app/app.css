@@ -219,6 +219,24 @@ body::before {
 .stagger-6 {
   animation-delay: 0.24s;
 }
+.stagger-7 {
+  animation-delay: 0.28s;
+}
+.stagger-8 {
+  animation-delay: 0.32s;
+}
+.stagger-9 {
+  animation-delay: 0.36s;
+}
+.stagger-10 {
+  animation-delay: 0.4s;
+}
+.stagger-11 {
+  animation-delay: 0.44s;
+}
+.stagger-12 {
+  animation-delay: 0.48s;
+}
 
 /* ===== Guide Card ===== */
 .guide-card {

@@ -13,6 +13,7 @@
 ### Task 1: Install tsx & create directories
 
 **Files:**
+
 - Create: `scripts/` directory
 - Create: `app/generated/` directory
 - Create: `app/routes/add-widget-guide/`
@@ -21,6 +22,7 @@
 - [ ] **Step 1: Install tsx**
 
 Run:
+
 ```bash
 pnpm add -D tsx
 ```
@@ -30,6 +32,7 @@ Expected output: package added to devDependencies.
 - [ ] **Step 2: Create directory structure**
 
 Run:
+
 ```bash
 mkdir -p app/generated scripts app/routes/add-widget-guide app/routes/widget-troubleshoot
 ```
@@ -48,6 +51,7 @@ git commit -m "chore: add tsx for prebuild script"
 ### Task 2: Create `app/pages.ts` (category definitions)
 
 **Files:**
+
 - Create: `app/pages.ts`
 
 This file defines the category hierarchy (what categories exist, what page IDs belong to each category, and their display order). Individual page metadata (title, description, enabled) comes from `.meta.ts` files.
@@ -65,34 +69,34 @@ export interface CategoryConfig {
 
 export const categories = [
   {
-    id: 'add-widget-guide',
-    title: '如何添加小组件引导',
-    description: '根据您的手机系统，了解如何将小组件添加到主屏幕',
+    id: "add-widget-guide",
+    title: "如何添加小组件引导",
+    description: "根据您的手机系统，了解如何将小组件添加到主屏幕",
     order: 1,
     pageIds: [
-      'ios',
-      'hyperos',
-      'originos',
-      'vivo',
-      'harmonyos',
-      'coloros',
-      'magicos',
-      'flyme',
+      "ios",
+      "hyperos",
+      "originos",
+      "vivo",
+      "harmonyos",
+      "coloros",
+      "magicos",
+      "flyme",
     ] as const,
   },
   {
-    id: 'widget-troubleshoot',
-    title: '小组件不刷新排障',
-    description: '解决因系统后台限制导致的小组件不刷新问题',
+    id: "widget-troubleshoot",
+    title: "小组件不刷新排障",
+    description: "解决因系统后台限制导致的小组件不刷新问题",
     order: 2,
     pageIds: [
-      'hyperos',
-      'originos',
-      'vivo',
-      'harmonyos',
-      'coloros',
-      'magicos',
-      'flyme',
+      "hyperos",
+      "originos",
+      "vivo",
+      "harmonyos",
+      "coloros",
+      "magicos",
+      "flyme",
     ] as const,
   },
 ] as const;
@@ -110,6 +114,7 @@ git commit -m "feat: add category definitions"
 ### Task 3: Create `.meta.ts` files for all pages
 
 **Files:**
+
 - Create: `app/routes/add-widget-guide/ios.meta.ts`
 - Create: `app/routes/add-widget-guide/hyperos.meta.ts`
 - Create: `app/routes/add-widget-guide/originos.meta.ts`
@@ -133,8 +138,8 @@ Each `.meta.ts` is a pure data file (zero React imports) that exports a `routeMe
 ```ts
 // app/routes/add-widget-guide/ios.meta.ts
 export const routeMeta = {
-  title: 'iOS 添加小组件',
-  description: '在 iPhone 或 iPad 上通过编辑主屏幕添加小组件',
+  title: "iOS 添加小组件",
+  description: "在 iPhone 或 iPad 上通过编辑主屏幕添加小组件",
   enabled: true,
 } as const;
 ```
@@ -142,8 +147,8 @@ export const routeMeta = {
 ```ts
 // app/routes/add-widget-guide/hyperos.meta.ts
 export const routeMeta = {
-  title: 'HyperOS 添加小组件',
-  description: '在 Xiaomi HyperOS 系统中将小组件添加到主屏幕',
+  title: "HyperOS 添加小组件",
+  description: "在 Xiaomi HyperOS 系统中将小组件添加到主屏幕",
   enabled: true,
 } as const;
 ```
@@ -151,8 +156,8 @@ export const routeMeta = {
 ```ts
 // app/routes/widget-troubleshoot/hyperos.meta.ts
 export const routeMeta = {
-  title: 'HyperOS 排障',
-  description: '解决 HyperOS 系统中小组件不刷新问题',
+  title: "HyperOS 排障",
+  description: "解决 HyperOS 系统中小组件不刷新问题",
   enabled: true,
 } as const;
 ```
@@ -162,8 +167,8 @@ export const routeMeta = {
 ```ts
 // app/routes/add-widget-guide/originos.meta.ts
 export const routeMeta = {
-  title: 'OriginOS 添加小组件',
-  description: '在 vivo OriginOS 系统中添加小组件',
+  title: "OriginOS 添加小组件",
+  description: "在 vivo OriginOS 系统中添加小组件",
   enabled: false,
 } as const;
 ```
@@ -171,8 +176,8 @@ export const routeMeta = {
 ```ts
 // app/routes/add-widget-guide/vivo.meta.ts
 export const routeMeta = {
-  title: 'Vivo 添加小组件',
-  description: '在 Vivo 手机中添加小组件',
+  title: "vivo 添加小组件",
+  description: "在 vivo 手机中添加小组件",
   enabled: false,
 } as const;
 ```
@@ -180,8 +185,8 @@ export const routeMeta = {
 ```ts
 // app/routes/add-widget-guide/harmonyos.meta.ts
 export const routeMeta = {
-  title: 'HarmonyOS 添加小组件',
-  description: '在华为 HarmonyOS 系统中添加小组件',
+  title: "HarmonyOS 添加小组件",
+  description: "在华为 HarmonyOS 系统中添加小组件",
   enabled: false,
 } as const;
 ```
@@ -189,8 +194,8 @@ export const routeMeta = {
 ```ts
 // app/routes/add-widget-guide/coloros.meta.ts
 export const routeMeta = {
-  title: 'ColorOS 添加小组件',
-  description: '在 OPPO ColorOS 系统中添加小组件',
+  title: "ColorOS 添加小组件",
+  description: "在 OPPO ColorOS 系统中添加小组件",
   enabled: false,
 } as const;
 ```
@@ -198,8 +203,8 @@ export const routeMeta = {
 ```ts
 // app/routes/add-widget-guide/magicos.meta.ts
 export const routeMeta = {
-  title: 'MagicOS 添加小组件',
-  description: '在荣耀 MagicOS 系统中添加小组件',
+  title: "MagicOS 添加小组件",
+  description: "在荣耀 MagicOS 系统中添加小组件",
   enabled: false,
 } as const;
 ```
@@ -207,8 +212,8 @@ export const routeMeta = {
 ```ts
 // app/routes/add-widget-guide/flyme.meta.ts
 export const routeMeta = {
-  title: 'Flyme 添加小组件',
-  description: '在魅族 Flyme 系统中添加小组件',
+  title: "Flyme 添加小组件",
+  description: "在魅族 Flyme 系统中添加小组件",
   enabled: false,
 } as const;
 ```
@@ -218,8 +223,8 @@ export const routeMeta = {
 ```ts
 // app/routes/widget-troubleshoot/originos.meta.ts
 export const routeMeta = {
-  title: 'OriginOS 排障',
-  description: '解决 OriginOS 系统中小组件不刷新问题',
+  title: "OriginOS 排障",
+  description: "解决 OriginOS 系统中小组件不刷新问题",
   enabled: false,
 } as const;
 ```
@@ -227,8 +232,8 @@ export const routeMeta = {
 ```ts
 // app/routes/widget-troubleshoot/vivo.meta.ts
 export const routeMeta = {
-  title: 'Vivo 排障',
-  description: '解决 Vivo 手机中小组件不刷新问题',
+  title: "vivo 排障",
+  description: "解决 vivo 手机中小组件不刷新问题",
   enabled: false,
 } as const;
 ```
@@ -236,8 +241,8 @@ export const routeMeta = {
 ```ts
 // app/routes/widget-troubleshoot/harmonyos.meta.ts
 export const routeMeta = {
-  title: 'HarmonyOS 排障',
-  description: '解决 HarmonyOS 系统中小组件不刷新问题',
+  title: "HarmonyOS 排障",
+  description: "解决 HarmonyOS 系统中小组件不刷新问题",
   enabled: false,
 } as const;
 ```
@@ -245,8 +250,8 @@ export const routeMeta = {
 ```ts
 // app/routes/widget-troubleshoot/coloros.meta.ts
 export const routeMeta = {
-  title: 'ColorOS 排障',
-  description: '解决 ColorOS 系统中小组件不刷新问题',
+  title: "ColorOS 排障",
+  description: "解决 ColorOS 系统中小组件不刷新问题",
   enabled: false,
 } as const;
 ```
@@ -254,8 +259,8 @@ export const routeMeta = {
 ```ts
 // app/routes/widget-troubleshoot/magicos.meta.ts
 export const routeMeta = {
-  title: 'MagicOS 排障',
-  description: '解决 MagicOS 系统中小组件不刷新问题',
+  title: "MagicOS 排障",
+  description: "解决 MagicOS 系统中小组件不刷新问题",
   enabled: false,
 } as const;
 ```
@@ -263,8 +268,8 @@ export const routeMeta = {
 ```ts
 // app/routes/widget-troubleshoot/flyme.meta.ts
 export const routeMeta = {
-  title: 'Flyme 排障',
-  description: '解决 Flyme 系统中小组件不刷新问题',
+  title: "Flyme 排障",
+  description: "解决 Flyme 系统中小组件不刷新问题",
   enabled: false,
 } as const;
 ```
@@ -281,9 +286,11 @@ git commit -m "feat: add page metadata files"
 ### Task 4: Create `scripts/generate-pages.ts`
 
 **Files:**
+
 - Create: `scripts/generate-pages.ts`
 
 The script:
+
 1. Reads `app/pages.ts` to get category definitions + page ID lists
 2. Locates each `.meta.ts` by convention: `app/routes/{categoryId}/{pageId}.meta.ts`
 3. Dynamically imports each `.meta.ts` (pure data, no React — safe for Node.js with tsx)
@@ -294,14 +301,14 @@ The script:
 
 ```ts
 #!/usr/bin/env tsx
-import { glob } from 'tinyglobby';
-import path from 'path';
-import fs from 'fs';
+import { glob } from "tinyglobby";
+import path from "path";
+import fs from "fs";
 
-const PROJECT_ROOT = path.resolve(import.meta.dirname, '..');
-const APP_DIR = path.join(PROJECT_ROOT, 'app');
-const OUTPUT_DIR = path.join(APP_DIR, 'generated');
-const OUTPUT_FILE = path.join(OUTPUT_DIR, 'pages.ts');
+const PROJECT_ROOT = path.resolve(import.meta.dirname, "..");
+const APP_DIR = path.join(PROJECT_ROOT, "app");
+const OUTPUT_DIR = path.join(APP_DIR, "generated");
+const OUTPUT_FILE = path.join(OUTPUT_DIR, "pages.ts");
 
 type RouteMeta = {
   title: string;
@@ -335,7 +342,7 @@ function formatPath(categoryId: string, pageId: string): string {
 
 async function main() {
   // Step 1: Read category definitions from app/pages.ts
-  const pagesModulePath = path.join(APP_DIR, 'pages.ts');
+  const pagesModulePath = path.join(APP_DIR, "pages.ts");
   const pagesModule = await import(pagesModulePath);
 
   const categories: typeof pagesModule.categories = pagesModule.categories;
@@ -349,7 +356,7 @@ async function main() {
     for (const pageId of category.pageIds) {
       const metaFilePath = path.join(
         APP_DIR,
-        'routes',
+        "routes",
         category.id,
         `${pageId}.meta.ts`,
       );
@@ -388,7 +395,7 @@ export const routeManifest = ${JSON.stringify(manifest, null, 2)} as const;
 `;
 
   fs.mkdirSync(OUTPUT_DIR, { recursive: true });
-  fs.writeFileSync(OUTPUT_FILE, output, 'utf-8');
+  fs.writeFileSync(OUTPUT_FILE, output, "utf-8");
 
   const totalPages = manifest.categories.reduce(
     (sum, c) => sum + c.pages.length,
@@ -408,18 +415,21 @@ main().catch(console.error);
 ```
 
 Note: `import.meta.dirname` requires Node.js 21+. If the project uses an older Node version, use this instead:
+
 ```ts
-const PROJECT_ROOT = path.resolve(new URL('.', import.meta.url).pathname, '..');
+const PROJECT_ROOT = path.resolve(new URL(".", import.meta.url).pathname, "..");
 ```
 
 - [ ] **Step 2: Verify script runs**
 
 Run:
+
 ```bash
 pnpm tsx scripts/generate-pages.ts
 ```
 
 Expected output:
+
 ```
 ✅ Generated manifest: 2 categories, 15 pages (3 enabled)
 ```
@@ -438,11 +448,13 @@ git commit -m "feat: add prebuild script for page manifest generation"
 ### Task 5: Create `app/generated/pages.ts` (first-run generation)
 
 **Files:**
+
 - Create: `app/generated/pages.ts` (via running the prebuild script)
 
 - [ ] **Step 1: Run the generate script**
 
 Run:
+
 ```bash
 pnpm tsx scripts/generate-pages.ts
 ```
@@ -454,12 +466,13 @@ cat app/generated/pages.ts
 ```
 
 Expected content (partial):
+
 ```ts
 // Auto-generated by scripts/generate-pages.ts — do not edit manually
 export const routeManifest = {
-  "categories": [
+  categories: [
     {
-      "id": "add-widget-guide",
+      id: "add-widget-guide",
       // ...
     },
   ],
@@ -480,6 +493,7 @@ Note: `-f` is needed because `app/generated/` may be in `.gitignore` later.
 ### Task 6: Update `app/routes.ts` for dynamic route generation
 
 **Files:**
+
 - Modify: `app/routes.ts`
 
 - [ ] **Step 1: Rewrite app/routes.ts**
@@ -491,26 +505,18 @@ import { routeManifest } from "./generated/pages";
 const routes: RouteConfig = [index("routes/home.tsx")];
 
 for (const category of routeManifest.categories) {
-  const children: RouteConfig = [
-    index(`routes/${category.id}/index.tsx`),
-  ];
+  const children: RouteConfig = [index(`routes/${category.id}/index.tsx`)];
 
   for (const page of category.pages) {
     if (page.enabled) {
-      children.push(
-        route(page.id, `routes/${category.id}/${page.id}.tsx`),
-      );
+      children.push(route(page.id, `routes/${category.id}/${page.id}.tsx`));
     } else {
       // Disabled pages redirect to parent via shared redirect component
-      children.push(
-        route(page.id, "routes/redirect-page.tsx"),
-      );
+      children.push(route(page.id, "routes/redirect-page.tsx"));
     }
   }
 
-  routes.push(
-    route(category.id, `routes/${category.id}/layout.tsx`, children),
-  );
+  routes.push(route(category.id, `routes/${category.id}/layout.tsx`, children));
 }
 
 export default routes satisfies RouteConfig;
@@ -528,6 +534,7 @@ git commit -m "feat: dynamic route generation from manifest"
 ### Task 7: Update `react-router.config.ts` for prerender paths
 
 **Files:**
+
 - Modify: `react-router.config.ts`
 
 - [ ] **Step 1: Update react-router.config.ts**
@@ -563,6 +570,7 @@ git commit -m "feat: dynamic prerender paths from manifest"
 ### Task 8: Create shared redirect component
 
 **Files:**
+
 - Create: `app/routes/redirect-page.tsx`
 
 - [ ] **Step 1: Write redirect-page.tsx**
@@ -596,6 +604,7 @@ git commit -m "feat: add shared redirect component for disabled pages"
 ### Task 9: Create category layouts (with back button)
 
 **Files:**
+
 - Create: `app/routes/add-widget-guide/layout.tsx`
 - Create: `app/routes/widget-troubleshoot/layout.tsx`
 
@@ -617,7 +626,7 @@ export default function AddWidgetGuideLayout() {
         <Link
           to=".."
           relative="path"
-          className="inline-flex items-center gap-1 text-sm text-neutral-600 hover:text-neutral-900 mb-4"
+          className="mb-4 inline-flex items-center gap-1 text-sm text-neutral-600 hover:text-neutral-900"
         >
           <svg
             width="16"
@@ -657,7 +666,7 @@ export default function WidgetTroubleshootLayout() {
         <Link
           to=".."
           relative="path"
-          className="inline-flex items-center gap-1 text-sm text-neutral-600 hover:text-neutral-900 mb-4"
+          className="mb-4 inline-flex items-center gap-1 text-sm text-neutral-600 hover:text-neutral-900"
         >
           <svg
             width="16"
@@ -693,6 +702,7 @@ git commit -m "feat: add category layouts with back button"
 ### Task 10: Create category index pages (OS selection list)
 
 **Files:**
+
 - Create: `app/routes/add-widget-guide/index.tsx`
 - Create: `app/routes/widget-troubleshoot/index.tsx`
 
@@ -728,17 +738,17 @@ export default function AddWidgetGuideIndex() {
 
   return (
     <div>
-      <h1 className="text-xl font-semibold mb-2">{category.title}</h1>
-      <p className="text-neutral-500 text-sm mb-5">{category.description}</p>
+      <h1 className="mb-2 text-xl font-semibold">{category.title}</h1>
+      <p className="mb-5 text-sm text-neutral-500">{category.description}</p>
       <div className="flex flex-col gap-3">
         {enabledPages.map((page) => (
           <Link
             key={page.id}
             to={page.id}
-            className="block p-4 rounded-xl border border-neutral-200 hover:border-neutral-400 transition-colors"
+            className="block rounded-xl border border-neutral-200 p-4 transition-colors hover:border-neutral-400"
           >
             <h2 className="font-medium">{page.title}</h2>
-            <p className="text-sm text-neutral-500 mt-1">{page.description}</p>
+            <p className="mt-1 text-sm text-neutral-500">{page.description}</p>
           </Link>
         ))}
       </div>
@@ -777,17 +787,17 @@ export default function WidgetTroubleshootIndex() {
 
   return (
     <div>
-      <h1 className="text-xl font-semibold mb-2">{category.title}</h1>
-      <p className="text-neutral-500 text-sm mb-5">{category.description}</p>
+      <h1 className="mb-2 text-xl font-semibold">{category.title}</h1>
+      <p className="mb-5 text-sm text-neutral-500">{category.description}</p>
       <div className="flex flex-col gap-3">
         {enabledPages.map((page) => (
           <Link
             key={page.id}
             to={page.id}
-            className="block p-4 rounded-xl border border-neutral-200 hover:border-neutral-400 transition-colors"
+            className="block rounded-xl border border-neutral-200 p-4 transition-colors hover:border-neutral-400"
           >
             <h2 className="font-medium">{page.title}</h2>
-            <p className="text-sm text-neutral-500 mt-1">{page.description}</p>
+            <p className="mt-1 text-sm text-neutral-500">{page.description}</p>
           </Link>
         ))}
       </div>
@@ -808,6 +818,7 @@ git commit -m "feat: add category index pages with OS list"
 ### Task 11: Update home page (all pages list)
 
 **Files:**
+
 - Modify: `app/routes/home.tsx`
 
 - [ ] **Step 1: Rewrite home page**
@@ -834,7 +845,7 @@ export function meta({}: Route.MetaArgs) {
 export default function Home() {
   return (
     <div className="p-5">
-      <h1 className="text-xl font-semibold mb-6">使用指南</h1>
+      <h1 className="mb-6 text-xl font-semibold">使用指南</h1>
       <div className="flex flex-col gap-8">
         {routeManifest.categories.map((category) => {
           const enabledPages = category.pages.filter((p) => p.enabled);
@@ -842,10 +853,7 @@ export default function Home() {
 
           return (
             <section key={category.id}>
-              <Link
-                to={`/${category.id}/`}
-                className="block mb-3"
-              >
+              <Link to={`/${category.id}/`} className="mb-3 block">
                 <h2 className="text-lg font-medium text-neutral-900">
                   {category.title}
                 </h2>
@@ -853,15 +861,15 @@ export default function Home() {
                   {category.description}
                 </p>
               </Link>
-              <div className="flex flex-col gap-2 ml-2">
+              <div className="ml-2 flex flex-col gap-2">
                 {enabledPages.map((page) => (
                   <Link
                     key={page.id}
                     to={page.path}
-                    className="block p-3 rounded-lg border border-neutral-100 hover:border-neutral-300 transition-colors"
+                    className="block rounded-lg border border-neutral-100 p-3 transition-colors hover:border-neutral-300"
                   >
-                    <span className="font-medium text-sm">{page.title}</span>
-                    <p className="text-xs text-neutral-400 mt-0.5">
+                    <span className="text-sm font-medium">{page.title}</span>
+                    <p className="mt-0.5 text-xs text-neutral-400">
                       {page.description}
                     </p>
                   </Link>
@@ -888,6 +896,7 @@ git commit -m "feat: dynamic home page listing all categories and pages"
 ### Task 12: Create individual page components (enabled pages)
 
 **Files:**
+
 - Create: `app/routes/add-widget-guide/ios.tsx`
 - Create: `app/routes/add-widget-guide/hyperos.tsx`
 - Create: `app/routes/widget-troubleshoot/hyperos.tsx`
@@ -914,22 +923,28 @@ export default function IosGuide() {
   return (
     <article className="prose prose-neutral max-w-none">
       <h1>iOS 添加小组件</h1>
-      <p className="text-neutral-500 text-sm">最后更新：2026 年 5 月</p>
-      <div className="mt-6 space-y-4 text-neutral-700 text-sm leading-relaxed">
+      <p className="text-sm text-neutral-500">最后更新：2026 年 5 月</p>
+      <div className="mt-6 space-y-4 text-sm leading-relaxed text-neutral-700">
         <section>
           <h2 className="text-base font-medium text-neutral-900">操作步骤</h2>
-          <ol className="list-decimal pl-5 space-y-2 mt-2">
+          <ol className="mt-2 list-decimal space-y-2 pl-5">
             <li>长按主屏幕空白区域，进入编辑模式</li>
-            <li>点击左上角的 <strong>+</strong> 按钮</li>
+            <li>
+              点击左上角的 <strong>+</strong> 按钮
+            </li>
             <li>搜索或找到本应用的小组件</li>
             <li>选择合适的小组件尺寸</li>
-            <li>点击 <strong>添加小组件</strong></li>
-            <li>点击右上角 <strong>完成</strong> 退出编辑模式</li>
+            <li>
+              点击 <strong>添加小组件</strong>
+            </li>
+            <li>
+              点击右上角 <strong>完成</strong> 退出编辑模式
+            </li>
           </ol>
         </section>
         <section>
           <h2 className="text-base font-medium text-neutral-900">注意事项</h2>
-          <ul className="list-disc pl-5 space-y-1 mt-2">
+          <ul className="mt-2 list-disc space-y-1 pl-5">
             <li>确保 iOS 版本不低于 14.0</li>
             <li>如果找不到小组件，请确认应用已更新到最新版本</li>
           </ul>
@@ -960,21 +975,25 @@ export default function HyperosGuide() {
   return (
     <article className="prose prose-neutral max-w-none">
       <h1>HyperOS 添加小组件</h1>
-      <p className="text-neutral-500 text-sm">最后更新：2026 年 5 月</p>
-      <div className="mt-6 space-y-4 text-neutral-700 text-sm leading-relaxed">
+      <p className="text-sm text-neutral-500">最后更新：2026 年 5 月</p>
+      <div className="mt-6 space-y-4 text-sm leading-relaxed text-neutral-700">
         <section>
           <h2 className="text-base font-medium text-neutral-900">操作步骤</h2>
-          <ol className="list-decimal pl-5 space-y-2 mt-2">
+          <ol className="mt-2 list-decimal space-y-2 pl-5">
             <li>在主屏幕双指捏合或长按空白区域</li>
-            <li>点击底部 <strong>添加工具</strong> 或 <strong>小组件</strong></li>
+            <li>
+              点击底部 <strong>添加工具</strong> 或 <strong>小组件</strong>
+            </li>
             <li>在小组件列表中找到本应用</li>
             <li>选择合适的小组件样式和尺寸</li>
-            <li>点击 <strong>添加到主屏幕</strong></li>
+            <li>
+              点击 <strong>添加到主屏幕</strong>
+            </li>
           </ol>
         </section>
         <section>
           <h2 className="text-base font-medium text-neutral-900">注意事项</h2>
-          <ul className="list-disc pl-5 space-y-1 mt-2">
+          <ul className="mt-2 list-disc space-y-1 pl-5">
             <li>HyperOS 基于 Android，不同机型操作可能略有差异</li>
             <li>部分 MIUI 版本操作路径可能不同</li>
           </ul>
@@ -1005,32 +1024,32 @@ export default function HyperosTroubleshoot() {
   return (
     <article className="prose prose-neutral max-w-none">
       <h1>HyperOS 小组件不刷新排障</h1>
-      <p className="text-neutral-500 text-sm">最后更新：2026 年 5 月</p>
-      <div className="mt-6 space-y-4 text-neutral-700 text-sm leading-relaxed">
+      <p className="text-sm text-neutral-500">最后更新：2026 年 5 月</p>
+      <div className="mt-6 space-y-4 text-sm leading-relaxed text-neutral-700">
         <section>
           <h2 className="text-base font-medium text-neutral-900">检查步骤</h2>
-          <ol className="list-decimal pl-5 space-y-2 mt-2">
+          <ol className="mt-2 list-decimal space-y-2 pl-5">
             <li>
               <strong>关闭省电模式</strong>
-              <p className="text-xs text-neutral-400 mt-0.5">
+              <p className="mt-0.5 text-xs text-neutral-400">
                 设置 → 省电与电池 → 关闭省电模式
               </p>
             </li>
             <li>
               <strong>允许后台运行</strong>
-              <p className="text-xs text-neutral-400 mt-0.5">
+              <p className="mt-0.5 text-xs text-neutral-400">
                 设置 → 应用设置 → 本应用 → 省电策略 → 选择"无限制"
               </p>
             </li>
             <li>
               <strong>锁定应用</strong>
-              <p className="text-xs text-neutral-400 mt-0.5">
+              <p className="mt-0.5 text-xs text-neutral-400">
                 在多任务界面将本应用下拉锁定
               </p>
             </li>
             <li>
               <strong>重启小组件</strong>
-              <p className="text-xs text-neutral-400 mt-0.5">
+              <p className="mt-0.5 text-xs text-neutral-400">
                 移除小组件后重新添加
               </p>
             </li>
@@ -1054,6 +1073,7 @@ git commit -m "feat: add content pages for enabled guides (iOS, HyperOS)"
 ### Task 13: Update package.json scripts + .gitignore
 
 **Files:**
+
 - Modify: `package.json`
 - Modify: `.gitignore`
 
@@ -1100,6 +1120,7 @@ pnpm build
 ```
 
 Expected output:
+
 ```
 ✅ Generated manifest: 2 categories, 15 pages (3 enabled)
 ✔ Build complete

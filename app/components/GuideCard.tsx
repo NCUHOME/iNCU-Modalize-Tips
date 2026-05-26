@@ -21,7 +21,7 @@ export function GuideCard({
   isLoading = false,
   onClick,
 }: GuideCardProps) {
-  const delayClass = stagger >= 1 && stagger <= 6 ? `stagger-${stagger}` : "";
+  const delayClass = stagger >= 1 && stagger <= 12 ? `stagger-${stagger}` : "";
 
   return (
     <Link
