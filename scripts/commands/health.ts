@@ -5,6 +5,64 @@ import pc from "picocolors";
 import { EXIT, ROUTES_DIR, PAGES_FILE } from "../lib/constants";
 import { importPagesFile, readMeta } from "../lib/pages";
 
+// ---- Agent 模式 ----
+
+export async function healthCheckAgent(): Promise<string[]> {
+  const cats = await importPagesFile();
+  const issues: string[] = [];
+  const definedPages = new Set<string>();
+
+  for (const cat of cats) {
+    for (const pg of cat.pages) {
+      const k = `${cat.id}/${pg.id}`;
+      definedPages.add(k);
+      const dir = path.join(ROUTES_DIR, cat.id, pg.id);
+      const hasMeta = fs.existsSync(path.join(dir, "meta.ts"));
+      const hasPage = fs.existsSync(path.join(dir, "page.tsx"));
+
+      if (!hasMeta && !hasPage) {
+        issues.push(`⚠️  ${k} — 缺少 meta.ts 和 page.tsx`);
+      } else {
+        if (!hasMeta) issues.push(`⚠️  ${k} — 缺少 meta.ts`);
+        if (!hasPage) issues.push(`⚠️  ${k} — 缺少 page.tsx`);
+      }
+
+      if (hasMeta) {
+        const m = readMeta(cat.id, pg.id);
+        if (!m.title || m.title === pg.id) {
+          issues.push(`💡 ${k} — meta 标题与 ID 相同，建议补充标题`);
+        }
+      }
+    }
+  }
+
+  for (const catDir of fs.readdirSync(ROUTES_DIR, { withFileTypes: true })) {
+    if (!catDir.isDirectory()) continue;
+    const catP = path.join(ROUTES_DIR, catDir.name);
+    for (const pgDir of fs.readdirSync(catP, { withFileTypes: true })) {
+      if (!pgDir.isDirectory()) continue;
+      const k = `${catDir.name}/${pgDir.name}`;
+      if (!definedPages.has(k)) {
+        issues.push(`🫥 ${k} — 孤立目录，未被 pages.ts 引用`);
+      }
+    }
+  }
+
+  for (const cat of cats) {
+    const catPath = path.join(ROUTES_DIR, cat.id);
+    if (!fs.existsSync(path.join(catPath, "layout.tsx"))) {
+      issues.push(`⚠️  ${cat.id} — 缺少 layout.tsx`);
+    }
+    if (!fs.existsSync(path.join(catPath, "index.tsx"))) {
+      issues.push(`⚠️  ${cat.id} — 缺少 index.tsx`);
+    }
+  }
+
+  return issues;
+}
+
+// ---- 交互模式 ----
+
 export async function healthCheck() {
   const s = spinner();
   s.start("扫描项目…");

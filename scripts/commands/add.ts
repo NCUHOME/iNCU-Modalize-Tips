@@ -12,6 +12,123 @@ import {
   updatePageTsErrorIgnore,
 } from "../lib/utils";
 
+// ---- 非交互式（agent 调用） ----
+
+export interface AddPageArgs {
+  category: string;
+  page: string;
+  title: string;
+  desc: string;
+  enabled?: boolean;
+}
+
+export async function addPageAgent(args: AddPageArgs): Promise<string> {
+  const content = fs.readFileSync(PAGES_FILE, "utf-8");
+  const cats = await importPagesFile();
+
+  const category = cats.find((c) => c.id === args.category);
+  if (!category) throw new Error(`分类 "${args.category}" 不存在`);
+  if (!/^[a-z][a-z0-9-]*$/.test(args.page))
+    throw new Error(`页面 ID "${args.page}" 格式无效`);
+  if (category.pages.some((p) => p.id === args.page))
+    throw new Error(`页面 "${args.page}" 已存在于分类 "${args.category}"`);
+  if (!args.title.trim()) throw new Error("标题不能为空");
+
+  const dir = path.join(ROUTES_DIR, args.category, args.page);
+  if (fs.existsSync(dir))
+    throw new Error(`目录 ${args.category}/${args.page} 已存在`);
+
+  const enabled = args.enabled !== false; // 默认启用
+  fs.mkdirSync(dir, { recursive: true });
+
+  const now = new Date();
+  const updatedAt = `${now.getFullYear()}年${now.getMonth() + 1}月`;
+  const metaContent = applyTemplate("page-meta.template", {
+    title: args.title.trim(),
+    description: args.desc.trim(),
+    updatedAt,
+  });
+  fs.writeFileSync(path.join(dir, "meta.ts"), metaContent, "utf-8");
+
+  const pageContent = applyTemplate("page.template", {
+    categoryId: args.category,
+    pageId: args.page,
+    componentName: toPascalCase(args.page),
+  });
+  fs.writeFileSync(path.join(dir, "page.tsx"), pageContent, "utf-8");
+
+  if (!enabled) {
+    updatePageTsErrorIgnore(args.category, args.page, false);
+  }
+
+  const newContent = content.replace(
+    new RegExp(
+      `(id:\\s*"${args.category}"[\\s\\S]*?pages:\\s*\\[[\\s\\S]*?)(\\n\\s+\\]\\s+as\\s+const,)`,
+    ),
+    `$1\n      { id: "${args.page}", enabled: ${enabled} },$2`,
+  );
+  fs.writeFileSync(PAGES_FILE, newContent, "utf-8");
+
+  runGenerate();
+  return `${args.category}/${args.page}`;
+}
+
+export interface AddCategoryArgs {
+  id: string;
+  title: string;
+  desc: string;
+  order?: number;
+}
+
+export async function addCategoryAgent(args: AddCategoryArgs): Promise<string> {
+  const content = fs.readFileSync(PAGES_FILE, "utf-8");
+  const cats = await importPagesFile();
+
+  if (!/^[a-z][a-z0-9-]*$/.test(args.id))
+    throw new Error(`分类 ID "${args.id}" 格式无效`);
+  if (cats.some((c) => c.id === args.id))
+    throw new Error(`分类 "${args.id}" 已存在`);
+  if (!args.title.trim()) throw new Error("标题不能为空");
+
+  const catDir = path.join(ROUTES_DIR, args.id);
+  if (fs.existsSync(catDir)) throw new Error(`目录 ${args.id} 已存在`);
+
+  const orderNum =
+    args.order ??
+    (cats.length > 0 ? Math.max(...cats.map((c) => c.order)) + 1 : 1);
+  fs.mkdirSync(catDir, { recursive: true });
+
+  const pascalId = toPascalCase(args.id);
+  const layoutContent = applyTemplate("layout.template", {
+    componentName: pascalId,
+    categoryId: args.id,
+  });
+  const indexContent = applyTemplate("index.template", {
+    categoryId: args.id,
+    componentName: pascalId,
+  });
+
+  fs.writeFileSync(path.join(catDir, "layout.tsx"), layoutContent, "utf-8");
+  fs.writeFileSync(path.join(catDir, "index.tsx"), indexContent, "utf-8");
+
+  const categoryBlock = `  {
+    id: "${args.id}",
+    title: "${args.title.trim()}",
+    description: "${args.desc.trim()}",
+    order: ${orderNum},
+    pages: [
+    ] as const,
+  },
+`;
+  const newContent = content.replace(/(\] as const;)/, `${categoryBlock}$1`);
+  fs.writeFileSync(PAGES_FILE, newContent, "utf-8");
+
+  runGenerate();
+  return args.id;
+}
+
+// ---- 交互式（原有方法不做改动） ----
+
 export async function addPage() {
   const content = fs.readFileSync(PAGES_FILE, "utf-8");
   const cats = await importPagesFile();

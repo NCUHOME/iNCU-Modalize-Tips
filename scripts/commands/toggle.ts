@@ -12,6 +12,28 @@ import {
   type ScrolledListState,
 } from "../lib/terminal";
 
+// ---- Agent 模式 ----
+
+export async function togglePageAgent(
+  categoryId: string,
+  pageId: string,
+): Promise<boolean> {
+  const cats = await importPagesFile();
+  const cat = cats.find((c) => c.id === categoryId);
+  if (!cat) throw new Error(`分类 "${categoryId}" 不存在`);
+  const pg = cat.pages.find((p) => p.id === pageId);
+  if (!pg) throw new Error(`页面 "${pageId}" 不存在于分类 "${categoryId}"`);
+
+  const newState = !pg.enabled;
+  pg.enabled = newState;
+  fs.writeFileSync(PAGES_FILE, rebuildPagesFile(cats), "utf-8");
+  updatePageTsErrorIgnore(categoryId, pageId, newState);
+  runGenerate();
+  return newState;
+}
+
+// ---- 交互模式 ----
+
 export async function toggleInCat() {
   const cats = await importPagesFile();
   if (cats.length === 0) {

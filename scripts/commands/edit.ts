@@ -6,6 +6,31 @@ import { EXIT, PAGES_FILE } from "../lib/constants";
 import { importPagesFile, readMeta, writeMeta } from "../lib/pages";
 import { runGenerate } from "../lib/utils";
 
+// ---- Agent 模式 ----
+
+export async function editPageAgent(
+  categoryId: string,
+  pageId: string,
+  title?: string,
+  desc?: string,
+): Promise<void> {
+  const cats = await importPagesFile();
+  const cat = cats.find((c) => c.id === categoryId);
+  if (!cat) throw new Error(`分类 "${categoryId}" 不存在`);
+  const pg = cat.pages.find((p) => p.id === pageId);
+  if (!pg) throw new Error(`页面 "${pageId}" 不存在`);
+
+  const cur = readMeta(categoryId, pageId);
+  const newTitle = (title || cur.title).trim();
+  const newDesc = (desc !== undefined ? desc : cur.desc).trim();
+
+  if (newTitle === cur.title && newDesc === cur.desc) return;
+  writeMeta(categoryId, pageId, newTitle, newDesc, cur.image, cur.updatedAt);
+  runGenerate();
+}
+
+// ---- 交互模式 ----
+
 export async function editInCat() {
   const cats = await importPagesFile();
   if (cats.length === 0) {

@@ -7,6 +7,44 @@ import { EXIT, ROUTES_DIR, PAGES_FILE } from "../lib/constants";
 import { importPagesFile, rebuildPagesFile, readMeta } from "../lib/pages";
 import { runGenerate } from "../lib/utils";
 
+// ---- Agent 模式 ----
+
+export async function migratePageAgent(
+  fromId: string,
+  toId: string,
+  pageId: string,
+  force: boolean,
+): Promise<void> {
+  const cats = await importPagesFile();
+  const fromCat = cats.find((c) => c.id === fromId);
+  if (!fromCat) throw new Error(`来源分类 "${fromId}" 不存在`);
+  const toCat = cats.find((c) => c.id === toId);
+  if (!toCat) throw new Error(`目标分类 "${toId}" 不存在`);
+
+  const pg = fromCat.pages.find((p) => p.id === pageId);
+  if (!pg) throw new Error(`页面 "${pageId}" 不在分类 "${fromId}" 中`);
+  if (!force && toCat.pages.some((p) => p.id === pageId))
+    throw new Error(
+      `目标分类 "${toId}" 已存在页面 "${pageId}"，使用 --force 覆盖`,
+    );
+
+  fromCat.pages = fromCat.pages.filter((p) => p.id !== pageId);
+  toCat.pages = toCat.pages.filter((p) => p.id !== pageId);
+  toCat.pages.push({ id: pageId, enabled: pg.enabled });
+
+  const fromDir = path.join(ROUTES_DIR, fromId, pageId);
+  const toDir = path.join(ROUTES_DIR, toId, pageId);
+  if (fs.existsSync(fromDir)) {
+    fs.mkdirSync(path.dirname(toDir), { recursive: true });
+    fs.renameSync(fromDir, toDir);
+  }
+
+  fs.writeFileSync(PAGES_FILE, rebuildPagesFile(cats), "utf-8");
+  runGenerate();
+}
+
+// ---- 交互模式 ----
+
 export async function migratePage() {
   const cats = await importPagesFile();
 

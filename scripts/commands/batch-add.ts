@@ -20,6 +20,71 @@ import {
   updatePageTsErrorIgnore,
 } from "../lib/utils";
 
+// ---- Agent 模式 ----
+
+export async function batchAddAgent(
+  categoryId: string,
+  descTemplate?: string,
+): Promise<number> {
+  const allBrands = loadBrands();
+  const cats = await importPagesFile();
+  const cat = cats.find((c) => c.id === categoryId);
+  if (!cat) throw new Error(`分类 "${categoryId}" 不存在`);
+
+  const missing = getMissingBrands(cat, allBrands);
+  if (missing.length === 0) return 0;
+
+  const template = descTemplate || "在{{title}}系统中添加小组件";
+  const now = new Date();
+  const updatedAt = `${now.getFullYear()}年${now.getMonth() + 1}月`;
+  let created = 0;
+
+  for (const brand of missing) {
+    const dir = path.join(ROUTES_DIR, categoryId, brand.id);
+    if (fs.existsSync(dir)) continue;
+    fs.mkdirSync(dir, { recursive: true });
+
+    let metaContent = applyTemplate("page-meta.template", {
+      title: brand.title,
+      description: renderDesc(template, brand),
+      updatedAt,
+    });
+    if (brand.image) {
+      metaContent = metaContent.replace(
+        `description: "${renderDesc(template, brand)}"`,
+        `description: "${renderDesc(template, brand)}",
+  image: "${brand.image}"`,
+      );
+    }
+    fs.writeFileSync(path.join(dir, "meta.ts"), metaContent, "utf-8");
+
+    const pageContent = applyTemplate("page.template", {
+      categoryId,
+      pageId: brand.id,
+      componentName: toPascalCase(brand.id),
+    });
+    fs.writeFileSync(path.join(dir, "page.tsx"), pageContent, "utf-8");
+    created++;
+  }
+
+  if (created > 0) {
+    const freshCats = await importPagesFile();
+    const targetCat = freshCats.find((c) => c.id === categoryId);
+    if (targetCat) {
+      for (const brand of missing) {
+        if (!targetCat.pages.some((p) => p.id === brand.id)) {
+          targetCat.pages.push({ id: brand.id, enabled: true });
+        }
+      }
+      writePages(freshCats);
+    }
+    runGenerate();
+  }
+  return created;
+}
+
+// ---- 交互模式 ----
+
 // ---- 品牌数据（从模板文件加载） ----
 
 interface BrandDef {

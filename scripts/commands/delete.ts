@@ -7,6 +7,54 @@ import { EXIT, BACK, ROUTES_DIR, PAGES_FILE } from "../lib/constants";
 import { importPagesFile, rebuildPagesFile } from "../lib/pages";
 import { hasUncommittedChanges, runGenerate } from "../lib/utils";
 
+// ---- Agent 模式 ----
+
+export async function deletePageAgent(
+  categoryId: string,
+  pageId: string,
+  force: boolean,
+): Promise<void> {
+  const cats = await importPagesFile();
+  const cat = cats.find((c) => c.id === categoryId);
+  if (!cat) throw new Error(`分类 "${categoryId}" 不存在`);
+  if (!cat.pages.some((p) => p.id === pageId))
+    throw new Error(`页面 "${pageId}" 不存在`);
+
+  if (!force && hasUncommittedChanges())
+    throw new Error("有未提交的更改，请先提交或使用 --force");
+
+  const pgDir = path.join(ROUTES_DIR, categoryId, pageId);
+  if (fs.existsSync(pgDir)) fs.rmSync(pgDir, { recursive: true, force: true });
+
+  const all = await importPagesFile();
+  const tgt = all.find((c) => c.id === categoryId)!;
+  tgt.pages = tgt.pages.filter((p) => p.id !== pageId);
+  fs.writeFileSync(PAGES_FILE, rebuildPagesFile(all), "utf-8");
+  runGenerate();
+}
+
+export async function deleteCategoryAgent(
+  categoryId: string,
+  force: boolean,
+): Promise<void> {
+  const cats = await importPagesFile();
+  const cat = cats.find((c) => c.id === categoryId);
+  if (!cat) throw new Error(`分类 "${categoryId}" 不存在`);
+
+  if (!force && hasUncommittedChanges())
+    throw new Error("有未提交的更改，请先提交或使用 --force");
+
+  const catDir = path.join(ROUTES_DIR, categoryId);
+  if (fs.existsSync(catDir))
+    fs.rmSync(catDir, { recursive: true, force: true });
+
+  const remaining = cats.filter((c) => c.id !== categoryId);
+  fs.writeFileSync(PAGES_FILE, rebuildPagesFile(remaining), "utf-8");
+  runGenerate();
+}
+
+// ---- 交互模式 ----
+
 /** Quick delete from manage menu */
 export async function deleteFromManage() {
   const cats = await importPagesFile();

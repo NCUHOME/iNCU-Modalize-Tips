@@ -1,62 +1,83 @@
 #!/usr/bin/env tsx
-import { intro, outro, select, isCancel } from "@clack/prompts";
 import pc from "picocolors";
-import { addPage, addCategory } from "./commands/add";
-import { toggleInCat } from "./commands/toggle";
-import { sortInCat } from "./commands/sort";
-import { editInCat } from "./commands/edit";
-import {
-  deleteFromManage,
-  deletePage,
-  deleteCategory,
-} from "./commands/delete";
-import { healthCheck } from "./commands/health";
-import { migratePage } from "./commands/migrate";
-import { batchAdd } from "./commands/batch-add";
+import { parseArgs, hasArgs } from "./lib/args";
+import { commands } from "./commands/agent-registry";
 
-// ---- Manage sub-menu ----
+// ---- Agent 模式 ----
 
-async function manageMenu() {
-  while (true) {
-    const action = await select<string>({
-      message: "📋 管理操作:",
-      options: [
-        { value: "toggle", label: "🌕 启停页面", hint: "启用 / 停用页面" },
-        { value: "edit", label: "✏️  编辑页面", hint: "修改标题 / 描述" },
-        { value: "sort", label: "↕️  页面排序", hint: "调整页面顺序" },
-        { value: "---1", label: pc.dim("─".repeat(36)) },
-        { value: "del-pg", label: "🗑️  删除页面" },
-        { value: "del-cat", label: "🗑️  删除分类" },
-        { value: "---2", label: pc.dim("─".repeat(36)) },
-        { value: "back", label: "← 返回主菜单" },
-      ],
-    });
-    if (isCancel(action) || action === "back") return;
-    if (action?.startsWith("---")) continue;
-
-    switch (action) {
-      case "toggle":
-        await toggleInCat();
-        break;
-      case "edit":
-        await editInCat();
-        break;
-      case "sort":
-        await sortInCat();
-        break;
-      case "del-pg":
-        await deleteFromManage();
-        break;
-      case "del-cat":
-        await deleteCategory();
-        break;
+async function agentMode() {
+  const { command, options: o } = parseArgs();
+  const cmd = commands[command as string];
+  if (!cmd) {
+    console.error(
+      pc.red(
+        `❌ 未知命令: ${command}。可用: ${Object.keys(commands).join(" ")}`,
+      ),
+    );
+    process.exit(1);
+  }
+  for (const r of cmd.required) {
+    if (!o[r]) {
+      console.error(pc.red(`❌ --${r} 必填`));
+      process.exit(1);
     }
   }
+  await cmd.run(o);
 }
 
-// ---- Main ----
+// ---- 交互模式 ----
 
-async function main() {
+async function interactiveMode() {
+  // 延迟导入 clack，避免 agent 模式下加载
+  const { intro, outro, select, isCancel } = await import("@clack/prompts");
+  const { addPage, addCategory } = await import("./commands/add");
+  const { toggleInCat } = await import("./commands/toggle");
+  const { sortInCat } = await import("./commands/sort");
+  const { editInCat } = await import("./commands/edit");
+  const { deleteFromManage, deleteCategory } =
+    await import("./commands/delete");
+  const { healthCheck } = await import("./commands/health");
+  const { migratePage } = await import("./commands/migrate");
+  const { batchAdd } = await import("./commands/batch-add");
+
+  async function manageMenu() {
+    while (true) {
+      const action = await select<string>({
+        message: "📋 管理操作:",
+        options: [
+          { value: "toggle", label: "🌕 启停页面", hint: "启用 / 停用页面" },
+          { value: "edit", label: "✏️  编辑页面", hint: "修改标题 / 描述" },
+          { value: "sort", label: "↕️  页面排序", hint: "调整页面顺序" },
+          { value: "---1", label: pc.dim("─".repeat(36)) },
+          { value: "del-pg", label: "🗑️  删除页面" },
+          { value: "del-cat", label: "🗑️  删除分类" },
+          { value: "---2", label: pc.dim("─".repeat(36)) },
+          { value: "back", label: "← 返回主菜单" },
+        ],
+      });
+      if (isCancel(action) || action === "back") return;
+      if (action?.startsWith("---")) continue;
+
+      switch (action) {
+        case "toggle":
+          await toggleInCat();
+          break;
+        case "edit":
+          await editInCat();
+          break;
+        case "sort":
+          await sortInCat();
+          break;
+        case "del-pg":
+          await deleteFromManage();
+          break;
+        case "del-cat":
+          await deleteCategory();
+          break;
+      }
+    }
+  }
+
   intro(pc.bgCyan(" 页面/分类管理 "));
 
   while (true) {
@@ -119,7 +140,11 @@ async function main() {
   outro("再见!");
 }
 
+// ---- 入口 ----
+
+const parsed = parseArgs();
+const main = hasArgs(parsed) ? agentMode : interactiveMode;
 main().catch((err) => {
-  console.error(err);
+  console.error(pc.red(err instanceof Error ? err.message : String(err)));
   process.exit(1);
 });
