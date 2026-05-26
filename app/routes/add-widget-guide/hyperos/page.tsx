@@ -16,7 +16,7 @@ export default function HyperosGuide() {
       <section>
         <h2>操作步骤</h2>
         <ol>
-          <li>在主屏幕双指捏合或长按空白区域</li>
+          <li>在主屏幕双指捏合，或按住主屏幕空白区域直到进入编辑模式</li>
           <li>
             点击底部 <strong>小部件</strong>
           </li>

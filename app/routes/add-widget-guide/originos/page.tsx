@@ -16,7 +16,7 @@ export default function OriginosGuide() {
       <section>
         <h2>操作步骤</h2>
         <ol>
-          <li>在主屏幕长按空白区域</li>
+          <li>按住主屏幕空白区域直到进入编辑模式</li>
           <li>
             轻点底部 <strong>组件</strong>
           </li>

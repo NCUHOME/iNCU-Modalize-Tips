@@ -21,9 +21,7 @@ export default function IosGuide() {
       <section>
         <h2>添加主屏幕小组件</h2>
         <ol>
-          <li>
-            长按主屏幕空白区域进入编辑模式，或按住主屏幕背景直到图标开始抖动
-          </li>
+          <li>在主屏幕上，按住空白区域，直到 App 开始晃动。</li>
           <li>
             轻点屏幕顶部的 <strong>编辑</strong>，然后选取{" "}
             <strong>添加小组件</strong>
@@ -40,10 +38,10 @@ export default function IosGuide() {
           </li>
           <li>选择合适的小组件尺寸</li>
           <li>
-            点击 <strong>添加小组件</strong>
+            轻点 <strong>添加小组件</strong>
           </li>
           <li>
-            点击右上角 <strong>完成</strong> 退出编辑模式
+            轻点屏幕顶部的 <strong>完成</strong>
           </li>
         </ol>
       </section>

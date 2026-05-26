@@ -14,7 +14,7 @@ export default function AndroidGuide() {
       <section>
         <h2>添加小组件</h2>
         <ol>
-          <li>长按主屏幕空白区域，进入编辑模式</li>
+          <li>按住主屏幕空白区域直到进入编辑模式</li>
           <li>
             轻点 <strong>小组件</strong>（或微件）
           </li>
