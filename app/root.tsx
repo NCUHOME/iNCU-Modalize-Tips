@@ -13,16 +13,7 @@ import "./app.css";
 import { mincu } from "mincu-react";
 
 export const links: Route.LinksFunction = () => [
-  { rel: "preconnect", href: "https://fonts.googleapis.com" },
-  {
-    rel: "preconnect",
-    href: "https://fonts.gstatic.com",
-    crossOrigin: "anonymous",
-  },
-  {
-    rel: "stylesheet",
-    href: "https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap",
-  },
+  // 不使用外部字体，完全依赖系统字体
 ];
 
 const themeScript = `
