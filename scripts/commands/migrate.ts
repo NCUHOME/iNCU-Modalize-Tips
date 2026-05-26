@@ -39,6 +39,14 @@ export async function migratePageAgent(
     fs.renameSync(fromDir, toDir);
   }
 
+  // 更新 page.tsx 中硬编码的 categoryId
+  const pageFile = path.join(toDir, "page.tsx");
+  if (fs.existsSync(pageFile)) {
+    let src = fs.readFileSync(pageFile, "utf-8");
+    src = src.replaceAll(`"${fromId}"`, `"${toId}"`);
+    fs.writeFileSync(pageFile, src, "utf-8");
+  }
+
   fs.writeFileSync(PAGES_FILE, rebuildPagesFile(cats), "utf-8");
   runGenerate();
 }
