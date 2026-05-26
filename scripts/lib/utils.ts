@@ -4,6 +4,14 @@ import { execSync } from "node:child_process";
 import { spinner } from "@clack/prompts";
 import { ROOT } from "./constants";
 
+/**
+ * 转义字符串中的特殊字符，使其安全嵌入 TypeScript 双引号字符串字面量。
+ * 处理: \  → \\ 、" → \" 、换行 → \n
+ */
+export function escapeString(s: string): string {
+  return s.replace(/\\/g, "\\\\").replace(/"/g, '\\"').replace(/\n/g, "\\n");
+}
+
 export function toPascalCase(str: string): string {
   return str
     .split(/[-\s]+/)

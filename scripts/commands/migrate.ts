@@ -118,9 +118,6 @@ export async function migratePage() {
   const s = spinner();
   s.start("迁移页面…");
 
-  fromCat.pages = fromCat.pages.filter((p) => p.id !== pg.id);
-  toCat.pages.push({ id: pg.id, enabled: pg.enabled });
-
   const fromDir = path.join(ROUTES_DIR, fromCat.id, pg.id);
   const toDir = path.join(ROUTES_DIR, toCat.id, pg.id);
   if (fs.existsSync(fromDir)) {

@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import type { PageEntry, CategoryEntry } from "./types";
 import { PAGES_FILE, ROUTES_DIR } from "./constants";
+import { escapeString } from "./utils";
 
 export async function importPagesFile(): Promise<CategoryEntry[]> {
   const url = new URL(`file://${PAGES_FILE}`);
@@ -45,8 +46,8 @@ export function rebuildPagesFile(cats: CategoryEntry[]): string {
     const c = cats[ci];
     lines.push(`  {`);
     lines.push(`    id: "${c.id}",`);
-    lines.push(`    title: "${c.title}",`);
-    lines.push(`    description: "${c.description}",`);
+    lines.push(`    title: "${escapeString(c.title)}",`);
+    lines.push(`    description: "${escapeString(c.description)}",`);
     lines.push(`    order: ${c.order},`);
     lines.push(`    pages: [`);
     for (let pi = 0; pi < c.pages.length; pi++) {
@@ -93,19 +94,15 @@ export function writeMeta(
 ): void {
   const dir = path.join(ROUTES_DIR, categoryId, pageId);
   fs.mkdirSync(dir, { recursive: true });
-  const imgLine = image
-    ? `,
-  image: "${image}"`
-    : "";
-  const updatedAtLine = updatedAt
-    ? `,
-  updatedAt: "${updatedAt}"`
+  const imgLineSafe = image ? `,\n  image: "${escapeString(image)}"` : "";
+  const updatedAtLineSafe = updatedAt
+    ? `,\n  updatedAt: "${escapeString(updatedAt)}"`
     : "";
   fs.writeFileSync(
     path.join(dir, "meta.ts"),
     `export const routeMeta = {
-  title: "${title}",
-  description: "${description}"${imgLine}${updatedAtLine},
+  title: "${escapeString(title)}",
+  description: "${escapeString(description)}"${imgLineSafe}${updatedAtLineSafe},
 } as const;
 `,
     "utf-8",

@@ -11,6 +11,7 @@ import {
   toPascalCase,
   updatePageTsErrorIgnore,
 } from "../lib/utils";
+import { rebuildPagesFile } from "../lib/pages";
 
 // ---- 非交互式（agent 调用） ----
 
@@ -24,7 +25,6 @@ export interface AddPageArgs {
 }
 
 export async function addPageAgent(args: AddPageArgs): Promise<string> {
-  const content = fs.readFileSync(PAGES_FILE, "utf-8");
   const cats = await importPagesFile();
 
   const category = cats.find((c) => c.id === args.category);
@@ -69,13 +69,8 @@ export async function addPageAgent(args: AddPageArgs): Promise<string> {
     updatePageTsErrorIgnore(args.category, args.page, false);
   }
 
-  const newContent = content.replace(
-    new RegExp(
-      `(id:\\s*"${args.category}"[\\s\\S]*?pages:\\s*\\[[\\s\\S]*?)(\\n\\s+\\]\\s+as\\s+const,)`,
-    ),
-    `$1\n      { id: "${args.page}", enabled: ${enabled} },$2`,
-  );
-  fs.writeFileSync(PAGES_FILE, newContent, "utf-8");
+  category.pages.push({ id: args.page, enabled });
+  fs.writeFileSync(PAGES_FILE, rebuildPagesFile(cats), "utf-8");
 
   runGenerate();
   return `${args.category}/${args.page}`;
@@ -89,7 +84,6 @@ export interface AddCategoryArgs {
 }
 
 export async function addCategoryAgent(args: AddCategoryArgs): Promise<string> {
-  const content = fs.readFileSync(PAGES_FILE, "utf-8");
   const cats = await importPagesFile();
 
   if (!/^[a-z][a-z0-9-]*$/.test(args.id))
@@ -119,17 +113,14 @@ export async function addCategoryAgent(args: AddCategoryArgs): Promise<string> {
   fs.writeFileSync(path.join(catDir, "layout.tsx"), layoutContent, "utf-8");
   fs.writeFileSync(path.join(catDir, "index.tsx"), indexContent, "utf-8");
 
-  const categoryBlock = `  {
-    id: "${args.id}",
-    title: "${args.title.trim()}",
-    description: "${args.desc.trim()}",
-    order: ${orderNum},
-    pages: [
-    ] as const,
-  },
-`;
-  const newContent = content.replace(/(\] as const;)/, `${categoryBlock}$1`);
-  fs.writeFileSync(PAGES_FILE, newContent, "utf-8");
+  cats.push({
+    id: args.id,
+    title: args.title.trim(),
+    description: args.desc.trim(),
+    order: orderNum,
+    pages: [],
+  });
+  fs.writeFileSync(PAGES_FILE, rebuildPagesFile(cats), "utf-8");
 
   runGenerate();
   return args.id;
@@ -138,7 +129,6 @@ export async function addCategoryAgent(args: AddCategoryArgs): Promise<string> {
 // ---- 交互式（原有方法不做改动） ----
 
 export async function addPage() {
-  const content = fs.readFileSync(PAGES_FILE, "utf-8");
   const cats = await importPagesFile();
 
   if (cats.length === 0) {
@@ -282,13 +272,8 @@ export async function addPage() {
     updatePageTsErrorIgnore(category!.id, pageId!, false);
   }
 
-  const newContent = content.replace(
-    new RegExp(
-      `(id:\\s*"${category!.id}"[\\s\\S]*?pages:\\s*\\[[\\s\\S]*?)(\\n\\s+\\]\\s+as\\s+const,)`,
-    ),
-    `$1\n      { id: "${pageId}", enabled: ${enabled} },$2`,
-  );
-  fs.writeFileSync(PAGES_FILE, newContent, "utf-8");
+  category!.pages.push({ id: pageId!, enabled: enabled! });
+  fs.writeFileSync(PAGES_FILE, rebuildPagesFile(cats), "utf-8");
 
   s.stop(`页面 ${pc.green(`${category!.id}/${pageId}`)} 已创建`);
 
@@ -296,7 +281,6 @@ export async function addPage() {
 }
 
 export async function addCategory() {
-  const content = fs.readFileSync(PAGES_FILE, "utf-8");
   const cats = await importPagesFile();
 
   type Step = "categoryId" | "title" | "desc" | "order" | "done";
@@ -410,17 +394,14 @@ export async function addCategory() {
   fs.writeFileSync(path.join(catDir, "layout.tsx"), layoutContent, "utf-8");
   fs.writeFileSync(path.join(catDir, "index.tsx"), indexContent, "utf-8");
 
-  const categoryBlock = `  {
-    id: "${categoryId}",
-    title: "${title}",
-    description: "${description}",
-    order: ${orderNum},
-    pages: [
-    ] as const,
-  },
-`;
-  const newContent = content.replace(/(\] as const;)/, `${categoryBlock}$1`);
-  fs.writeFileSync(PAGES_FILE, newContent, "utf-8");
+  cats.push({
+    id: categoryId!,
+    title: title!,
+    description: description!,
+    order: orderNum!,
+    pages: [],
+  });
+  fs.writeFileSync(PAGES_FILE, rebuildPagesFile(cats), "utf-8");
 
   s.stop(`分类 ${pc.green(categoryId)} 已创建`);
 

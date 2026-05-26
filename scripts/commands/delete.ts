@@ -26,10 +26,8 @@ export async function deletePageAgent(
   const pgDir = path.join(ROUTES_DIR, categoryId, pageId);
   if (fs.existsSync(pgDir)) fs.rmSync(pgDir, { recursive: true, force: true });
 
-  const all = await importPagesFile();
-  const tgt = all.find((c) => c.id === categoryId)!;
-  tgt.pages = tgt.pages.filter((p) => p.id !== pageId);
-  fs.writeFileSync(PAGES_FILE, rebuildPagesFile(all), "utf-8");
+  cat.pages = cat.pages.filter((p) => p.id !== pageId);
+  fs.writeFileSync(PAGES_FILE, rebuildPagesFile(cats), "utf-8");
   runGenerate();
 }
 
