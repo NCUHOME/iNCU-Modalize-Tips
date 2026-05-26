@@ -30,6 +30,16 @@
     "image": "/images/oppo.svg"
   },
   {
+    "id": "oneplus",
+    "title": "一加 ColorOS",
+    "image": "/images/oneplus.svg"
+  },
+  {
+    "id": "realme",
+    "title": "realme UI",
+    "image": "/images/realme.svg"
+  },
+  {
     "id": "magicos",
     "title": "荣耀MagicOS",
     "image": "/images/honor.svg"
