@@ -25,6 +25,7 @@ pnpm cli delete-cat --category old-guide --force
 # 迁移页面
 pnpm cli migrate --from add-widget-guide --to widget-troubleshoot --page realme
 
-# 健康检查
+# 健康检查（加 --fix 自动修复缺失文件、清理孤立目录）
 pnpm cli health
+pnpm cli health --fix
 ```

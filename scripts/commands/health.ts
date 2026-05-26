@@ -3,28 +3,52 @@ import path from "node:path";
 import { select, spinner, isCancel } from "@clack/prompts";
 import pc from "picocolors";
 import { EXIT, ROUTES_DIR, PAGES_FILE } from "../lib/constants";
-import { importPagesFile, readMeta } from "../lib/pages";
+import { importPagesFile, readMeta, rebuildPagesFile } from "../lib/pages";
+import { applyTemplate, runGenerate, toPascalCase } from "../lib/utils";
 
 // ---- Agent 模式 ----
 
-export async function healthCheckAgent(): Promise<string[]> {
+export async function healthCheckAgent(fix = false): Promise<string[]> {
   const cats = await importPagesFile();
   const issues: string[] = [];
   const definedPages = new Set<string>();
+  const toDelete: string[] = [];
 
   for (const cat of cats) {
     for (const pg of cat.pages) {
       const k = `${cat.id}/${pg.id}`;
       definedPages.add(k);
       const dir = path.join(ROUTES_DIR, cat.id, pg.id);
-      const hasMeta = fs.existsSync(path.join(dir, "meta.ts"));
-      const hasPage = fs.existsSync(path.join(dir, "page.tsx"));
+      const metaPath = path.join(dir, "meta.ts");
+      const pagePath = path.join(dir, "page.tsx");
+      const hasMeta = fs.existsSync(metaPath);
+      const hasPage = fs.existsSync(pagePath);
 
       if (!hasMeta && !hasPage) {
         issues.push(`⚠️  ${k} — 缺少 meta.ts 和 page.tsx`);
       } else {
         if (!hasMeta) issues.push(`⚠️  ${k} — 缺少 meta.ts`);
         if (!hasPage) issues.push(`⚠️  ${k} — 缺少 page.tsx`);
+      }
+
+      if (fix) {
+        if (!hasMeta) {
+          const m = readMeta(cat.id, pg.id);
+          const metaContent = applyTemplate("page-meta.template", {
+            title: m.title || pg.id,
+            description: m.desc || pg.id,
+            updatedAt: m.updatedAt || "",
+          });
+          fs.writeFileSync(metaPath, metaContent, "utf-8");
+        }
+        if (!hasPage) {
+          const pageContent = applyTemplate("page.template", {
+            categoryId: cat.id,
+            pageId: pg.id,
+            componentName: toPascalCase(pg.id),
+          });
+          fs.writeFileSync(pagePath, pageContent, "utf-8");
+        }
       }
 
       if (hasMeta) {
@@ -43,6 +67,7 @@ export async function healthCheckAgent(): Promise<string[]> {
       if (!pgDir.isDirectory()) continue;
       const k = `${catDir.name}/${pgDir.name}`;
       if (!definedPages.has(k)) {
+        toDelete.push(path.join(ROUTES_DIR, catDir.name, pgDir.name));
         issues.push(`🫥 ${k} — 孤立目录，未被 pages.ts 引用`);
       }
     }
@@ -50,14 +75,43 @@ export async function healthCheckAgent(): Promise<string[]> {
 
   for (const cat of cats) {
     const catPath = path.join(ROUTES_DIR, cat.id);
-    if (!fs.existsSync(path.join(catPath, "layout.tsx"))) {
+    const layoutPath = path.join(catPath, "layout.tsx");
+    const indexPath = path.join(catPath, "index.tsx");
+    if (!fs.existsSync(layoutPath)) {
       issues.push(`⚠️  ${cat.id} — 缺少 layout.tsx`);
+      if (fix) {
+        const pascalId = toPascalCase(cat.id);
+        fs.writeFileSync(
+          layoutPath,
+          applyTemplate("layout.template", {
+            componentName: pascalId,
+            categoryId: cat.id,
+          }),
+          "utf-8",
+        );
+      }
     }
-    if (!fs.existsSync(path.join(catPath, "index.tsx"))) {
+    if (!fs.existsSync(indexPath)) {
       issues.push(`⚠️  ${cat.id} — 缺少 index.tsx`);
+      if (fix) {
+        const pascalId = toPascalCase(cat.id);
+        fs.writeFileSync(
+          indexPath,
+          applyTemplate("index.template", {
+            componentName: pascalId,
+            categoryId: cat.id,
+          }),
+          "utf-8",
+        );
+      }
     }
   }
 
+  if (fix && toDelete.length > 0) {
+    for (const d of toDelete) fs.rmSync(d, { recursive: true, force: true });
+  }
+
+  if (fix) runGenerate();
   return issues;
 }
 
