@@ -400,8 +400,8 @@ body::before {
 
 /* ===== Brand Icon ===== */
 .brand-icon {
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   border-radius: 8px;
   flex-shrink: 0;
   object-fit: contain;
@@ -410,8 +410,8 @@ body::before {
 }
 
 .brand-icon-lg {
-  width: 40px;
-  height: 40px;
+  width: 42px;
+  height: 42px;
   border-radius: 10px;
   flex-shrink: 0;
   object-fit: contain;
