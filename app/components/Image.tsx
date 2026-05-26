@@ -15,7 +15,7 @@ export function Image({ src, alt, caption, maxWidth = 400 }: ImageProps) {
         style={{ maxWidth }}
       />
       {caption && (
-        <figcaption className="mt-1 text-center text-sm text-neutral-500">
+        <figcaption className="mt-1 text-center text-sm text-neutral-600">
           {caption}
         </figcaption>
       )}
