@@ -417,6 +417,41 @@ body::before {
   background-size: 200% 100%;
 }
 
+/* ===== Image Skeleton Shimmer ===== */
+@keyframes img-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.img-shimmer {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(127, 127, 127, 0.08) 25%,
+    rgba(127, 127, 127, 0.15) 50%,
+    rgba(127, 127, 127, 0.08) 75%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: img-shimmer 1.5s ease-in-out infinite;
+}
+
+[data-theme="dark"] .img-shimmer {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.04) 25%,
+    rgba(255, 255, 255, 0.08) 50%,
+    rgba(255, 255, 255, 0.04) 75%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+}
+
 /* ===== Section Links ===== */
 .section-link {
   text-decoration: none;
