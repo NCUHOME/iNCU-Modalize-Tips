@@ -214,6 +214,11 @@ body::before {
   animation-delay: 0.05s;
 }
 
+/* ===== Safari: 让内容区域独立过渡，避免伪元素时闪现 ===== */
+.safari #main-content {
+  view-transition-name: main-content !important;
+}
+
 /* ===== Stagger Delays ===== */
 .stagger-1 {
   animation-delay: 0.04s;

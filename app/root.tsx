@@ -19,7 +19,7 @@ export const links: Route.LinksFunction = () => [
 const themeScript = `
 (function() {
   try {
-    var t = localStorage.getItem('theme');
+    let t = localStorage.getItem('theme');
     if (!t) {
       t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
     }
@@ -35,6 +35,22 @@ function ThemeScript() {
   return <script dangerouslySetInnerHTML={{ __html: themeScript }} />;
 }
 
+const safariScript = `
+(function() {
+  try {
+    let ua = navigator.userAgent;
+    let isSafari = /^((?!chrome|android).)*safari/i.test(ua);
+    if (isSafari) {
+      document.documentElement.classList.add('safari');
+    }
+  } catch(e) {}
+})();
+`;
+
+function SafariScript() {
+  return <script dangerouslySetInnerHTML={{ __html: safariScript }} />;
+}
+
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="zh-CN" suppressHydrationWarning>
@@ -44,6 +60,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
         <ThemeScript />
+        <SafariScript />
       </head>
       <body>
         <main id="main-content">{children}</main>
