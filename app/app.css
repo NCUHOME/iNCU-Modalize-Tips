@@ -183,25 +183,25 @@ body::before {
   }
 }
 
-@keyframes slide-in-from-left {
+@keyframes vt-slide-in-left {
   from {
     opacity: 0;
-    transform: translateX(-100%);
+    clip-path: inset(0 100% 0 0);
   }
   to {
     opacity: 1;
-    transform: translateX(0);
+    clip-path: inset(0 0 0 0);
   }
 }
 
-@keyframes slide-out-to-left {
+@keyframes vt-slide-out-left {
   from {
     opacity: 1;
-    transform: translateX(0);
+    clip-path: inset(0 0 0 0);
   }
   to {
     opacity: 0;
-    transform: translateX(-100%);
+    clip-path: inset(0 100% 0 0);
   }
 }
 
@@ -654,12 +654,6 @@ body::before {
   view-transition-name: back-button;
 }
 
-.back-btn-hidden {
-  position: absolute;
-  opacity: 0;
-  pointer-events: none;
-}
-
 .back-btn:active {
   border-color: var(--accent);
   color: var(--accent);
@@ -694,19 +688,29 @@ body::before {
 
 /* ===== Back Button View Transition ===== */
 ::view-transition-group(back-button) {
+  z-index: 1;
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
 }
 
 ::view-transition-old(back-button) {
-  animation: 0.25s ease-out both slide-out-to-left;
+  animation: 0.25s ease-out both vt-slide-out-left;
 }
 
 ::view-transition-new(back-button) {
-  animation: 0.3s ease-out both slide-in-from-left;
+  animation: 0.3s ease-out both vt-slide-in-left;
 }
 
 /* ===== Top Bar Title View Transition ===== */
+::view-transition-group(top-bar-title) {
+  z-index: 2;
+}
+
+::view-transition-old(top-bar-title),
+::view-transition-new(top-bar-title) {
+  background-color: var(--bg);
+}
+
 ::view-transition-old(top-bar-title) {
   animation: 0.25s ease-out both fade-out;
 }
