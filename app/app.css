@@ -183,25 +183,25 @@ body::before {
   }
 }
 
-@keyframes vt-slide-in-left {
+@keyframes slide-in-from-left {
   from {
     opacity: 0;
-    clip-path: inset(0 100% 0 0);
+    transform: translateX(-100%);
   }
   to {
     opacity: 1;
-    clip-path: inset(0 0 0 0);
+    transform: translateX(0);
   }
 }
 
-@keyframes vt-slide-out-left {
+@keyframes slide-out-to-left {
   from {
     opacity: 1;
-    clip-path: inset(0 0 0 0);
+    transform: translateX(0);
   }
   to {
     opacity: 0;
-    clip-path: inset(0 100% 0 0);
+    transform: translateX(-100%);
   }
 }
 
@@ -236,9 +236,13 @@ body::before {
   animation-delay: 0.05s;
 }
 
-/* ===== Safari: 让内容区域独立过渡，避免伪元素时闪现 ===== */
-.safari #main-content {
-  view-transition-name: main-content !important;
+/* ===== Safari: 禁用 view-transition ===== */
+.safari,
+.safari *,
+.safari ::view-transition-group(*),
+.safari ::view-transition-old(*),
+.safari ::view-transition-new(*) {
+  view-transition-name: none !important;
 }
 
 /* ===== Stagger Delays ===== */
@@ -688,17 +692,16 @@ body::before {
 
 /* ===== Back Button View Transition ===== */
 ::view-transition-group(back-button) {
-  z-index: 1;
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
 }
 
 ::view-transition-old(back-button) {
-  animation: 0.25s ease-out both vt-slide-out-left;
+  animation: 0.2s ease-out both slide-out-to-left;
 }
 
 ::view-transition-new(back-button) {
-  animation: 0.3s ease-out both vt-slide-in-left;
+  animation: 0.2s ease-out both slide-in-from-left;
 }
 
 /* ===== Top Bar Title View Transition ===== */
@@ -706,17 +709,12 @@ body::before {
   z-index: 2;
 }
 
-::view-transition-old(top-bar-title),
-::view-transition-new(top-bar-title) {
-  background-color: var(--bg);
-}
-
 ::view-transition-old(top-bar-title) {
-  animation: 0.25s ease-out both fade-out;
+  animation-timing-function: ease-out;
 }
 
 ::view-transition-new(top-bar-title) {
-  animation: 0.3s ease-out both fade-in;
+  animation-timing-function: ease-out;
 }
 
 /* ===== Scrollbar ===== */
