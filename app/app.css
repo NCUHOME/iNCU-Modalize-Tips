@@ -741,11 +741,15 @@ body::before {
 }
 
 ::view-transition-old(top-bar-title) {
-  animation-timing-function: ease-out;
+  animation-timing-function: ease;
 }
 
 ::view-transition-new(top-bar-title) {
-  animation-timing-function: ease-out;
+  animation-timing-function: ease;
+}
+
+::view-transition-group(top-bar-title) {
+  background-color: var(--bg);
 }
 
 /* ===== Scrollbar ===== */
