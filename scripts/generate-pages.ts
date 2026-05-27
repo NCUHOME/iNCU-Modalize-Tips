@@ -1,6 +1,7 @@
 #!/usr/bin/env tsx
 import path from "path";
 import fs from "fs";
+import { generateImagesMeta } from "./generate-images-meta";
 
 const PROJECT_ROOT = path.resolve(import.meta.dirname, "..");
 const APP_DIR = path.join(PROJECT_ROOT, "app");
@@ -47,6 +48,7 @@ async function importWithBust(filePath: string) {
 }
 
 async function main() {
+  generateImagesMeta();
   const pagesModulePath = path.join(APP_DIR, "pages.ts");
   const pagesModule = await importWithBust(pagesModulePath);
 

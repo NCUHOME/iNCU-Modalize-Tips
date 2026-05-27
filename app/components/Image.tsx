@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Skeleton } from "~/components/Skeleton";
 import { Spinner } from "~/components/Spinner";
+import { imageMeta } from "~/generated/images-meta";
 
 interface ImageProps {
   src: string;
@@ -62,14 +63,28 @@ export function Image({
     };
   }, [src]);
 
-  // ---------- 容器尺寸 ----------
-  const figureStyle: React.CSSProperties = { maxWidth };
-  if (width) figureStyle.width = width;
+  const meta = imageMeta[src as keyof typeof imageMeta];
+  const finalWidth = width || meta?.width;
+  const finalHeight = height || meta?.height;
 
-  const wrapperStyle: React.CSSProperties = {};
-  if (width) wrapperStyle.width = width;
+  // ---------- 容器尺寸 ----------
+  const computedMaxWidth = finalWidth
+    ? Math.min(maxWidth, finalWidth)
+    : maxWidth;
+
+  const figureStyle: React.CSSProperties = {
+    maxWidth: computedMaxWidth,
+    width: width ? width : "100%",
+  };
+
+  const wrapperStyle: React.CSSProperties = {
+    width: "100%",
+  };
+
   if (height) {
     wrapperStyle.height = height;
+  } else if (finalWidth && finalHeight) {
+    wrapperStyle.aspectRatio = `${finalWidth} / ${finalHeight}`;
   } else {
     wrapperStyle.minHeight = 80;
   }
@@ -102,8 +117,8 @@ export function Image({
           ref={imgRef}
           src={src}
           alt={alt}
-          width={width}
-          height={height}
+          width={finalWidth}
+          height={finalHeight}
           className={`w-full rounded-xl object-cover align-middle transition-opacity duration-300 ${
             loaded && !errored ? "opacity-100" : "opacity-0"
           } ${imageClassName}`}
