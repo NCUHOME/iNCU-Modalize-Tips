@@ -29,3 +29,7 @@ pnpm cli migrate --from add-widget-guide --to widget-troubleshoot --page realme
 pnpm cli health
 pnpm cli health --fix
 ```
+
+# public 图片列表
+
+- `public/images/` 目录下有各个品牌的图片，使用cli创建已有品牌logo的页面时必须指定对应图片路径，如 `--image "/images/ios.webp"`，否则需要手动添加图片并编辑页面 meta。
