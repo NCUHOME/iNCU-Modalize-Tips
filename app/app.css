@@ -697,11 +697,11 @@ body::before {
 }
 
 ::view-transition-old(back-button) {
-  animation: 0.2s ease-out both slide-out-to-left;
+  animation: 0.25s ease both slide-out-to-left;
 }
 
 ::view-transition-new(back-button) {
-  animation: 0.2s ease-out both slide-in-from-left;
+  animation: 0.25s ease both slide-in-from-left;
 }
 
 /* ===== Top Bar Title View Transition ===== */
