@@ -107,8 +107,14 @@ export const commands: Record<string, Command> = {
     run: async (o) => {
       const { healthCheckAgent } = await import("./health");
       const issues = await healthCheckAgent(!!o.fix);
-      if (issues.length === 0) console.log(pc.green("✅ 无问题"));
-      else for (const i of issues) console.log(i);
+      if (issues.length === 0) {
+        console.log(pc.green("✅ 无问题"));
+      } else {
+        for (const i of issues) console.log(i);
+        if (o.fix) {
+          console.log(pc.green(`✅ Fix 完成，已处理 ${issues.length} 个问题`));
+        }
+      }
     },
   },
 };

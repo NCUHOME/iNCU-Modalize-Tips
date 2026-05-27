@@ -12,6 +12,7 @@ export async function healthCheckAgent(fix = false): Promise<string[]> {
   const cats = await importPagesFile();
   const issues: string[] = [];
   const definedPages = new Set<string>();
+  const definedCats = new Set(cats.map((c) => c.id));
   const toDelete: string[] = [];
 
   for (const cat of cats) {
@@ -62,13 +63,18 @@ export async function healthCheckAgent(fix = false): Promise<string[]> {
 
   for (const catDir of fs.readdirSync(ROUTES_DIR, { withFileTypes: true })) {
     if (!catDir.isDirectory()) continue;
-    const catP = path.join(ROUTES_DIR, catDir.name);
-    for (const pgDir of fs.readdirSync(catP, { withFileTypes: true })) {
+    const catPath = path.join(ROUTES_DIR, catDir.name);
+    if (!definedCats.has(catDir.name)) {
+      toDelete.push(catPath);
+      issues.push(`🫥 ${catDir.name} — 孤立分类目录，未被 pages.ts 引用`);
+      continue;
+    }
+    for (const pgDir of fs.readdirSync(catPath, { withFileTypes: true })) {
       if (!pgDir.isDirectory()) continue;
       const k = `${catDir.name}/${pgDir.name}`;
       if (!definedPages.has(k)) {
-        toDelete.push(path.join(ROUTES_DIR, catDir.name, pgDir.name));
-        issues.push(`🫥 ${k} — 孤立目录，未被 pages.ts 引用`);
+        toDelete.push(path.join(catPath, pgDir.name));
+        issues.push(`🫥 ${k} — 孤立页面目录，未被 pages.ts 引用`);
       }
     }
   }
@@ -125,6 +131,7 @@ export async function healthCheck() {
   const issues: string[] = [];
   const orphans: string[] = [];
   const definedPages = new Set<string>();
+  const definedCats = new Set(cats.map((c) => c.id));
 
   for (const cat of cats) {
     for (const pg of cat.pages) {
@@ -154,13 +161,20 @@ export async function healthCheck() {
 
   for (const catDir of fs.readdirSync(ROUTES_DIR, { withFileTypes: true })) {
     if (!catDir.isDirectory()) continue;
-    const catP = path.join(ROUTES_DIR, catDir.name);
-    for (const pgDir of fs.readdirSync(catP, { withFileTypes: true })) {
+    const catPath = path.join(ROUTES_DIR, catDir.name);
+    if (!definedCats.has(catDir.name)) {
+      orphans.push(catPath);
+      issues.push(
+        `🫥 ${pc.red(catDir.name)} — 孤立分类目录（未被 pages.ts 引用）`,
+      );
+      continue;
+    }
+    for (const pgDir of fs.readdirSync(catPath, { withFileTypes: true })) {
       if (!pgDir.isDirectory()) continue;
       const k = `${catDir.name}/${pgDir.name}`;
       if (!definedPages.has(k)) {
-        orphans.push(path.join(ROUTES_DIR, catDir.name, pgDir.name));
-        issues.push(`🫥 ${pc.red(k)} — 孤立目录（未被 pages.ts 引用）`);
+        orphans.push(path.join(catPath, pgDir.name));
+        issues.push(`🫥 ${pc.red(k)} — 孤立页面目录（未被 pages.ts 引用）`);
       }
     }
   }
