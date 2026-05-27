@@ -183,6 +183,28 @@ body::before {
   }
 }
 
+@keyframes slide-in-from-left {
+  from {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-out-to-left {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+}
+
 .anim-fade-up {
   animation: fade-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
@@ -632,6 +654,12 @@ body::before {
   view-transition-name: back-button;
 }
 
+.back-btn-hidden {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
 .back-btn:active {
   border-color: var(--accent);
   color: var(--accent);
@@ -671,13 +699,20 @@ body::before {
 }
 
 ::view-transition-old(back-button) {
-  animation: 0.2s ease both fade-in;
-  animation-direction: reverse;
+  animation: 0.25s ease-out both slide-out-to-left;
 }
 
 ::view-transition-new(back-button) {
-  animation: 0.2s ease both fade-in;
-  animation-delay: 0.08s;
+  animation: 0.3s ease-out both slide-in-from-left;
+}
+
+/* ===== Top Bar Title View Transition ===== */
+::view-transition-old(top-bar-title) {
+  animation: 0.25s ease-out both fade-out;
+}
+
+::view-transition-new(top-bar-title) {
+  animation: 0.3s ease-out both fade-in;
 }
 
 /* ===== Scrollbar ===== */

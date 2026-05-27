@@ -7,8 +7,6 @@ interface BackButtonProps {
 export function BackButton({ visible }: BackButtonProps) {
   const navigate = useNavigate();
 
-  if (!visible) return null;
-
   const handleClick = () => {
     if (document.startViewTransition) {
       document.startViewTransition(() => navigate(-1));
@@ -18,7 +16,13 @@ export function BackButton({ visible }: BackButtonProps) {
   };
 
   return (
-    <button onClick={handleClick} className="back-btn" aria-label="返回上一页">
+    <button
+      onClick={handleClick}
+      className={`back-btn${!visible ? "back-btn-hidden" : ""}`}
+      aria-label="返回上一页"
+      aria-hidden={!visible}
+      tabIndex={visible ? 0 : -1}
+    >
       <svg
         width="16"
         height="16"
