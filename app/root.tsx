@@ -19,7 +19,7 @@ export const links: Route.LinksFunction = () => [
 const themeScript = `
 (function() {
   try {
-    let t = localStorage.getItem('theme');
+    var t = localStorage.getItem('theme');
     if (!t) {
       t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
     }
@@ -38,8 +38,8 @@ function ThemeScript() {
 const safariScript = `
 (function() {
   try {
-    let ua = navigator.userAgent;
-    let isSafari = /^((?!chrome|android).)*safari/i.test(ua);
+    var ua = navigator.userAgent;
+    var isSafari = /^((?!chrome|android).)*safari/i.test(ua);
     if (isSafari) {
       document.documentElement.classList.add('safari');
     }
