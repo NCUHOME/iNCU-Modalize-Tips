@@ -621,12 +621,12 @@ body::before {
 
 .top-bar-title-lg {
   font-size: 22px;
-  line-height: 1.3;
+  width: fit-content;
 }
 
 .top-bar-title-sm {
   font-size: 17px;
-  line-height: 1.3;
+  width: fit-content;
 }
 
 .top-bar-desc {
