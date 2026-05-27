@@ -236,13 +236,9 @@ body::before {
   animation-delay: 0.05s;
 }
 
-/* ===== Safari: 禁用 view-transition ===== */
-.safari,
-.safari *,
-.safari ::view-transition-group(*),
-.safari ::view-transition-old(*),
-.safari ::view-transition-new(*) {
-  view-transition-name: none !important;
+/* ===== Safari: 让内容区域独立过渡，避免伪元素时闪现 ===== */
+.safari #main-content {
+  view-transition-name: main-content !important;
 }
 
 /* ===== Stagger Delays ===== */

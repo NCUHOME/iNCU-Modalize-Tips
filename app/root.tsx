@@ -39,7 +39,9 @@ const safariScript = `
 (function() {
   try {
     var ua = navigator.userAgent;
-    var isSafari = /^((?!chrome|android).)*safari/i.test(ua);
+    var isSafari = /^((?!chrome|android).)*safari/i.test(ua) ||
+      /iPad|iPhone|iPod/.test(ua) ||
+      (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
     if (isSafari) {
       document.documentElement.classList.add('safari');
     }
