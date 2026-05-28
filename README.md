@@ -49,9 +49,12 @@ pnpm cli
 提供完整的页面和分类管理功能，所有变更自动更新 `pages.ts` 并重新生成 manifest。
 
 - **新增页面/分类** — 自动生成对应文件并注册到配置
+- **一键添加** — 自动检测缺失品牌并批量添加
 - **管理子菜单** — 开启停用页面、编辑标题描述、调整排序、删除页面/分类（删除前检查 git 变更并二次确认）
 - **迁移页面** — 将页面移到另一个分类
 - **健康检查** — 扫描孤立文件与缺失元数据
+
+非交互式（Agent）模式及完整命令参考见 [docs/CLI.md](docs/CLI.md)。
 
 ## 页面开关
 
@@ -72,8 +75,10 @@ pages: [
 
 ```ts
 export const routeMeta = {
-  title: '页面标题',
-  description: '简短描述',
+  title: "页面标题",
+  description: "简短描述",
+  image: "/images/xxx.webp",
+  updatedAt: "2026年5月",
 } as const;
 ```
 
