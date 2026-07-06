@@ -23,7 +23,7 @@ export default function ColorosTroubleshoot() {
           </li>
           <li>
             <strong>允许自启动</strong>
-            <ul className="list-outside list-disc">
+            <ul className="option-list">
               <li>
                 ColorOS 12及以上：设置 → 应用 → 自启动 → 找到{" "}
                 <strong>南大家园</strong> → 开启（系统最多允许 5 个应用自启动）

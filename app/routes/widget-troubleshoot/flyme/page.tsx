@@ -15,9 +15,7 @@ export default function OsPage() {
 
   return (
     <Detail page={page ?? {}}>
-      <div className="mt-8 text-sm text-(--text-tertiary)">
-        此页面正在准备中，敬请期待。
-      </div>
+      <div className="placeholder-text mt-8">此页面正在准备中，敬请期待。</div>
     </Detail>
   );
 }

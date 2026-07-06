@@ -68,12 +68,12 @@ description: "编写 iNCU-Modalize-Tips 项目路由文档页面的指南。当�
 
 重要且难理解的步骤必须使用 `<ol>` 分点方便随时插入图片，不准写为嵌套子步骤；易于理解的繁多步骤（如设置页的路径）可以写作嵌套子步骤。
 
-展开同一操作下不同版本或分支路径时使用，**必须加** `className="list-outside list-disc"`，否则圆点消失：
+展开同一操作下不同版本或分支路径时使用，**必须加** `className="option-list"`，否则圆点消失：
 
 ```tsx
 <li>
   <strong>允许自启动</strong>
-  <ul className="list-outside list-disc">
+  <ul className="option-list">
     <li>ColorOS 12及以上：设置 → 应用 → 自启动 → ...</li>
     <li>ColorOS 7 - 11.3：手机管家 → 权限隐私 → ...</li>
   </ul>
@@ -91,7 +91,7 @@ description: "编写 iNCU-Modalize-Tips 项目路由文档页面的指南。当�
   <li>长按 <strong>南大家园</strong> 图标</li>
   <li>根据需要选择以下快捷选项：</li>
 </ol>
-<ul className="list-outside list-disc">
+<ul className="option-list">
   <li><strong>我的课表</strong>：快速打开课表页面</li>
   <li><strong>我的成绩</strong>：快速进入成绩查询</li>
 </ul>
@@ -100,7 +100,7 @@ description: "编写 iNCU-Modalize-Tips 项目路由文档页面的指南。当�
 **规则：**
 
 - 独立 `<ul>` 紧跟在 `<ol>` 关闭标签后，前面**不需要也不应该**套一层 `<li>`
-- **必须加** `className="list-outside list-disc"`
+- **必须加** `className="option-list"`
 - 语义上仍属于该 `section` 的内容，在 h2 结构上是合理的
 - 独立 `<ul>` 与嵌套子步骤的区别：前者是"操作完成后列举选项"，后者是"某一步操作下的分支路径"
 
@@ -111,7 +111,7 @@ description: "编写 iNCU-Modalize-Tips 项目路由文档页面的指南。当�
 放在 `<h2>` 正下方，固定样式：
 
 ```tsx
-<p className="-mt-2 mb-1 text-neutral-600" style={{ fontSize: "12px" }}>
+<p className="version-hint">
   <strong>iOS 16</strong>及以上版本支持在锁屏界面添加小组件。
 </p>
 ```
@@ -152,9 +152,9 @@ cli 会自动生成占位页面
 - [ ] 步骤用 `<ol>`，注意事项用 `<ul>`
 - [ ] `<strong>` 包裹 App 名、UI 按钮、系统功能名
 - [ ] 路径用 `→`（前后空格），选项值用中文双引号
-- [ ] 每个 `<ul>` 都有 `className="list-outside list-disc"`（无论是嵌套还是独立）
+- [ ] 每个 `<ul>` 都有 `className="option-list"`（无论是嵌套还是独立）
 - [ ] `<ul>` 位置正确：嵌套子步骤在 `<li>` 内，独立选项在 `<ol>` 后
 - [ ] 有图片文件才插入 `<Image>` / `import`；没有则不写
 - [ ] 最后一个 `<section>` 是「注意事项」
-- [ ] 版本提示用固定 `className` + `fontSize`
+- [ ] 版本提示用 `version-hint` 工具类
 - [ ] `export default function` 组件名语义化

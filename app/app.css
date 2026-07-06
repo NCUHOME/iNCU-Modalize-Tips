@@ -8,6 +8,24 @@
     "Segoe UI Symbol", "Noto Color Emoji";
 }
 
+/* ===== Custom Utilities ===== */
+@utility version-hint {
+  margin-top: calc(var(--spacing) * -2);
+  margin-bottom: calc(var(--spacing) * 1);
+  color: var(--color-neutral-600);
+  font-size: var(--text-xs);
+}
+
+@utility placeholder-text {
+  color: var(--text-tertiary);
+  font-size: var(--text-sm);
+}
+
+@utility option-list {
+  list-style-type: disc;
+  list-style-position: outside;
+}
+
 /* ===== Theme Variables ===== */
 :root {
   --bg: #f6f6f6;

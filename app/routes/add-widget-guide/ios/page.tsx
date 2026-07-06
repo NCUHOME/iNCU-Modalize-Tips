@@ -47,7 +47,7 @@ export default function IosGuide() {
       </section>
       <section>
         <h2>添加锁屏小组件</h2>
-        <p className="-mt-2 mb-1 text-neutral-600" style={{ fontSize: "12px" }}>
+        <p className="version-hint">
           <strong>iOS 16</strong>及以上版本支持在锁屏界面添加小组件。
         </p>
         <ol>
@@ -75,7 +75,7 @@ export default function IosGuide() {
       </section>
       <section>
         <h2>自定义小组件颜色</h2>
-        <p className="-mt-2 mb-1 text-neutral-600" style={{ fontSize: "12px" }}>
+        <p className="version-hint">
           <strong>iOS 18</strong>及以上版本支持自定义小组件外观。
         </p>
         <ol>
@@ -121,9 +121,7 @@ export default function IosGuide() {
           </li>
         </ul>
         <br />
-        <p className="-mt-2 mb-1 text-neutral-600" style={{ fontSize: "12px" }}>
-          注意：此设置将会应用于所有图标与小组件。
-        </p>
+        <p className="version-hint">注意：此设置将会应用于所有图标与小组件。</p>
       </section>
       <section>
         <h2>注意事项</h2>
