@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useSyncExternalStore } from "react";
 import { useNavigation } from "react-router";
 import { GuideCard } from "~/components/GuideCard";
+import { trackEvent } from "~/lib/analytics";
+import { routeManifest } from "~/generated/pages";
 import {
   getLoadingPageId,
   setLoadingPageId,
@@ -36,6 +38,21 @@ export function GuideCardList({
 
   const handleCardClick = useCallback(
     (pageId: string) => {
+      const clickedPage = pages.find((p) => p.pageId === pageId);
+      if (clickedPage) {
+        // pageId is a path like "/add-widget-guide/ios"
+        const parts = clickedPage.pageId.split("/").filter(Boolean);
+        const category_id = parts[0] ?? "";
+        const page_id = parts[1] ?? "";
+        const cat = routeManifest.categories.find((c) => c.id === category_id);
+        trackEvent("点击卡片", {
+          category_id,
+          category: cat?.title ?? "",
+          page_id,
+          page_title: clickedPage.title,
+        });
+      }
+
       setLoadingPageId(null);
       clearLoadingTimer();
       setLoadingTimer(
@@ -45,7 +62,7 @@ export function GuideCardList({
         }, loadingDelay),
       );
     },
-    [loadingDelay],
+    [loadingDelay, pages],
   );
 
   useEffect(() => {

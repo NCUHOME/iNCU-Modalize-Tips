@@ -1,4 +1,5 @@
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
+import { trackEvent } from "~/lib/analytics";
 
 interface BackButtonProps {
   visible: boolean;
@@ -6,10 +7,12 @@ interface BackButtonProps {
 
 export function BackButton({ visible }: BackButtonProps) {
   const navigate = useNavigate();
+  const location = useLocation();
 
   if (!visible) return null;
 
   const handleClick = () => {
+    trackEvent("点击返回", { from_path: location.pathname });
     if (document.startViewTransition) {
       document.startViewTransition(() => navigate(-1));
     } else {

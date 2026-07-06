@@ -63,6 +63,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
         <ThemeScript />
         <SafariScript />
+        <script
+          defer
+          src="https://s.ncuos.com/script.js"
+          data-website-id="d8f69365-d14d-4c9b-8804-b6b7482c513e"
+        />
       </head>
       <body>
         <main id="main-content">{children}</main>
